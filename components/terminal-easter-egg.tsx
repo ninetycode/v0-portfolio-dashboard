@@ -37,13 +37,14 @@ const staticCommands: Record<string, string | string[]> = {
     "memorables a través del diseño técnico.",
   ],
   skills: [
+    ">> Diseño de Juegos █████████░ 90%",
+    ">> Narrativa █████████░ 85%",
     ">> Programación ████████░░ 80%",
     ">> Diseño de Niveles ████████░░ 80%",
+    ">> UX/UI ███████░░░ 70%",
     ">> Producción ██████░░░░ 60%",
-    ">> GDScript █████████░ 90%",
-    ">> C# ███████░░░ 70%",
-    ">> Unity ████████░░ 80%",
-    ">> Godot █████████░ 90%",
+    ">> Arte █████░░░░░ 50%",
+    ">> Música ████░░░░░░ 35%",
   ],
   contact: [
     "╔═══════════════════════════════════════╗",
