@@ -7,6 +7,7 @@ import { AudioProvider } from '@/lib/audio-context'
 import { ThemeProvider } from '@/components/theme-provider'
 import { CustomCursor } from '@/components/custom-cursor'
 import { TerminalEasterEgg } from '@/components/terminal-easter-egg'
+import { ScrollToTop } from '@/components/scroll-to-top'
 import './globals.css'
 
 const lora = Lora({ 
@@ -69,6 +70,7 @@ export default function RootLayout({
               <AudioProvider>
                 <CustomCursor />
                 {children}
+                <ScrollToTop />
                 <TerminalEasterEgg />
               </AudioProvider>
             </CursorProvider>

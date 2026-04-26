@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { 
@@ -12,7 +12,6 @@ import {
   Linkedin, 
   Link2, 
   Bookmark,
-  ChevronUp,
   Check
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
@@ -60,18 +59,9 @@ function parseMarkdown(content: string): string {
 }
 
 export function BlogPostContent({ post, relatedPosts, baseUrl }: BlogPostContentProps) {
-  const [showScrollTop, setShowScrollTop] = useState(false)
   const [copied, setCopied] = useState(false)
   const { t } = useLang()
   const tb = t.blog
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 500)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
 
   const shareUrl = `${baseUrl}/blog/${post.slug}`
   const shareText = `${post.title} por ${post.author.name}`
@@ -80,10 +70,6 @@ export function BlogPostContent({ post, relatedPosts, baseUrl }: BlogPostContent
     await navigator.clipboard.writeText(shareUrl)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
-  }
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   return (
@@ -298,16 +284,7 @@ export function BlogPostContent({ post, relatedPosts, baseUrl }: BlogPostContent
         </section>
       )}
 
-      {/* Scroll to top */}
-      {showScrollTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-24 right-6 z-40 p-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:scale-110 transition-transform"
-          aria-label={tb.scrollToTop}
-        >
-          <ChevronUp className="h-5 w-5" />
-        </button>
-      )}
+
     </div>
   )
 }
