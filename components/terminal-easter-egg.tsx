@@ -1,7 +1,7 @@
 "use client"
 
-import { useState, useRef, useEffect } from "react"
-import { Terminal, Minus, X, Maximize2 } from "lucide-react"
+import { useState, useRef, useEffect, useCallback } from "react"
+import { Terminal, Minus, X, Maximize2, Volume2, VolumeX } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useCursor } from "@/lib/cursor-context"
 
@@ -19,6 +19,8 @@ const staticCommands: Record<string, string | string[]> = {
     "  contact  - Información de contacto",
     "  games    - Lista de juegos",
     "  glow     - Activa/desactiva el halo de luz del cursor",
+    "  /play    - Reproduce la banda sonora",
+    "  /stop    - Detiene la música",
     "  secret   - ???",
     "  clear    - Limpia la terminal",
   ],
@@ -89,8 +91,54 @@ export function TerminalEasterEgg() {
     { type: "output", content: "" },
   ])
   const [currentInput, setCurrentInput] = useState("")
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [isMuted, setIsMuted] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const terminalRef = useRef<HTMLDivElement>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  // Initialize audio on mount
+  useEffect(() => {
+    const audio = new Audio("/audio/moonlit-vale.ogg")
+    audio.loop = true
+    audio.volume = 0.5
+    audioRef.current = audio
+
+    audio.addEventListener("ended", () => {
+      // Loop is enabled, but just in case
+      setIsPlaying(false)
+    })
+
+    return () => {
+      audio.pause()
+      audio.src = ""
+    }
+  }, [])
+
+  const playAudio = useCallback(() => {
+    if (audioRef.current && !isPlaying) {
+      audioRef.current.play().then(() => {
+        setIsPlaying(true)
+      }).catch((err) => {
+        console.error("[v0] Audio play failed:", err)
+      })
+    }
+  }, [isPlaying])
+
+  const stopAudio = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+      setIsPlaying(false)
+    }
+  }, [])
+
+  const toggleMute = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.muted = !audioRef.current.muted
+      setIsMuted(!isMuted)
+    }
+  }, [isMuted])
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -131,6 +179,40 @@ export function TerminalEasterEgg() {
         type: "system", 
         content: `Halo de luz del cursor: ${newState ? "ACTIVADO" : "DESACTIVADO"}` 
       })
+      setLines(newLines)
+      return
+    }
+
+    if (trimmedInput === "/play") {
+      if (isPlaying) {
+        newLines.push({ 
+          type: "system", 
+          content: "La música ya está reproduciéndose." 
+        })
+      } else {
+        playAudio()
+        newLines.push({ 
+          type: "system", 
+          content: "Reproduciendo banda sonora..." 
+        })
+      }
+      setLines(newLines)
+      return
+    }
+
+    if (trimmedInput === "/stop") {
+      if (isPlaying) {
+        stopAudio()
+        newLines.push({ 
+          type: "system", 
+          content: "Música detenida." 
+        })
+      } else {
+        newLines.push({ 
+          type: "system", 
+          content: "No hay música reproduciéndose." 
+        })
+      }
       setLines(newLines)
       return
     }
@@ -205,6 +287,24 @@ export function TerminalEasterEgg() {
             <span className="font-mono text-xs text-muted-foreground">
               akane_terminal
             </span>
+            {isPlaying && (
+              <button
+                onClick={toggleMute}
+                className="flex items-center gap-1 px-2 py-0.5 rounded text-xs transition-colors hover:bg-muted/20"
+                style={{
+                  color: isDark ? "#7ee787" : "#1d6a35",
+                }}
+                aria-label={isMuted ? "Activar sonido" : "Silenciar"}
+                title={isMuted ? "Activar sonido" : "Silenciar"}
+              >
+                {isMuted ? (
+                  <VolumeX className="h-3 w-3" />
+                ) : (
+                  <Volume2 className="h-3 w-3" />
+                )}
+                <span className="animate-pulse">{"♪"}</span>
+              </button>
+            )}
           </div>
           <div className="flex items-center gap-1">
             <button
