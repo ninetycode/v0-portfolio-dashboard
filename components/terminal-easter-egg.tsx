@@ -36,17 +36,7 @@ const staticCommands: Record<string, string | string[]> = {
     "Apasionado por crear experiencias de juego",
     "memorables a través del diseño técnico.",
   ],
-  skills: [
-    ">> Diseño de Juegos  [=========.] 90%",
-    ">> Narrativa         [========..] 85%",
-    ">> Diseño de Niveles [========..] 80%",
-    ">> Documentación     [=======...] 75%",
-    ">> UX/UI             [=======...] 70%",
-    ">> Programación      [======....] 60%",
-    ">> Producción        [======....] 60%",
-    ">> Arte              [=====.....] 50%",
-    ">> Música            [===.......] 35%",
-  ],
+
   contact: [
     "╔═══════════════════════════════════════╗",
     "║  CANALES DE COMUNICACIÓN              ║",
@@ -95,6 +85,7 @@ export function TerminalEasterEgg() {
     { type: "output", content: "" },
   ])
   const [currentInput, setCurrentInput] = useState("")
+  const [isAnimating, setIsAnimating] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const terminalRef = useRef<HTMLDivElement>(null)
 
@@ -109,6 +100,73 @@ export function TerminalEasterEgg() {
       inputRef.current.focus()
     }
   }, [isOpen, isMinimized])
+
+  const skillsData = [
+    { name: "Diseño de Juegos", percent: 90 },
+    { name: "Narrativa", percent: 85 },
+    { name: "Diseño de Niveles", percent: 80 },
+    { name: "Documentación", percent: 75 },
+    { name: "UX/UI", percent: 70 },
+    { name: "Programación", percent: 60 },
+    { name: "Producción", percent: 60 },
+    { name: "Arte", percent: 50 },
+    { name: "Música", percent: 35 },
+  ]
+
+  const generateBar = (filled: number) => {
+    const total = 10
+    const filledPart = "=".repeat(filled)
+    const emptyPart = ".".repeat(total - filled)
+    return `[${filledPart}${emptyPart}]`
+  }
+
+  const animateSkills = async (baseLines: TerminalLine[]) => {
+    setIsAnimating(true)
+    
+    // Show scanning message
+    setLines([...baseLines, { type: "system", content: "Analizando habilidades..." }])
+    await new Promise(r => setTimeout(r, 500))
+    
+    let currentLines = [...baseLines, { type: "system", content: "Analizando habilidades..." }, { type: "output", content: "" }]
+    setLines(currentLines)
+    
+    for (const skill of skillsData) {
+      const paddedName = skill.name.padEnd(18)
+      const targetFilled = Math.round(skill.percent / 10)
+      
+      // Animate the bar filling up
+      for (let i = 0; i <= targetFilled; i++) {
+        const bar = generateBar(i)
+        const displayPercent = i * 10
+        const skillLine = `>> ${paddedName} ${bar} ${displayPercent}%`
+        
+        // Update the last skill line or add new one
+        const existingSkillIndex = currentLines.findIndex(
+          line => line.content.startsWith(`>> ${paddedName}`)
+        )
+        
+        if (existingSkillIndex >= 0) {
+          currentLines = [
+            ...currentLines.slice(0, existingSkillIndex),
+            { type: "output" as const, content: skillLine },
+            ...currentLines.slice(existingSkillIndex + 1)
+          ]
+        } else {
+          currentLines = [...currentLines, { type: "output" as const, content: skillLine }]
+        }
+        
+        setLines([...currentLines])
+        await new Promise(r => setTimeout(r, 40))
+      }
+      
+      // Small pause between skills
+      await new Promise(r => setTimeout(r, 80))
+    }
+    
+    // Final message
+    setLines([...currentLines, { type: "output", content: "" }, { type: "system", content: "Análisis completo." }])
+    setIsAnimating(false)
+  }
 
   const handleCommand = (input: string) => {
     const trimmedInput = input.trim().toLowerCase()
@@ -127,6 +185,11 @@ export function TerminalEasterEgg() {
         { type: "system", content: "akane_terminal v1.0.0" },
         { type: "output", content: "" },
       ])
+      return
+    }
+
+    if (trimmedInput === "skills") {
+      animateSkills(newLines)
       return
     }
 
@@ -326,6 +389,7 @@ export function TerminalEasterEgg() {
                 style={{ color: isDark ? "#cdd9e5" : "#1e293b" }}
                 spellCheck={false}
                 autoComplete="off"
+                disabled={isAnimating}
                 aria-label="Terminal input"
               />
               <span className="w-2 h-4 bg-primary/70 animate-pulse" />
