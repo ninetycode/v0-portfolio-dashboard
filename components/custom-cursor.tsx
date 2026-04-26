@@ -5,7 +5,7 @@ import { useTheme } from "next-themes"
 import { useCursor } from "@/lib/cursor-context"
 
 export function CustomCursor() {
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
   const { glowEnabled } = useCursor()
   const [mounted, setMounted] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
@@ -118,7 +118,7 @@ export function CustomCursor() {
 
   if (!mounted) return null
 
-  const isDark = theme === 'dark'
+  const isDark = resolvedTheme === 'dark'
 
   // Match exactly the --primary CSS variable used by buttons in each mode.
   // Light: oklch(0.4318 0.0709 257.7737) — slate-blue
