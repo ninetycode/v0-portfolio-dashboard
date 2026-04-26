@@ -39,6 +39,21 @@ export function Navbar() {
     return isHome ? `#${item.hash}` : `/#${item.hash}`
   }
 
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, item: NavItem) => {
+      if (!item.hash) return
+      if (isHome) {
+        e.preventDefault()
+        const target = document.getElementById(item.hash)
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" })
+        }
+        setIsMenuOpen(false)
+      }
+    },
+    [isHome]
+  )
+
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -103,6 +118,7 @@ export function Navbar() {
             <li key={item.label}>
               <Link
                 href={resolveHref(item)}
+                onClick={(e) => handleNavClick(e, item)}
                 className={`px-3 py-2 text-sm transition-colors duration-200 rounded-md hover:bg-primary/5 ${
                   isActive(item)
                     ? "text-primary font-medium"
@@ -152,7 +168,10 @@ export function Navbar() {
               <li key={item.label}>
                 <Link
                   href={resolveHref(item)}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={(e) => {
+                    handleNavClick(e, item)
+                    if (!item.hash) setIsMenuOpen(false)
+                  }}
                   className={`block px-4 py-3 text-sm hover:bg-primary/5 rounded-md transition-colors ${
                     isActive(item)
                       ? "text-primary font-medium"
