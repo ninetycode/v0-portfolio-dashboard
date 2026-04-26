@@ -236,10 +236,10 @@ export function ThemeToggle() {
         className="relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full border-2 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         style={{
           backgroundColor: isDark
-            ? "oklch(0.4241 0.0952 264.0306)"
+            ? "oklch(0.8818 0.0755 140.3035)"
             : "oklch(0.8585 0.0200 260.1685)",
           borderColor: isDark
-            ? "oklch(0.3843 0.0301 269.7337)"
+            ? "oklch(0.7638 0.0980 140.3035)"
             : "oklch(0.8585 0.0200 260.1685)",
         }}
       >
