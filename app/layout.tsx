@@ -3,8 +3,10 @@ import { Lora, Fira_Code, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { LangProvider } from '@/lib/i18n'
 import { CursorProvider } from '@/lib/cursor-context'
+import { AudioProvider } from '@/lib/audio-context'
 import { ThemeProvider } from '@/components/theme-provider'
 import { CustomCursor } from '@/components/custom-cursor'
+import { TerminalEasterEgg } from '@/components/terminal-easter-egg'
 import './globals.css'
 
 const lora = Lora({ 
@@ -64,8 +66,11 @@ export default function RootLayout({
         >
           <LangProvider>
             <CursorProvider>
-              <CustomCursor />
-              {children}
+              <AudioProvider>
+                <CustomCursor />
+                {children}
+                <TerminalEasterEgg />
+              </AudioProvider>
             </CursorProvider>
           </LangProvider>
         </ThemeProvider>

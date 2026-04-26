@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useRef, useEffect, useCallback } from "react"
+import { useState, useRef, useEffect } from "react"
 import { Terminal, Minus, X, Maximize2, Volume2, VolumeX } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useCursor } from "@/lib/cursor-context"
+import { useAudio } from "@/lib/audio-context"
 
 interface TerminalLine {
   type: "input" | "output" | "error" | "system"
@@ -19,8 +20,8 @@ const staticCommands: Record<string, string | string[]> = {
     "  contact  - Información de contacto",
     "  games    - Lista de juegos",
     "  glow     - Activa/desactiva el halo de luz del cursor",
-    "  /play    - Reproduce la banda sonora",
-    "  /stop    - Detiene la música",
+    "  play     - Reproduce la banda sonora",
+    "  stop     - Detiene la música",
     "  secret   - ???",
     "  clear    - Limpia la terminal",
   ],
@@ -82,6 +83,7 @@ const staticCommands: Record<string, string | string[]> = {
 export function TerminalEasterEgg() {
   const { glowEnabled, toggleGlow } = useCursor()
   const { resolvedTheme } = useTheme()
+  const { isPlaying, isMuted, play: playAudio, stop: stopAudio, toggleMute } = useAudio()
   const isDark = resolvedTheme === "dark"
   const [isOpen, setIsOpen] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
@@ -91,54 +93,8 @@ export function TerminalEasterEgg() {
     { type: "output", content: "" },
   ])
   const [currentInput, setCurrentInput] = useState("")
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [isMuted, setIsMuted] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const terminalRef = useRef<HTMLDivElement>(null)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-
-  // Initialize audio on mount
-  useEffect(() => {
-    const audio = new Audio("/audio/moonlit-vale.ogg")
-    audio.loop = true
-    audio.volume = 0.5
-    audioRef.current = audio
-
-    audio.addEventListener("ended", () => {
-      // Loop is enabled, but just in case
-      setIsPlaying(false)
-    })
-
-    return () => {
-      audio.pause()
-      audio.src = ""
-    }
-  }, [])
-
-  const playAudio = useCallback(() => {
-    if (audioRef.current && !isPlaying) {
-      audioRef.current.play().then(() => {
-        setIsPlaying(true)
-      }).catch((err) => {
-        console.error("[v0] Audio play failed:", err)
-      })
-    }
-  }, [isPlaying])
-
-  const stopAudio = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current.currentTime = 0
-      setIsPlaying(false)
-    }
-  }, [])
-
-  const toggleMute = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.muted = !audioRef.current.muted
-      setIsMuted(!isMuted)
-    }
-  }, [isMuted])
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -183,7 +139,7 @@ export function TerminalEasterEgg() {
       return
     }
 
-    if (trimmedInput === "/play") {
+    if (trimmedInput === "play") {
       if (isPlaying) {
         newLines.push({ 
           type: "system", 
@@ -200,7 +156,7 @@ export function TerminalEasterEgg() {
       return
     }
 
-    if (trimmedInput === "/stop") {
+    if (trimmedInput === "stop") {
       if (isPlaying) {
         stopAudio()
         newLines.push({ 

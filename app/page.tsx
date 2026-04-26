@@ -7,7 +7,6 @@ import { ExperienceTimeline } from "@/components/experience-timeline"
 import { SkillTree } from "@/components/skill-tree"
 import { ToolInventory } from "@/components/tool-inventory"
 import { ContactQuest } from "@/components/contact-quest"
-import { TerminalEasterEgg } from "@/components/terminal-easter-egg"
 
 export default function Home() {
   return (
@@ -38,7 +37,6 @@ export default function Home() {
       </footer>
 
       <StatusBar />
-      <TerminalEasterEgg />
     </div>
   )
 }
