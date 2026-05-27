@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -50,10 +50,18 @@ const socialLinks = [
 export function ContactQuest() {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
   const [formData, setFormData] = useState({ name: "", email: "", message: "" })
+  const [mounted, setMounted] = useState(false)
   const { t } = useLang()
   const ct = t.contact
   const { resolvedTheme } = useTheme()
-  const colorPalette = resolvedTheme === "dark" ? difficultyColorMap.dark : difficultyColorMap.light
+
+  useEffect(() => { setMounted(true) }, [])
+
+  const colorPalette = mounted && resolvedTheme === "dark"
+    ? difficultyColorMap.dark
+    : mounted && resolvedTheme === "light"
+      ? difficultyColorMap.light
+      : difficultyColorMap.dark // default to dark while hydrating
 
   const getColor = (difficulty: string) =>
     (colorPalette as Record<string, string>)[difficulty] ?? colorPalette.Normal
@@ -89,7 +97,7 @@ export function ContactQuest() {
         <div className="grid gap-6 md:grid-cols-3 mb-12">
           {ct.quests.map((quest, index) => {
             const color = getColor(quest.difficulty)
-            const bgTint = resolvedTheme === "dark"
+            const bgTint = (mounted && resolvedTheme === "dark") || !mounted
               ? `color-mix(in oklch, ${color} 18%, transparent)`
               : `color-mix(in srgb, ${color} 12%, white)`
             return (
