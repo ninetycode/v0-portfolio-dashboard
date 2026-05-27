@@ -22,7 +22,7 @@ export const translations = {
       objective: "Objetivo:",
       objectiveValue: "Gamedev Job Hunt",
       location: "Ubicación:",
-      locationValue: "González Catán, AR",
+      locationValue: "Buenos Aires, AR",
     },
     // Hero
     hero: {
@@ -432,7 +432,7 @@ export const translations = {
       objective: "Objective:",
       objectiveValue: "Gamedev Job Hunt",
       location: "Location:",
-      locationValue: "González Catán, AR",
+      locationValue: "Buenos Aires, AR",
     },
     hero: {
       badge: "system_started",

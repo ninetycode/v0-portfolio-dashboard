@@ -45,9 +45,9 @@ export function StatusBar() {
 
         {/* Location */}
         <div className="hidden md:flex items-center gap-2 shrink-0">
-          <MapPin className="h-4 w-4 text-accent" />
+          <MapPin className="h-4 w-4 text-primary" />
           <span className="font-mono text-xs text-muted-foreground">{s.location}</span>
-          <span className="font-mono text-xs text-accent">{s.locationValue}</span>
+          <span className="font-mono text-xs text-primary">{s.locationValue}</span>
         </div>
       </div>
     </div>
