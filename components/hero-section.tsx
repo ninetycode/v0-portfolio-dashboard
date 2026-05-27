@@ -19,8 +19,7 @@ export function HeroSection() {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center pt-16 pb-24">
-      {/* Background Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30" />
+      {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
       
       <div className="relative z-10 mx-auto max-w-6xl px-4 text-center">
