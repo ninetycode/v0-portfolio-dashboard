@@ -84,7 +84,7 @@ export function ContactQuest() {
   }
 
   return (
-    <section id="contact" className="py-20 px-4 bg-muted/30">
+    <section id="contact" className="py-20 px-4">
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-accent/10 border border-accent/30">
@@ -104,7 +104,7 @@ export function ContactQuest() {
             return (
               <Card
                 key={index}
-                className="group relative overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/50 transition-all duration-300 flex flex-col"
+                className="group relative overflow-hidden border-border/50 bg-card hover:border-primary/50 transition-all duration-300 flex flex-col"
               >
                 <div
                   className="absolute top-0 right-0 px-3 py-1 text-xs font-mono rounded-bl-lg font-semibold"
@@ -159,7 +159,7 @@ export function ContactQuest() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border/50 bg-card/50 hover:border-primary/50 hover:bg-primary/5 transition-all duration-200"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border/50 bg-card hover:border-primary/50 hover:bg-primary/5 transition-all duration-200"
               >
                 {link.icon}
                 <span className="font-sans text-sm">{link.name}</span>

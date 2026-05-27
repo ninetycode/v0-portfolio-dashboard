@@ -89,7 +89,7 @@ export function ToolInventory() {
   const toolColor = !mounted ? "#86efac" : resolvedTheme === "dark" ? "#86efac" : "#478cbf"
 
   return (
-    <section className="py-20 px-4 bg-muted/30">
+    <section className="py-20 px-4">
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-accent/10 border border-accent/30">
@@ -114,7 +114,7 @@ export function ToolInventory() {
                   return (
                     <div
                       key={tool.id}
-                      className="group relative p-4 rounded-xl border border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/50 transition-all duration-300"
+                      className="group relative p-4 rounded-xl border border-border/50 bg-card hover:border-primary/50 transition-all duration-300"
                     >
                       {/* Icon */}
                       <div

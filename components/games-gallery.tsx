@@ -79,7 +79,7 @@ export function GamesGallery() {
   const prevScreenshot = () => setCurrentScreenshot((prev) => (prev - 1 + screenshots.length) % screenshots.length)
 
   return (
-    <section className="py-20 px-4 bg-muted/30">
+    <section className="py-20 px-4">
       <div className="mx-auto max-w-6xl">
         <div className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 border border-primary/30">
@@ -94,7 +94,7 @@ export function GamesGallery() {
             <Card
               key={index}
               onClick={() => { setSelectedIdx(index); setCurrentScreenshot(0) }}
-              className="group relative overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/50 transition-all duration-300 cursor-pointer"
+              className="group relative overflow-hidden border-border/50 bg-card hover:border-primary/50 transition-all duration-300 cursor-pointer"
             >
               <div className="relative aspect-video overflow-hidden">
                 <Image src={gamesImages[index]} alt={game.title} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />

@@ -98,7 +98,7 @@ export function SkillTree() {
             {activeSkill ? (() => {
               const s = buildSkill(activeSkill as SkillId)
               return (
-                <Card className="border-border/50 bg-card/80 backdrop-blur-sm overflow-hidden">
+                <Card className="border-border/50 bg-card overflow-hidden">
                   <div className="h-1" style={{ backgroundColor: s.color }} />
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-4">

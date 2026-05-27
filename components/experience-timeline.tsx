@@ -20,7 +20,7 @@ export function ExperienceTimeline() {
   const selectedBlog = selectedIdx !== null ? experienceBlogPosts[selectedIdx] : undefined
 
   return (
-    <section id="experience" className="py-20 px-4 bg-muted/30">
+    <section id="experience" className="py-20 px-4">
       <div className="mx-auto max-w-6xl">
         {/* Section Header */}
         <div className="flex items-center gap-3 mb-4">
@@ -62,7 +62,7 @@ export function ExperienceTimeline() {
                   <div className={`p-4 rounded-lg border transition-all duration-300 ${
                     selectedIdx === index
                       ? "border-primary/50 bg-primary/5"
-                      : "border-border/50 bg-card/50 group-hover:border-primary/30"
+                      : "border-border/50 bg-card group-hover:border-primary/30"
                   }`}>
                     <div className="flex items-start justify-between gap-2 mb-1">
                       <h3 className="font-serif font-semibold group-hover:text-primary transition-colors">
@@ -82,7 +82,7 @@ export function ExperienceTimeline() {
           {/* Detail Panel */}
           <div className="lg:sticky lg:top-24 h-fit">
             {selectedExp ? (
-              <div className="p-6 rounded-xl border border-border/50 bg-card/80 backdrop-blur-sm">
+              <div className="p-6 rounded-xl border border-border/50 bg-card">
                 <div className="flex items-center gap-2 mb-4">
                   <span className={`px-2 py-1 rounded text-xs font-mono ${
                     selectedType === "work"

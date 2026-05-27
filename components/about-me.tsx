@@ -61,7 +61,7 @@ export function AboutMe() {
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="p-6 rounded-xl border border-border/50 bg-card/50 backdrop-blur-sm hover:border-primary/30 transition-colors group"
+                className="p-6 rounded-xl border border-border/50 bg-card hover:border-primary/30 transition-colors group"
               >
                 <stat.icon className="h-8 w-8 text-primary mb-4 transition-transform duration-200 group-hover:scale-125" />
                 <h3 className="font-bold text-lg mb-1">{stat.title}</h3>

@@ -120,7 +120,7 @@ export function BlogSection() {
               placeholder={tb.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-card/50 border-border/50 focus:border-primary/50"
+              className="pl-10 bg-card border-border/50 focus:border-primary/50"
             />
           </div>
           <div className="flex flex-wrap gap-2">
@@ -164,7 +164,7 @@ export function BlogSection() {
           {filtered.map((post) => (
             <Card
               key={post.id}
-              className="group overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/50 transition-all duration-300 cursor-pointer"
+              className="group overflow-hidden border-border/50 bg-card hover:border-primary/50 transition-all duration-300 cursor-pointer"
             >
               <CardContent className="p-6">
                 <div className="flex flex-col sm:flex-row sm:items-start gap-4">

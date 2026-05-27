@@ -161,7 +161,7 @@ export function ProjectsGallery() {
   }
 
   return (
-    <section className="py-20 px-4 bg-muted/30">
+    <section className="py-20 px-4">
       <div className="mx-auto max-w-6xl">
         {/* Header */}
         <div className="flex items-center gap-3 mb-4">
@@ -184,7 +184,7 @@ export function ProjectsGallery() {
               placeholder={pr.searchPlaceholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-background/60 border-border/50 focus:border-primary/50"
+              className="pl-10 bg-card border-border/50 focus:border-primary/50"
             />
           </div>
 
@@ -220,7 +220,7 @@ export function ProjectsGallery() {
 
           {/* Expanded Filters */}
           {showFilters && (
-            <div className="space-y-4 p-4 rounded-lg bg-background/60 border border-border/50">
+            <div className="space-y-4 p-4 rounded-lg bg-card border border-border/50">
               {/* Platform Filters */}
               <div>
                 <h4 className="text-sm font-medium mb-2 text-muted-foreground">{pr.filterPlatform}</h4>
@@ -308,7 +308,7 @@ export function ProjectsGallery() {
             const StatusIcon = statusConfig[project.status].icon
             return (
               <Link key={project.id} href={`/proyectos/${project.slug}`}>
-                <Card className="group relative overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm hover:border-primary/50 transition-all duration-300 cursor-pointer h-full">
+                <Card className="group relative overflow-hidden border-border/50 bg-card hover:border-primary/50 transition-all duration-300 cursor-pointer h-full">
                 <div className="relative aspect-video overflow-hidden">
                   <Image 
                     src={project.coverImage} 

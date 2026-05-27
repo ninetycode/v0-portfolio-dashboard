@@ -164,7 +164,7 @@ export function TechLab() {
           {techProjects.map((project) => (
             <Card 
               key={project.id}
-              className="overflow-hidden border-border/50 bg-card/80 backdrop-blur-sm"
+              className="overflow-hidden border-border/50 bg-card"
             >
               <CardHeader className="pb-4">
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
