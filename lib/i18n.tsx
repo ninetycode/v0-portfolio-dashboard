@@ -343,7 +343,7 @@ export const translations = {
         },
         {
           title: "Misión: Contratación Freelance",
-          description: "��Necesitas un Game Designer para tu proyecto? Contáctame para discutir cómo puedo ayudarte.",
+          description: "¿Necesitas un Game Designer para tu proyecto? Contáctame para discutir cómo puedo ayudarte.",
           reward: "Diseño de juegos profesional",
           difficulty: "Normal",
         },
