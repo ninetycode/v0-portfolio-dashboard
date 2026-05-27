@@ -348,6 +348,12 @@ export const translations = {
           difficulty: "Normal",
         },
         {
+          title: "Misión: Prueba de Videojuego",
+          description: "¿Necesitas que alguien pruebe tu juego en profundidad? Realizo playtesting, reporto bugs y genero informes detallados para que puedas iterar con datos reales.",
+          reward: "Informe de bugs + Reporte de sesión",
+          difficulty: "Normal",
+        },
+        {
           title: "Misión: Entrevista Laboral",
           description: "Estoy buscando oportunidades de tiempo completo. Si tu estudio está contratando, hablemos.",
           reward: "Un diseñador dedicado",
@@ -747,6 +753,12 @@ export const translations = {
           title: "Mission: Freelance Hire",
           description: "Do you need a Game Designer for your project? Contact me to discuss how I can help.",
           reward: "Professional game design",
+          difficulty: "Normal",
+        },
+        {
+          title: "Mission: Game Playtesting",
+          description: "Need someone to thoroughly test your game? I do playtesting sessions, report bugs and generate detailed reports so you can iterate with real data.",
+          reward: "Bug report + Session report",
           difficulty: "Normal",
         },
         {

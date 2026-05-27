@@ -7,15 +7,15 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { Scroll, Briefcase, MessageSquare, Gamepad2, Github, Linkedin, Send, Youtube, Instagram, X } from "lucide-react"
+import { Scroll, Briefcase, MessageSquare, Gamepad2, Github, Linkedin, Send, Youtube, Instagram, X, Bug } from "lucide-react"
 import { useLang } from "@/lib/i18n"
 
-// Order: Freelance (left), Feedback (middle), Interview (right)
-// Order: Feedback (left), Freelance (middle), Interview (right)
-const questFormTypes: Array<"hire" | "interview" | "feedback"> = ["feedback", "hire", "interview"]
+// Order: Feedback, Freelance, Playtesting, Interview
+const questFormTypes: Array<"hire" | "interview" | "feedback" | "playtest"> = ["feedback", "hire", "playtest", "interview"]
 const questIcons = [
   <Gamepad2 key="feedback" className="h-5 w-5" />,
   <Briefcase key="hire" className="h-5 w-5" />,
+  <Bug key="playtest" className="h-5 w-5" />,
   <MessageSquare key="interview" className="h-5 w-5" />,
 ]
 
@@ -79,6 +79,7 @@ export function ContactQuest() {
   const getMessageLabel = () => {
     if (selectedFormType === "hire") return ct.describeProject
     if (selectedFormType === "interview") return ct.describePosition
+    if (selectedFormType === "playtest") return ct.linkGame
     return ct.linkGame
   }
 
@@ -94,7 +95,7 @@ export function ContactQuest() {
         <p className="text-muted-foreground mb-12 max-w-2xl">{ct.subtitle}</p>
 
         {/* Quest Board */}
-        <div className="grid gap-6 md:grid-cols-3 mb-12">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-12">
           {ct.quests.map((quest, index) => {
             const color = getColor(quest.difficulty)
             const bgTint = (mounted && resolvedTheme === "dark") || !mounted
