@@ -95,7 +95,7 @@ export function ContactQuest() {
         <p className="text-muted-foreground mb-12 max-w-2xl">{ct.subtitle}</p>
 
         {/* Quest Board */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-12">
+        <div className="grid gap-6 sm:grid-cols-2 mb-12">
           {ct.quests.map((quest, index) => {
             const color = getColor(quest.difficulty)
             const bgTint = (mounted && resolvedTheme === "dark") || !mounted
@@ -124,10 +124,15 @@ export function ContactQuest() {
                 </CardHeader>
 
                 <CardContent className="flex flex-col flex-1">
-                  <p className="text-sm text-muted-foreground mb-4">{quest.description}</p>
+                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{quest.description}</p>
 
-                  <div className="flex items-center gap-2 mb-4 p-2 rounded-md bg-muted/50">
-                    <span className="font-mono text-xs text-muted-foreground">{ct.reward}</span>
+                  <div className="flex items-start gap-2 mb-3 p-2 rounded-md bg-muted/40">
+                    <span className="font-mono text-xs text-muted-foreground shrink-0 mt-0.5">{ct.requirements}</span>
+                    <span className="font-mono text-xs text-foreground/80">{quest.requirements}</span>
+                  </div>
+
+                  <div className="flex items-start gap-2 mb-4 p-2 rounded-md bg-muted/50">
+                    <span className="font-mono text-xs text-muted-foreground shrink-0 mt-0.5">{ct.reward}</span>
                     <span className="font-mono text-xs font-semibold" style={{ color }}>{quest.reward}</span>
                   </div>
 
