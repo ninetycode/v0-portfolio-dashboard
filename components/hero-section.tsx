@@ -18,13 +18,13 @@ export function HeroSection() {
   }
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 md:pt-16 pb-40 md:pb-28">
+    <section id="home" className="relative min-h-screen flex items-center justify-center pt-24 md:pt-20 pb-28 md:pb-20">
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
       
       <div className="relative z-10 mx-auto max-w-6xl px-4 text-center">
         {/* Terminal-style welcome */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2 mb-8">
+        <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-4 py-2 mt-6 md:mt-4 mb-6">
           <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
           <span className="font-mono text-xs text-primary">{h.badge}</span>
         </div>
@@ -91,7 +91,7 @@ export function HeroSection() {
         </div>
 
         {/* Contact Link */}
-        <div className="flex items-center justify-center mb-12">
+        <div className="flex items-center justify-center mb-6 md:mb-12">
           <Button asChild variant="ghost" size="sm" className="gap-2 font-mono text-muted-foreground hover:text-primary border border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-all duration-200">
             <a href="#contact">
               {h.ctaContact}
@@ -103,7 +103,7 @@ export function HeroSection() {
         <a 
           href="#about"
           onClick={handleScrollToAbout}
-          className="inline-flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+          className="inline-flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer pb-4 md:pb-0"
           aria-label={h.scrollDown}
         >
           <span className="font-mono text-xs">{h.scrollDown}</span>
