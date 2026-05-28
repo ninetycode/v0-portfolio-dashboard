@@ -18,7 +18,7 @@ export function HeroSection() {
   }
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center pt-16 pb-24">
+    <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 md:pt-16 pb-40 md:pb-28">
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
       
