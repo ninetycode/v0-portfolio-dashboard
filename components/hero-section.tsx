@@ -30,7 +30,7 @@ export function HeroSection() {
         </div>
 
         {/* Profile Image */}
-        <div className="relative mx-auto mb-8 h-40 w-40 md:h-48 md:w-48">
+        <div className="relative mx-auto mb-8 h-48 w-48 md:h-60 md:w-60">
           <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary via-accent to-primary opacity-50 blur-xl animate-pulse" />
           <div className="relative h-full w-full rounded-full border-2 border-primary/50 overflow-hidden bg-muted">
             <Image
@@ -42,8 +42,8 @@ export function HeroSection() {
             />
           </div>
           {/* Level Badge */}
-          <div className="absolute -bottom-4 -right-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-primary bg-background">
-            <span className="font-mono text-lg font-bold text-primary">27</span>
+          <div className="absolute bottom-1 right-1 flex h-10 w-10 items-center justify-center rounded-full border-2 border-primary bg-background">
+            <span className="font-mono text-sm font-bold text-primary">27</span>
           </div>
         </div>
 
