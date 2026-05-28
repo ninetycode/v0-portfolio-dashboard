@@ -10,6 +10,7 @@ export function CustomCursor() {
   const [mounted, setMounted] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
+  const [isTouchDevice, setIsTouchDevice] = useState(false)
   
   const cursorRef = useRef<HTMLDivElement>(null)
   const followerRef = useRef<HTMLDivElement>(null)
@@ -21,6 +22,14 @@ export function CustomCursor() {
 
   useEffect(() => {
     setMounted(true)
+    // Detect touch device
+    const checkTouchDevice = () => {
+      const hasTouch = 'ontouchstart' in window || 
+        navigator.maxTouchPoints > 0 ||
+        window.matchMedia('(pointer: coarse)').matches
+      setIsTouchDevice(hasTouch)
+    }
+    checkTouchDevice()
   }, [])
 
   // Sync follower position to current mouse when glow is re-enabled
@@ -34,7 +43,7 @@ export function CustomCursor() {
   }, [glowEnabled])
 
   useEffect(() => {
-    if (!mounted) return
+    if (!mounted || isTouchDevice) return
 
     const cursor = cursorRef.current
     const follower = followerRef.current
@@ -114,9 +123,9 @@ export function CustomCursor() {
       const styleEl = document.getElementById('custom-cursor-style')
       if (styleEl) styleEl.remove()
     }
-  }, [mounted])
+  }, [mounted, isTouchDevice])
 
-  if (!mounted) return null
+  if (!mounted || isTouchDevice) return null
 
   const isDark = resolvedTheme === 'dark'
 
