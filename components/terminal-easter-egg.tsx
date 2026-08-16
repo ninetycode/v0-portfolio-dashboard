@@ -5,6 +5,8 @@ import { Terminal, Minus, X, Maximize2, Volume2, VolumeX } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useCursor } from "@/lib/cursor-context"
 import { useAudio } from "@/lib/audio-context"
+import { useAdmin } from "@/lib/admin-context"
+import { adminLogin } from "@/app/actions/admin"
 
 interface TerminalLine {
   type: "input" | "output" | "error" | "system"
@@ -76,9 +78,11 @@ export function TerminalEasterEgg() {
   const { glowEnabled, toggleGlow } = useCursor()
   const { resolvedTheme } = useTheme()
   const { isPlaying, isMuted, play: playAudio, stop: stopAudio, toggleMute } = useAudio()
+  const { isAdmin, setIsAdmin, logout: adminLogoutCtx } = useAdmin()
   const isDark = resolvedTheme === "dark"
   const [isOpen, setIsOpen] = useState(false)
   const [isMinimized, setIsMinimized] = useState(false)
+  const [awaitingPassword, setAwaitingPassword] = useState(false)
   const [lines, setLines] = useState<TerminalLine[]>([
     { type: "system", content: "akane_terminal v1.0.0" },
     { type: "system", content: "Escribe 'help' para ver los comandos disponibles." },
@@ -168,14 +172,88 @@ export function TerminalEasterEgg() {
     setIsAnimating(false)
   }
 
-  const handleCommand = (input: string) => {
+  const handleCommand = async (input: string) => {
     const trimmedInput = input.trim().toLowerCase()
+
+    // Password entry mode (masked)
+    if (awaitingPassword) {
+      const masked = "*".repeat(input.length)
+      const newLines: TerminalLine[] = [
+        ...lines,
+        { type: "input", content: `password: ${masked}` },
+      ]
+      setAwaitingPassword(false)
+      if (input.trim() === "") {
+        newLines.push({ type: "error", content: "Autenticación cancelada." })
+        setLines(newLines)
+        return
+      }
+      setLines([...newLines, { type: "system", content: "Verificando credenciales..." }])
+      setIsAnimating(true)
+      try {
+        const result = await adminLogin(input.trim())
+        if (result.success) {
+          setIsAdmin(true)
+          setLines([
+            ...newLines,
+            { type: "system", content: "Verificando credenciales..." },
+            { type: "output", content: "" },
+            { type: "system", content: "╔════════════════════════════════════╗" },
+            { type: "system", content: "║  ACCESO CONCEDIDO                  ║" },
+            { type: "system", content: "║  Bienvenido, administrador.        ║" },
+            { type: "system", content: "╚════════════════════════════════════╝" },
+            { type: "output", content: "" },
+            { type: "output", content: "Ahora puedes gestionar el blog desde /blog" },
+            { type: "output", content: "Usa 'adminlogout' para cerrar la sesión." },
+          ])
+        } else {
+          setLines([
+            ...newLines,
+            { type: "system", content: "Verificando credenciales..." },
+            { type: "error", content: result.error || "Contraseña incorrecta. Acceso denegado." },
+          ])
+        }
+      } catch {
+        setLines([
+          ...newLines,
+          { type: "error", content: "Error de conexión. Intenta de nuevo." },
+        ])
+      } finally {
+        setIsAnimating(false)
+      }
+      return
+    }
+
     const newLines: TerminalLine[] = [
       ...lines,
       { type: "input", content: `$ ${input}` },
     ]
 
     if (trimmedInput === "") {
+      setLines(newLines)
+      return
+    }
+
+    if (trimmedInput === "adminuser") {
+      if (isAdmin) {
+        newLines.push({ type: "system", content: "Ya tienes una sesión de administrador activa." })
+        setLines(newLines)
+        return
+      }
+      setAwaitingPassword(true)
+      newLines.push({ type: "system", content: "Ingresa la contraseña de administrador:" })
+      setLines(newLines)
+      return
+    }
+
+    if (trimmedInput === "adminlogout") {
+      if (!isAdmin) {
+        newLines.push({ type: "error", content: "No hay sesión de administrador activa." })
+        setLines(newLines)
+        return
+      }
+      adminLogoutCtx()
+      newLines.push({ type: "system", content: "Sesión de administrador cerrada." })
       setLines(newLines)
       return
     }
@@ -378,10 +456,12 @@ export function TerminalEasterEgg() {
 
             {/* Input Line */}
             <div className="flex items-center gap-2 mt-1">
-              <span style={{ color: isDark ? "#7ee787" : "#1d6a35" }}>$</span>
+              <span style={{ color: isDark ? "#7ee787" : "#1d6a35" }}>
+                {awaitingPassword ? "password:" : "$"}
+              </span>
               <input
                 ref={inputRef}
-                type="text"
+                type={awaitingPassword ? "password" : "text"}
                 value={currentInput}
                 onChange={(e) => setCurrentInput(e.target.value)}
                 onKeyDown={handleKeyDown}

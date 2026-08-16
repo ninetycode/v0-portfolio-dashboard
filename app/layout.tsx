@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { LangProvider } from '@/lib/i18n'
 import { CursorProvider } from '@/lib/cursor-context'
 import { AudioProvider } from '@/lib/audio-context'
+import { AdminProvider } from '@/lib/admin-context'
 import { ThemeProvider } from '@/components/theme-provider'
 import { CustomCursor } from '@/components/custom-cursor'
 import { TerminalEasterEgg } from '@/components/terminal-easter-egg'
@@ -66,14 +67,16 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LangProvider>
-            <CursorProvider>
-              <AudioProvider>
-                <CustomCursor />
-                {children}
-                <ScrollToTop />
-                <TerminalEasterEgg />
-              </AudioProvider>
-            </CursorProvider>
+            <AdminProvider>
+              <CursorProvider>
+                <AudioProvider>
+                  <CustomCursor />
+                  {children}
+                  <ScrollToTop />
+                  <TerminalEasterEgg />
+                </AudioProvider>
+              </CursorProvider>
+            </AdminProvider>
           </LangProvider>
         </ThemeProvider>
         <Analytics />
