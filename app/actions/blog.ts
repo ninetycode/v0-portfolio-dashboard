@@ -45,6 +45,11 @@ export async function getPostBySlug(slug: string): Promise<BlogPostRow | null> {
   return rows[0] ?? null
 }
 
+export async function getPostById(id: string): Promise<BlogPostRow | null> {
+  const rows = await db.select().from(blogPosts).where(eq(blogPosts.id, id)).limit(1)
+  return rows[0] ?? null
+}
+
 export async function createPost(input: BlogPostInput): Promise<{ success: boolean; slug?: string; error?: string }> {
   try {
     await requireAdmin()
