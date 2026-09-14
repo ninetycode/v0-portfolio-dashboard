@@ -14,6 +14,7 @@ interface BlogSidebarProps {
   onCategoryChange: (category: string | null) => void
   selectedTags: string[]
   onTagToggle: (tag: string) => void
+  categoryCounts?: Record<string, number>
 }
 
 export function BlogSidebar({
@@ -23,10 +24,11 @@ export function BlogSidebar({
   onCategoryChange,
   selectedTags,
   onTagToggle,
+  categoryCounts: categoryCountsProp,
 }: BlogSidebarProps) {
   const [email, setEmail] = useState("")
   const [subscribed, setSubscribed] = useState(false)
-  const categoryCounts = getCategoryCounts()
+  const categoryCounts = categoryCountsProp ?? getCategoryCounts()
   const { t } = useLang()
   const tb = t.blog
 

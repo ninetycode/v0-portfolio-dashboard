@@ -3,16 +3,20 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Clock, Calendar, Star, ArrowRight } from "lucide-react"
+import { Clock, Calendar, Star, ArrowRight, Pencil, Trash2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import type { BlogPost } from "@/lib/blog-data"
 import { useLang } from "@/lib/i18n"
 
 interface BlogListProps {
   posts: BlogPost[]
+  isAdmin?: boolean
+  onEdit?: (post: BlogPost) => void
+  onDelete?: (post: BlogPost) => void
 }
 
-export function BlogList({ posts }: BlogListProps) {
+export function BlogList({ posts, isAdmin = false, onEdit, onDelete }: BlogListProps) {
   const [visiblePosts, setVisiblePosts] = useState<Set<string>>(new Set())
   const observerRef = useRef<IntersectionObserver | null>(null)
   const { t } = useLang()
@@ -73,6 +77,36 @@ export function BlogList({ posts }: BlogListProps) {
           
           {/* Bottom line animation */}
           <div className="absolute bottom-0 left-0 h-0.5 w-0 bg-primary group-hover:w-full transition-all duration-500" />
+
+          {/* Admin controls */}
+          {isAdmin && (
+            <div className="absolute top-4 right-4 z-10 flex items-center gap-2">
+              <Button
+                size="icon"
+                variant="secondary"
+                className="h-8 w-8 border border-border bg-card/90 backdrop-blur-sm hover:border-primary/50 hover:text-primary"
+                onClick={(e) => {
+                  e.preventDefault()
+                  onEdit?.(post)
+                }}
+                aria-label={`Editar: ${post.title}`}
+              >
+                <Pencil className="h-4 w-4" />
+              </Button>
+              <Button
+                size="icon"
+                variant="secondary"
+                className="h-8 w-8 border border-border bg-card/90 backdrop-blur-sm hover:border-destructive/50 hover:text-destructive"
+                onClick={(e) => {
+                  e.preventDefault()
+                  onDelete?.(post)
+                }}
+                aria-label={`Eliminar: ${post.title}`}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
 
           <Link href={`/blog/${post.slug}`} className="block relative p-6">
             <span className="sr-only">{tb.readMore}: {post.title}</span>

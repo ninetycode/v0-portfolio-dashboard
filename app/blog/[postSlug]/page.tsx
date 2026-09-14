@@ -2,30 +2,28 @@ import { notFound } from "next/navigation"
 import type { Metadata } from "next"
 import { Navbar } from "@/components/navbar"
 import { BlogPostContent } from "@/components/blog/blog-post-content"
-import { blogPosts, getPostBySlug, getRelatedPosts } from "@/lib/blog-data"
+import { getPostBySlug, getAllPosts } from "@/app/actions/blog"
+import { rowToPost } from "@/lib/blog-mapper"
 import { generateBlogPostingSchema } from "@/lib/structured-data"
 import { Footer } from "@/components/footer"
+
+export const dynamic = "force-dynamic"
 
 interface Props {
   params: Promise<{ postSlug: string }>
 }
 
-export async function generateStaticParams() {
-  return blogPosts.map((post) => ({
-    postSlug: post.slug,
-  }))
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { postSlug } = await params
-  const post = getPostBySlug(postSlug)
+  const row = await getPostBySlug(postSlug)
 
-  if (!post) {
+  if (!row) {
     return {
       title: "Post not found",
     }
   }
 
+  const post = rowToPost(row)
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://mathias.dev"
 
   return {
@@ -37,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: post.title,
       description: post.excerpt,
       type: "article",
-      publishedTime: post.date,
+      publishedTime: row.publishedAt,
       authors: [post.author.name],
       tags: post.tags,
       url: `${baseUrl}/blog/${post.slug}`,
@@ -55,13 +53,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { postSlug } = await params
-  const post = getPostBySlug(postSlug)
+  const row = await getPostBySlug(postSlug)
 
-  if (!post) {
+  if (!row) {
     notFound()
   }
 
-  const relatedPosts = getRelatedPosts(post, 3)
+  const post = rowToPost(row)
+
+  const allRows = await getAllPosts()
+  const relatedPosts = allRows
+    .filter((p) => p.id !== row.id && p.category === row.category)
+    .slice(0, 3)
+    .map(rowToPost)
+
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://mathias.dev"
   const structuredData = generateBlogPostingSchema(post, baseUrl)
 

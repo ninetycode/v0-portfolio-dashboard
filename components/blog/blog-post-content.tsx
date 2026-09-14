@@ -34,17 +34,58 @@ function parseMarkdown(content: string): string {
     return `<pre class="bg-muted/50 border border-border rounded-lg p-4 overflow-x-auto my-4"><code class="text-sm font-mono text-foreground">${code.trim()}</code></pre>`
   })
 
+  // Video embeds: @video(url)
+  html = html.replace(/^@video[(]([^)]+)[)]$/gm, (_, url: string) => {
+    const trimmed = url.trim()
+    // YouTube
+    const ytMatch = trimmed.match(
+      /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{11})/,
+    )
+    if (ytMatch) {
+      return `<div class="relative w-full aspect-video my-6 rounded-lg overflow-hidden border border-border"><iframe src="https://www.youtube.com/embed/${ytMatch[1]}" class="absolute inset-0 w-full h-full" allowfullscreen loading="lazy" title="Video embebido"></iframe></div>`
+    }
+    // Vimeo
+    const vimeoMatch = trimmed.match(/vimeo\.com\/(\d+)/)
+    if (vimeoMatch) {
+      return `<div class="relative w-full aspect-video my-6 rounded-lg overflow-hidden border border-border"><iframe src="https://player.vimeo.com/video/${vimeoMatch[1]}" class="absolute inset-0 w-full h-full" allowfullscreen loading="lazy" title="Video embebido"></iframe></div>`
+    }
+    // Direct video file
+    if (/\.(mp4|webm|ogg)(\?|$)/i.test(trimmed)) {
+      return `<video controls class="w-full my-6 rounded-lg border border-border"><source src="${trimmed}" /></video>`
+    }
+    return `<a href="${trimmed}" target="_blank" rel="noopener noreferrer" class="text-primary underline underline-offset-4">${trimmed}</a>`
+  })
+
+  // Images: ![alt](url)
+  html = html.replace(
+    /!\[([^\]]*)\][(]([^)]+)[)]/g,
+    '<figure class="my-6"><img src="$2" alt="$1" class="w-full rounded-lg border border-border" loading="lazy" /><figcaption class="text-center text-sm text-muted-foreground font-mono mt-2">$1</figcaption></figure>',
+  )
+
   // Inline code
   html = html.replace(/`([^`]+)`/g, '<code class="bg-muted/50 px-1.5 py-0.5 rounded text-sm font-mono text-primary">$1</code>')
 
   // Headers
+  html = html.replace(/^#### (.+)$/gm, '<h4 class="font-serif text-lg font-semibold mt-6 mb-3 text-foreground">$1</h4>')
   html = html.replace(/^### (.+)$/gm, '<h3 class="font-serif text-xl font-semibold mt-8 mb-4 text-foreground">$1</h3>')
   html = html.replace(/^## (.+)$/gm, '<h2 class="font-serif text-2xl font-semibold mt-10 mb-4 text-foreground border-b border-border pb-2">$1</h2>')
   html = html.replace(/^# (.+)$/gm, '<h1 class="font-serif text-3xl font-bold mt-12 mb-6 text-foreground">$1</h1>')
 
+  // Dividers
+  html = html.replace(/^---$/gm, '<hr class="my-8 border-border" />')
+
+  // Blockquotes
+  html = html.replace(/^> (.+)$/gm, '<blockquote class="border-l-2 border-primary pl-4 my-4 italic text-muted-foreground">$1</blockquote>')
+
   // Bold and italic
   html = html.replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-foreground">$1</strong>')
   html = html.replace(/\*([^*]+)\*/g, '<em class="italic">$1</em>')
+
+  // Links: [text](url) — after images so image syntax isn't double-processed
+  html = html.replace(
+    /(?<!!)\[([^\]]+)\][(]([^)]+)[)]/g,
+    '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-primary underline underline-offset-4 hover:opacity-80">$1</a>',
+  )
 
   // Unordered lists
   html = html.replace(/^- (.+)$/gm, '<li class="ml-4 mb-2 text-muted-foreground before:content-[\"•\"] before:text-primary before:mr-2">$1</li>')
