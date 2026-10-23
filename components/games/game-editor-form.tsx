@@ -97,6 +97,8 @@ async function uploadImage(file: File) {
   return data.url as string
 }
 
+const ITCH_PAGE = /^https?:\/\/(www\.)?[^/]+\.itch\.io\/\S+/i
+
 export function GameEditorForm({ game, taxonomy }: Props) {
   const router = useRouter()
   const initial = useMemo(() => (game ? toInput(game) : defaults), [game])
@@ -152,10 +154,11 @@ export function GameEditorForm({ game, taxonomy }: Props) {
     }))
   }
 
-  const runImport = async () => {
+  const runImport = async (url = itchUrl, embed = embedCode) => {
+    if (!ITCH_PAGE.test(url.trim())) return
     setImporting(true)
     setMessage(null)
-    const result = await importItchGame({ itchUrl, embedCode })
+    const result = await importItchGame({ itchUrl: url, embedCode: embed })
     setImporting(false)
     if (!result.success) return setMessage({ kind: "error", text: result.error })
     const data = result.data
@@ -163,7 +166,39 @@ export function GameEditorForm({ game, taxonomy }: Props) {
     if (data.platforms?.some((p) => !isBrowserPlatform(p))) setDownloadable(true)
     setSlugTouched(false)
     setErrors([])
-    setMessage({ kind: "success", text: "Ficha importada. Revisa los géneros, controles y capturas antes de guardar." })
+    setMessage({
+      kind: "success",
+      text: data.coverImage
+        ? "Ficha importada con portada y capturas. Revisa los controles antes de guardar."
+        : "Ficha importada, pero el juego no tiene portada en itch.io. Sube una abajo.",
+    })
+  }
+
+  const handleItchUrlPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pasted = e.clipboardData.getData("text").trim()
+    if (!ITCH_PAGE.test(pasted)) return
+    e.preventDefault()
+    setItchUrl(pasted)
+    runImport(pasted)
+  }
+
+  const handleEmbedChange = (value: string) => {
+    setEmbedCode(value)
+    if (!form.title || !value.trim()) return
+    const parsed = parseEmbed(value)
+    if (!isHttpUrl(parsed.url)) return
+    setEmbed(value)
+    setPlatforms(true, osPlatforms)
+  }
+
+  const fillImagesFromLink = async () => {
+    if (form.coverImage || !ITCH_PAGE.test(form.externalUrl.trim())) return
+    const result = await importItchGame({ itchUrl: form.externalUrl, embedCode: "" })
+    if (!result.success || !result.data.coverImage) return
+    const { coverImage, screenshots = [] } = result.data
+    setForm((prev) =>
+      prev.coverImage ? prev : { ...prev, coverImage, screenshots: prev.screenshots.length ? prev.screenshots : screenshots },
+    )
   }
 
   const handleCoverUpload = async (file?: File) => {
@@ -248,16 +283,31 @@ export function GameEditorForm({ game, taxonomy }: Props) {
           <div className="grid gap-4 md:grid-cols-2">
             <FieldShell label="URL pública de itch.io">
               {(id) => (
-                <Input id={id} value={itchUrl} onChange={(e) => setItchUrl(e.target.value)} placeholder="https://usuario.itch.io/mi-juego" autoComplete="off" />
+                <Input
+                  id={id}
+                  value={itchUrl}
+                  onChange={(e) => setItchUrl(e.target.value)}
+                  onPaste={handleItchUrlPaste}
+                  onKeyDown={(e) => {
+                    if (e.key !== "Enter" || e.nativeEvent.isComposing || e.keyCode === 229) return
+                    e.preventDefault()
+                    runImport()
+                  }}
+                  placeholder="https://usuario.itch.io/mi-juego"
+                  autoComplete="off"
+                />
               )}
             </FieldShell>
             <FieldShell label="Iframe (opcional)">
               {(id) => (
-                <Input id={id} value={embedCode} onChange={(e) => setEmbedCode(e.target.value)} placeholder={'<iframe src="https://itch.io/embed-upload/..." ...>'} autoComplete="off" className="font-mono text-xs" />
+                <Input id={id} value={embedCode} onChange={(e) => handleEmbedChange(e.target.value)} placeholder={'<iframe src="https://itch.io/embed-upload/..." ...>'} autoComplete="off" className="font-mono text-xs" />
               )}
             </FieldShell>
           </div>
-          <Button type="button" onClick={runImport} disabled={importing || !itchUrl.trim()} className="gap-2 self-start">
+          <p className="text-xs leading-relaxed text-muted-foreground">
+            {"Al pegar la URL se importa sola. Si pegas el iframe después, se aplica directamente a la ficha."}
+          </p>
+          <Button type="button" onClick={() => runImport()} disabled={importing || !ITCH_PAGE.test(itchUrl.trim())} className="gap-2 self-start">
             {importing ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4" />}
             {importing ? "Importando..." : "Importar datos"}
           </Button>
@@ -438,7 +488,7 @@ export function GameEditorForm({ game, taxonomy }: Props) {
           hint={isBrowser ? "Opcional. Aparece como botón “Ver en itch.io”." : undefined}
           error={hasError("externalUrl") ? "Los juegos descargables necesitan un enlace." : undefined}
         >
-          {(id) => <Input id={id} value={form.externalUrl} onChange={(e) => update("externalUrl", e.target.value)} placeholder="https://usuario.itch.io/mi-juego" autoComplete="off" />}
+          {(id) => <Input id={id} value={form.externalUrl} onChange={(e) => update("externalUrl", e.target.value)} onBlur={fillImagesFromLink} placeholder="https://usuario.itch.io/mi-juego" autoComplete="off" />}
         </FieldShell>
       </FormSection>
 

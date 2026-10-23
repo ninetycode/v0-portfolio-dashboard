@@ -240,13 +240,50 @@ function validateGame(data: ReturnType<typeof cleanGameInput>): string | null {
   return null
 }
 
+const ITCH_PAGE = /^https?:\/\/(www\.)?[^/]+\.itch\.io\/\S+/i
+
+function extractItchImages(html: string) {
+  const decodeUrl = (value: string) => value.replace(/&amp;/g, "&").trim()
+  const og =
+    html.match(/<meta[^>]+(?:property|name)=["']og:image["'][^>]+content=["']([^"']+)/i)?.[1] ??
+    html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']og:image["']/i)?.[1] ??
+    ""
+  const list = html.match(/class=["']screenshot_list["'][\s\S]*?<\/div>/i)?.[0] ?? ""
+  const screenshots = uniqueTags(
+    [...list.matchAll(/href=["'](https:\/\/img\.itch\.zone\/[^"']+)["']/gi)].map((m) => decodeUrl(m[1])),
+  ).slice(0, 12)
+  const coverImage = decodeUrl(og) || screenshots[0] || ""
+  return { coverImage, screenshots }
+}
+
+async function fetchItchImages(url: string) {
+  try {
+    const res = await fetch(url, { headers: { "user-agent": "Mozilla/5.0" }, signal: AbortSignal.timeout(8000) })
+    if (!res.ok) return null
+    return extractItchImages(await res.text())
+  } catch {
+    return null
+  }
+}
+
+async function fillMissingImages<T extends { coverImage: string | null; screenshots: string[]; externalUrl: string | null }>(data: T) {
+  if (data.coverImage || !data.externalUrl || !ITCH_PAGE.test(data.externalUrl)) return data
+  const images = await fetchItchImages(data.externalUrl)
+  if (!images?.coverImage) return data
+  return {
+    ...data,
+    coverImage: images.coverImage,
+    screenshots: data.screenshots.length ? data.screenshots : images.screenshots.length ? images.screenshots : [images.coverImage],
+  }
+}
+
 export async function importItchGame(input: {
   itchUrl: string
   embedCode: string
 }): Promise<{ success: true; data: Partial<GameInput> } | { success: false; error: string }> {
   try { await requireAdmin() } catch { return { success: false, error: "No autorizado." } }
   const itchUrl = input.itchUrl.trim()
-  if (!/^https?:\/\/(www\.)?[^/]+\.itch\.io\/\S+/i.test(itchUrl)) {
+  if (!ITCH_PAGE.test(itchUrl)) {
     return { success: false, error: "Introduce una URL pública válida de itch.io (https://usuario.itch.io/juego)." }
   }
   const embed = input.embedCode.trim() ? parseEmbed(input.embedCode) : null
@@ -273,7 +310,7 @@ export async function importItchGame(input: {
 
   const title = decode((html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? meta("og:title")).replace(/\s+by\s+.*$/i, "")) || "Juego sin título"
   const description = meta("og:description") || meta("description")
-  const coverImage = meta("og:image")
+  const { coverImage, screenshots } = extractItchImages(html)
   const genres = uniqueTags(infoRow("Genre").map(translateItchGenre))
   const platforms = uniqueTags(infoRow("Platforms").map(translateItchPlatform))
   const status = infoRow("Status").map(translateItchStatus)[0]
@@ -289,10 +326,8 @@ export async function importItchGame(input: {
     data.description = description
     data.shortDescription = description.slice(0, 500)
   }
-  if (coverImage) {
-    data.coverImage = coverImage
-    data.screenshots = [coverImage]
-  }
+  if (coverImage) data.coverImage = coverImage
+  if (screenshots.length || coverImage) data.screenshots = screenshots.length ? screenshots : [coverImage]
   if (genres.length) data.genres = genres
   if (status) data.status = status
   if (engine) data.engine = engine
@@ -308,7 +343,7 @@ export async function importItchGame(input: {
 
 export async function createGame(input: GameInput): Promise<ActionResult & { slug?: string }> {
   try { await requireAdmin() } catch { return { success: false, error: "No autorizado." } }
-  const data = cleanGameInput(input)
+  const data = await fillMissingImages(cleanGameInput(input))
   const invalid = validateGame(data)
   if (invalid) return { success: false, error: invalid }
   const existing = await db.select({ id: games.id }).from(games).where(eq(games.slug, data.slug)).limit(1)
@@ -324,7 +359,7 @@ export async function createGame(input: GameInput): Promise<ActionResult & { slu
 
 export async function updateGame(gameId: string, input: GameInput): Promise<ActionResult & { slug?: string }> {
   try { await requireAdmin() } catch { return { success: false, error: "No autorizado." } }
-  const data = cleanGameInput(input)
+  const data = await fillMissingImages(cleanGameInput(input))
   const invalid = validateGame(data)
   if (invalid) return { success: false, error: invalid }
   const clash = await db.select({ id: games.id }).from(games).where(eq(games.slug, data.slug)).limit(1)
