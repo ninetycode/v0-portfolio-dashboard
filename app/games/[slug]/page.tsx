@@ -9,6 +9,7 @@ import { StatusBar } from "@/components/status-bar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { GamePlayer } from "@/components/games/game-player"
+import { ItchDownloadWidget } from "@/components/games/itch-download-widget"
 import { GameScreenshots } from "@/components/games/game-screenshots"
 import { GameDocLinks } from "@/components/games/game-doc-links"
 import { GameReviews } from "@/components/games/game-reviews"
@@ -113,6 +114,14 @@ export default async function GamePage({ params }: Props) {
               coverImage={game.coverImage}
             />
           </section>
+        )}
+
+        {!game.embedUrl && game.itchGameId && (
+          <ItchDownloadWidget
+            itchGameId={game.itchGameId}
+            title={game.title}
+            platforms={game.platforms.filter((p) => p.toLowerCase() !== "navegador")}
+          />
         )}
 
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_320px]">
