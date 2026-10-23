@@ -121,6 +121,7 @@ export default async function GamePage({ params }: Props) {
             itchGameId={game.itchGameId}
             title={game.title}
             platforms={game.platforms.filter((p) => p.toLowerCase() !== "navegador")}
+            coverImage={game.coverImage}
           />
         )}
 
