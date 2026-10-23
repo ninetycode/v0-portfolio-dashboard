@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, ExternalLink, Keyboard } from "lucide-react"
+import { ArrowLeft, ExternalLink, Keyboard, Pencil } from "lucide-react"
+import { isAdmin } from "@/lib/admin-auth"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { StatusBar } from "@/components/status-bar"
@@ -50,6 +51,7 @@ export default async function GamePage({ params }: Props) {
   if (!game) notFound()
 
   const controls = parseControls(game.controls)
+  const admin = await isAdmin()
   const details = [
     { label: "Género", value: game.genres.join(", ") },
     { label: "Plataforma", value: game.platforms.join(", ") },
@@ -85,6 +87,10 @@ export default async function GamePage({ params }: Props) {
                 </span>
               </div>
             </div>
+            <div className="flex flex-wrap items-center gap-2">
+              {admin && <Button asChild variant="outline" className="gap-2 border-primary/40 text-primary hover:bg-primary/10">
+                <Link href={`/games/editor/${game.id}`}><Pencil className="h-4 w-4" />Editar contenido</Link>
+              </Button>}
             {game.externalUrl && (
               <Button asChild variant="outline" className="gap-2 bg-transparent">
                 <a href={game.externalUrl} target="_blank" rel="noopener noreferrer">
@@ -93,6 +99,7 @@ export default async function GamePage({ params }: Props) {
                 </a>
               </Button>
             )}
+            </div>
           </div>
         </header>
 

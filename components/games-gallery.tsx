@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Gamepad2, GripVertical, Loader2, Monitor, Play, Shield, Trash2 } from "lucide-react"
+import { Gamepad2, GripVertical, Loader2, Monitor, Play, Plus, Shield, Trash2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -93,6 +93,9 @@ export function GamesGallery({ games }: { games: GameSummary[] }) {
               <Shield className="h-4 w-4" />
               modo_admin
             </span>
+            <Button asChild size="sm" className="ml-auto gap-2">
+              <Link href="/games/editor"><Plus className="h-4 w-4" />Agregar juego</Link>
+            </Button>
             <span className="font-mono text-xs text-muted-foreground">
               {"Arrastra las cartas para reordenarlas"}
             </span>
