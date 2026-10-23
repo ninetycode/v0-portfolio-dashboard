@@ -19,8 +19,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "El archivo supera los 10MB" }, { status: 400 })
     }
 
+    if (!file.type.startsWith("image/")) {
+      return NextResponse.json({ error: "Solo se permiten imágenes" }, { status: 400 })
+    }
+
+    const folder = formData.get("folder") === "games" ? "games" : "blog"
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_")
-    const blob = await put(`blog/${Date.now()}-${safeName}`, file, {
+    const blob = await put(`${folder}/${Date.now()}-${safeName}`, file, {
       access: "public",
     })
 
