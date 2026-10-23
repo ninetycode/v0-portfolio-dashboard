@@ -38,6 +38,7 @@ export type GameInput = {
   embedWidth: number
   embedHeight: number
   externalUrl: string
+  itchGameId: string
   coverImage: string
   screenshots: string[]
   docLinks: GameDocLink[]
@@ -58,6 +59,7 @@ export type GameDetail = {
   embedWidth: number
   embedHeight: number
   externalUrl: string | null
+  itchGameId: string | null
   coverImage: string | null
   screenshots: string[]
   docLinks: GameDocLink[]

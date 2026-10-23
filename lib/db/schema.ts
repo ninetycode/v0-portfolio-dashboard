@@ -37,6 +37,7 @@ export const games = pgTable("games", {
   embedWidth: integer("embed_width").notNull().default(1280),
   embedHeight: integer("embed_height").notNull().default(740),
   externalUrl: text("external_url"),
+  itchGameId: text("itch_game_id"),
   coverImage: text("cover_image"),
   screenshots: text("screenshots").array().notNull().default([]),
   docLinks: jsonb("doc_links").$type<GameDocLink[]>().notNull().default([]),
