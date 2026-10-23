@@ -9,9 +9,12 @@ function StarGlyph({ fill, className }: { fill: 0 | 0.5 | 1; className?: string 
     <span className={cn("relative inline-block", className)}>
       <Star className="h-full w-full text-muted-foreground/40" strokeWidth={1.5} />
       {fill > 0 && (
-        <span className="absolute inset-0 overflow-hidden" style={{ width: fill === 1 ? "100%" : "50%" }}>
-          <Star className="h-full w-full fill-rating text-rating" strokeWidth={1.5} style={{ width: "100%", minWidth: "100%" }} />
-        </span>
+        <Star
+          className="absolute inset-0 h-full w-full fill-rating text-rating"
+          strokeWidth={1.5}
+          style={fill === 0.5 ? { clipPath: "inset(0 50% 0 0)" } : undefined}
+          aria-hidden="true"
+        />
       )}
     </span>
   )

@@ -20,8 +20,8 @@ function revalidateGames(slug?: string) {
 }
 
 const ratingStats = {
-  avgRating: sql<string | null>`(select avg(${gameReviews.rating}) from ${gameReviews} where ${gameReviews.gameId} = ${games.id})`,
-  reviewCount: sql<number>`(select count(*)::int from ${gameReviews} where ${gameReviews.gameId} = ${games.id})`,
+  avgRating: sql<string | null>`(select avg(gr.rating) from game_reviews gr where gr.game_id = "games"."id")`,
+  reviewCount: sql<number>`(select count(*)::int from game_reviews gr where gr.game_id = "games"."id")`,
 }
 
 function toAverage(value: string | null): number | null {
