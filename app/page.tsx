@@ -7,8 +7,13 @@ import { ExperienceTimeline } from "@/components/experience-timeline"
 import { SkillTree } from "@/components/skill-tree"
 import { ToolInventory } from "@/components/tool-inventory"
 import { ContactQuest } from "@/components/contact-quest"
+import { getGames } from "@/app/actions/games"
 
-export default function Home() {
+export const dynamic = "force-dynamic"
+
+export default async function Home() {
+  const games = await getGames()
+
   return (
     <div className="relative min-h-screen">
       <Navbar />
@@ -16,7 +21,7 @@ export default function Home() {
       <main className="pb-12">
         <HeroSection />
         <AboutMe />
-        <FeaturedGames />
+        <FeaturedGames games={games} />
         <ExperienceTimeline />
         <SkillTree />
         <ToolInventory />
