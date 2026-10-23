@@ -11,11 +11,11 @@ import { importItchGame, createGame, updateGame } from "@/app/actions/games"
 import type { GameDetail, GameInput } from "@/lib/games-types"
 
 type Props = { game?: GameDetail }
-const defaults: GameInput = { title: "", slug: "", shortDescription: "", description: "", controls: "", genres: ["Plataformas"], platforms: ["Navegador"], engine: "", status: "Released", embedUrl: "", embedWidth: 1280, embedHeight: 740, externalUrl: "", coverImage: "", screenshots: [], docLinks: [] }
+const defaults: GameInput = { title: "", slug: "", shortDescription: "", description: "", controls: "", genres: ["Plataformas"], platforms: ["Navegador"], engine: "", status: "Released", releaseType: "browser", embedUrl: "", embedWidth: 1280, embedHeight: 740, externalUrl: "", coverImage: "", screenshots: [], docLinks: [] }
 
 export function GameEditorForm({ game }: Props) {
   const router = useRouter()
-  const [form, setForm] = useState<GameInput>(game ? { title: game.title, slug: game.slug, shortDescription: game.shortDescription, description: game.description, controls: game.controls, genres: game.genres, platforms: game.platforms, engine: game.engine ?? "", status: game.status, embedUrl: game.embedUrl ?? "", embedWidth: game.embedWidth, embedHeight: game.embedHeight, externalUrl: game.externalUrl ?? "", coverImage: game.coverImage ?? "", screenshots: game.screenshots, docLinks: game.docLinks } : defaults)
+  const [form, setForm] = useState<GameInput>(game ? { title: game.title, slug: game.slug, shortDescription: game.shortDescription, description: game.description, controls: game.controls, genres: game.genres, platforms: game.platforms, engine: game.engine ?? "", status: game.status, releaseType: game.releaseType, embedUrl: game.embedUrl ?? "", embedWidth: game.embedWidth, embedHeight: game.embedHeight, externalUrl: game.externalUrl ?? "", coverImage: game.coverImage ?? "", screenshots: game.screenshots, docLinks: game.docLinks } : defaults)
   const [itchUrl, setItchUrl] = useState("")
   const [embedCode, setEmbedCode] = useState("")
   const [busy, setBusy] = useState(false)
@@ -40,8 +40,9 @@ export function GameEditorForm({ game }: Props) {
       <Field label="Plataformas (separadas por coma)" value={form.platforms.join(", ")} onChange={(v) => update("platforms", v.split(","))} />
       <Field label="Motor" value={form.engine} onChange={(v) => update("engine", v)} />
       <Field label="Estado" value={form.status} onChange={(v) => update("status", v)} />
-      <Field label="URL externa" value={form.externalUrl} onChange={(v) => update("externalUrl", v)} />
-      <Field label="URL del embed" value={form.embedUrl} onChange={(v) => update("embedUrl", v)} />
+      <div className="flex flex-col gap-2"><Label>Tipo de lanzamiento</Label><select value={form.releaseType} onChange={(e) => update("releaseType", e.target.value as GameInput["releaseType"])} className="h-10 rounded-md border border-input bg-background px-3 text-sm"><option value="browser">Jugable en navegador</option><option value="download">Descargable</option><option value="external">Página externa</option></select></div>
+      <Field label="URL externa / descarga" value={form.externalUrl} onChange={(v) => update("externalUrl", v)} />
+      {form.releaseType === "browser" && <Field label="URL del embed" value={form.embedUrl} onChange={(v) => update("embedUrl", v)} />}
       <Field label="URL de portada" value={form.coverImage} onChange={(v) => update("coverImage", v)} />
     </section>
     <TextField label="Descripción completa" value={form.description} onChange={(v) => update("description", v)} />

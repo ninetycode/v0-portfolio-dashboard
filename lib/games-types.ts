@@ -7,6 +7,7 @@ export type GameSummary = {
   shortDescription: string
   genres: string[]
   platforms: string[]
+  releaseType: string
   coverImage: string | null
   status: string
   playable: boolean
@@ -34,6 +35,7 @@ export type GameInput = {
   platforms: string[]
   engine: string
   status: string
+  releaseType: string
   embedUrl: string
   embedWidth: number
   embedHeight: number
@@ -54,6 +56,7 @@ export type GameDetail = {
   platforms: string[]
   engine: string | null
   status: string
+  releaseType: string
   embedUrl: string | null
   embedWidth: number
   embedHeight: number

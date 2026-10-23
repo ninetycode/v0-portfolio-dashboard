@@ -41,6 +41,7 @@ export async function getGames(): Promise<GameSummary[]> {
       platforms: games.platforms,
       coverImage: games.coverImage,
       status: games.status,
+      releaseType: games.releaseType,
       embedUrl: games.embedUrl,
       ...ratingStats,
     })
@@ -177,6 +178,7 @@ type GameInput = {
   platforms: string[]
   engine: string
   status: string
+  releaseType: string
   embedUrl: string
   embedWidth: number
   embedHeight: number
@@ -197,6 +199,7 @@ function cleanGameInput(input: GameInput) {
     platforms: input.platforms.map((v) => v.trim()).filter(Boolean).slice(0, 10),
     engine: input.engine.trim().slice(0, 80) || null,
     status: input.status.trim().slice(0, 80) || "Released",
+    releaseType: input.releaseType,
     embedUrl: input.embedUrl.trim().slice(0, 1000) || null,
     embedWidth: Math.max(320, Math.min(2400, Number(input.embedWidth) || 1280)),
     embedHeight: Math.max(240, Math.min(1600, Number(input.embedHeight) || 740)),
@@ -222,20 +225,22 @@ export async function importItchGame(input: { itchUrl: string; embedCode: string
   const description = meta("og:description") || meta("description") || "Un juego jugable desde el navegador."
   const coverImage = meta("og:image")
   const slug = title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "nuevo-juego"
-  return { success: true, data: { title, slug, shortDescription: description.slice(0, 500), description, controls: "", genres: ["Plataformas"], platforms: ["Navegador"], engine: "", status: "Released", embedUrl, embedWidth: 1280, embedHeight: 740, externalUrl: itchUrl, coverImage, screenshots: coverImage ? [coverImage] : [], docLinks: [{ label: "Página en itch.io", url: itchUrl }] } }
+  return { success: true, data: { title, slug, shortDescription: description.slice(0, 500), description, controls: "", genres: ["Plataformas"], platforms: ["Navegador"], engine: "", status: "Released", releaseType: "browser", embedUrl, embedWidth: 1280, embedHeight: 740, externalUrl: itchUrl, coverImage, screenshots: coverImage ? [coverImage] : [], docLinks: [{ label: "Página en itch.io", url: itchUrl }] } }
 }
 
 export async function createGame(input: GameInput): Promise<ActionResult & { slug?: string }> {
   try { await requireAdmin() } catch { return { success: false, error: "No autorizado." } }
   const data = cleanGameInput(input)
-  if (!data.title || !data.slug || !data.embedUrl) return { success: false, error: "Completa el título, slug e iframe." }
+  if (!data.title || !data.slug) return { success: false, error: "Completa el título y el slug." }
+  if (data.releaseType === "browser" && !data.embedUrl) return { success: false, error: "Los juegos de navegador necesitan una URL de embed." }
   try { await db.insert(games).values(data); revalidateGames(data.slug); return { success: true, slug: data.slug } } catch { return { success: false, error: "No se pudo crear el juego. El slug puede estar repetido." } }
 }
 
 export async function updateGame(gameId: string, input: GameInput): Promise<ActionResult & { slug?: string }> {
   try { await requireAdmin() } catch { return { success: false, error: "No autorizado." } }
   const data = cleanGameInput(input)
-  if (!data.title || !data.slug || !data.embedUrl) return { success: false, error: "Completa el título, slug e iframe." }
+  if (!data.title || !data.slug) return { success: false, error: "Completa el título y el slug." }
+  if (data.releaseType === "browser" && !data.embedUrl) return { success: false, error: "Los juegos de navegador necesitan una URL de embed." }
   try { const old = await db.select({ slug: games.slug }).from(games).where(eq(games.id, gameId)).limit(1); await db.update(games).set(data).where(eq(games.id, gameId)); revalidateGames(old[0]?.slug); revalidateGames(data.slug); return { success: true, slug: data.slug } } catch { return { success: false, error: "No se pudo guardar el juego." } }
 }
 

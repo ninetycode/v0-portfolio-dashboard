@@ -33,6 +33,7 @@ export const games = pgTable("games", {
   platforms: text("platforms").array().notNull().default([]),
   engine: text("engine"),
   status: text("status").notNull().default("Released"),
+  releaseType: text("release_type").notNull().default("browser"),
   embedUrl: text("embed_url"),
   embedWidth: integer("embed_width").notNull().default(1280),
   embedHeight: integer("embed_height").notNull().default(740),

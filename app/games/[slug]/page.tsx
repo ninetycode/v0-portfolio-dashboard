@@ -103,11 +103,13 @@ export default async function GamePage({ params }: Props) {
           </div>
         </header>
 
-        {game.embedUrl && (
-          <section aria-label="Jugar">
+        {(game.embedUrl || game.releaseType !== "browser") && (
+          <section aria-label={game.releaseType === "browser" ? "Jugar" : "Acceso al juego"}>
             <GamePlayer
               title={game.title}
+              releaseType={game.releaseType}
               embedUrl={game.embedUrl}
+              externalUrl={game.externalUrl}
               width={game.embedWidth}
               height={game.embedHeight}
               coverImage={game.coverImage}

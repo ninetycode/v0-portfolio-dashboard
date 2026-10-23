@@ -1,20 +1,30 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { Maximize2, Play } from "lucide-react"
+import { Download, ExternalLink, Maximize2, Play } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface GamePlayerProps {
   title: string
-  embedUrl: string
+  releaseType: string
+  embedUrl: string | null
+  externalUrl: string | null
   width: number
   height: number
   coverImage: string | null
 }
 
-export function GamePlayer({ title, embedUrl, width, height, coverImage }: GamePlayerProps) {
+export function GamePlayer({ title, releaseType, embedUrl, externalUrl, width, height, coverImage }: GamePlayerProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [started, setStarted] = useState(false)
+
+  if (releaseType !== "browser") {
+    return <div className="flex flex-col items-center justify-center gap-4 rounded-lg border border-border bg-card p-10 text-center">
+      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">{releaseType === "download" ? <Download className="h-8 w-8" /> : <ExternalLink className="h-8 w-8" />}</div>
+      <div><h2 className="font-serif text-xl font-semibold">{releaseType === "download" ? "Juego descargable" : "Juego externo"}</h2><p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">{releaseType === "download" ? "Este juego no funciona directamente en el navegador. Descarga la versión jugable para tu dispositivo." : "Este juego se juega desde una página externa."}</p></div>
+      {externalUrl && <Button asChild className="gap-2"><a href={externalUrl} target="_blank" rel="noopener noreferrer">{releaseType === "download" ? <Download className="h-4 w-4" /> : <ExternalLink className="h-4 w-4" />}{releaseType === "download" ? "Descargar juego" : "Visitar juego"}</a></Button>}
+    </div>
+  }
 
   const goFullscreen = () => {
     containerRef.current?.requestFullscreen?.()
@@ -29,7 +39,7 @@ export function GamePlayer({ title, embedUrl, width, height, coverImage }: GameP
       >
         {started ? (
           <iframe
-            src={embedUrl}
+            src={embedUrl ?? ""}
             title={`Jugar ${title}`}
             className="absolute inset-0 h-full w-full"
             allow="autoplay; fullscreen; gamepad"
