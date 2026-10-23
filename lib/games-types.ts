@@ -24,6 +24,25 @@ export type GameReview = {
   createdAt: string
 }
 
+export type GameInput = {
+  title: string
+  slug: string
+  shortDescription: string
+  description: string
+  controls: string
+  genres: string[]
+  platforms: string[]
+  engine: string
+  status: string
+  embedUrl: string
+  embedWidth: number
+  embedHeight: number
+  externalUrl: string
+  coverImage: string
+  screenshots: string[]
+  docLinks: GameDocLink[]
+}
+
 export type GameDetail = {
   id: string
   slug: string
