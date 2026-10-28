@@ -344,7 +344,7 @@ export const translations = {
           difficulty: "Fácil",
         },
         {
-          title: "Misión: Contrataci��n Freelance",
+          title: "Misión: Contratación Freelance",
           description: "¿Necesitas un Game Designer para tu proyecto? Contáctame para discutir cómo puedo ayudarte.",
           requirements: "Proyecto definido / Presupuesto acordado",
           reward: "Diseño de juegos profesional",
