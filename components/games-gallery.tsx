@@ -229,7 +229,7 @@ export function GamesGallery({ games }: { games: GameSummary[] }) {
               aria-label="Visita mi itch.io"
             >
               <img
-                src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/itch-io/light.svg"
+                src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/itchdotio/default.svg"
                 alt=""
                 aria-hidden="true"
                 className="h-5 w-5"
