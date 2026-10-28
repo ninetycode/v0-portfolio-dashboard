@@ -20,7 +20,7 @@ export default async function Home() {
       
       <main className="pb-12">
         <HeroSection />
-        <AboutMe />
+        <AboutMe gameCount={games.length} />
         <FeaturedGames games={games} />
         <ExperienceTimeline />
         <SkillTree />

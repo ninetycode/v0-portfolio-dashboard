@@ -3,8 +3,8 @@
 import { Gamepad2, Code, Target, Trophy } from "lucide-react"
 import { useLang } from "@/lib/i18n"
 
-export function AboutMe() {
-  const { t } = useLang()
+export function AboutMe({ gameCount }: { gameCount: number }) {
+  const { t, lang } = useLang()
   const about = t.about
 
   const stats = [
@@ -15,7 +15,7 @@ export function AboutMe() {
     },
     {
       icon: Code,
-      title: about.stat2Title,
+      title: `${gameCount} ${lang === "es" ? "juegos" : "games"}`,
       description: about.stat2Desc,
     },
     {
