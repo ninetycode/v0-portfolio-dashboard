@@ -625,7 +625,7 @@ export function GameEditorForm({ game, taxonomy }: Props) {
   )
 }
 
-function FormSection({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) {
+export function FormSection({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) {
   return (
     <section className="flex flex-col gap-5 border-t border-border pt-8">
       <div>
@@ -637,7 +637,7 @@ function FormSection({ title, description, children }: { title: string; descript
   )
 }
 
-function FieldShell({
+export function FieldShell({
   label,
   required,
   hint,
@@ -703,7 +703,7 @@ function ModeCard({ icon, title, text, active, error, onClick }: { icon: React.R
   )
 }
 
-function ImageDrop({
+export function ImageDrop({
   image,
   busy,
   onFile,
