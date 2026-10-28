@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ExternalLink, Gamepad2, GripVertical, Loader2, Monitor, Play, Plus, Shield, Trash2 } from "lucide-react"
+import { siItchdotio } from "simple-icons/icons"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -232,7 +233,14 @@ export function GamesGallery({ games }: { games: GameSummary[] }) {
               rel="noreferrer"
               aria-label="Visita mi itch.io"
             >
-              Visita mi itch.io
+              <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                className="h-5 w-5 fill-current"
+              >
+                <path d={siItchdotio.path} />
+              </svg>
+              Visitá mi itch.io
               <ExternalLink data-icon="inline-end" />
             </a>
           </Button>
