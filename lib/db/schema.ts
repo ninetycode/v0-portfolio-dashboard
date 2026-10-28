@@ -56,5 +56,31 @@ export const gameReviews = pgTable("game_reviews", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 })
 
+export type ProjectResourceRow = { type: string; label: string; url: string }
+
+export const projects = pgTable("projects", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  slug: text("slug").notNull().unique(),
+  title: text("title").notNull(),
+  shortDescription: text("short_description").notNull().default(""),
+  description: text("description").notNull().default(""),
+  status: text("status").notNull().default("idea"),
+  categories: text("categories").array().notNull().default([]),
+  platforms: text("platforms").array().notNull().default([]),
+  tags: text("tags").array().notNull().default([]),
+  projectDate: text("project_date").notNull().default(""),
+  coverImage: text("cover_image"),
+  screenshots: text("screenshots").array().notNull().default([]),
+  embedUrl: text("embed_url"),
+  embedWidth: integer("embed_width").notNull().default(1280),
+  embedHeight: integer("embed_height").notNull().default(740),
+  externalUrl: text("external_url"),
+  resources: jsonb("resources").$type<ProjectResourceRow[]>().notNull().default([]),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export type ProjectRow = typeof projects.$inferSelect
+
 export type GameRow = typeof games.$inferSelect
 export type GameReviewRow = typeof gameReviews.$inferSelect
