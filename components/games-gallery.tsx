@@ -219,6 +219,25 @@ export function GamesGallery({ games }: { games: GameSummary[] }) {
             ))}
           </ul>
         )}
+
+        <div className="mt-12 flex justify-center">
+          <Button asChild size="lg" className="gap-3">
+            <a
+              href="https://ninetygames.itch.io"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Visita mi itch.io"
+            >
+              <img
+                src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/itch-io/light.svg"
+                alt=""
+                aria-hidden="true"
+                className="h-5 w-5"
+              />
+              Visita mi itch.io
+            </a>
+          </Button>
+        </div>
       </div>
 
       <AlertDialog open={gameToDelete !== null} onOpenChange={(open) => !open && setGameToDelete(null)}>
