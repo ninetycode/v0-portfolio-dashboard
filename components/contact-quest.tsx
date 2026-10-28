@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Scroll, Briefcase, MessageSquare, Gamepad2, Github, Linkedin, Send, Youtube, Instagram, X, Bug } from "lucide-react"
+import { siGmail } from "simple-icons/icons"
 import { useLang } from "@/lib/i18n"
 
 // Order: Feedback, Freelance, Playtesting, Interview
@@ -40,8 +41,9 @@ const difficultyColorMap = {
 
 const socialLinks = [
   { name: "LinkedIn", href: "https://www.linkedin.com/in/mathias-andino/", icon: <Linkedin className="h-5 w-5" /> },
-  { name: "GitHub", href: "https://github.com/ninetycode", icon: <Github className="h-5 w-5" /> },
   { name: "Itch.io", href: "https://ninetygames.itch.io/", icon: <Gamepad2 className="h-5 w-5" /> },
+  { name: "Gmail", href: "mailto:mathias.gamedesigner@gmail.com", icon: <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5 fill-current"><path d={siGmail.path} /></svg> },
+  { name: "GitHub", href: "https://github.com/ninetycode", icon: <Github className="h-5 w-5" /> },
   { name: "Instagram", href: "https://www.instagram.com/mathiasandino.ar", icon: <Instagram className="h-5 w-5" /> },
   { name: "YouTube", href: "https://www.youtube.com/@Mattez", icon: <Youtube className="h-5 w-5" /> },
   { name: "X", href: "https://x.com/mathigamedev", icon: <X className="h-5 w-5" /> },
