@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Gamepad2, GripVertical, Loader2, Monitor, Play, Plus, Shield, Trash2 } from "lucide-react"
+import { ExternalLink, Gamepad2, GripVertical, Loader2, Monitor, Play, Plus, Shield, Trash2 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -221,20 +221,19 @@ export function GamesGallery({ games }: { games: GameSummary[] }) {
         )}
 
         <div className="mt-12 flex justify-center">
-          <Button asChild size="lg" className="gap-3">
+          <Button
+            asChild
+            variant="outline"
+            className="h-12 rounded-full border-primary px-6 font-mono text-sm text-primary hover:bg-primary/10 hover:text-primary"
+          >
             <a
               href="https://ninetygames.itch.io"
               target="_blank"
               rel="noreferrer"
               aria-label="Visita mi itch.io"
             >
-              <img
-                src="https://cdn.jsdelivr.net/gh/glincker/thesvg@main/public/icons/itchdotio/default.svg"
-                alt=""
-                aria-hidden="true"
-                className="h-5 w-5"
-              />
               Visita mi itch.io
+              <ExternalLink data-icon="inline-end" />
             </a>
           </Button>
         </div>
