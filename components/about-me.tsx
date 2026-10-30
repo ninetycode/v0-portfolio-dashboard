@@ -54,6 +54,7 @@ export function AboutMe({ gameCount }: { gameCount: number }) {
             <p>{about.paragraph1}</p>
             <p>{about.paragraph2}</p>
             <p>{about.paragraph3}</p>
+            <p>{about.paragraph4}</p>
           </div>
 
           {/* Stats Grid — spans right col, aligned with body text */}

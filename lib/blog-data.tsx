@@ -99,7 +99,7 @@ El proyecto nos enseñó que la comunicación entre equipo es tan importante com
     author: {
       name: "Mathías Andino",
       avatar: "/profile-avatar.jpg",
-      role: "Technical Game Designer",
+      role: "Game Narrative Designer junior",
     },
     featured: true,
     color: "from-primary/20 to-accent/20",
@@ -188,7 +188,7 @@ El game feel no se agrega al final, se diseña desde el principio. Cada mecánic
     author: {
       name: "Mathías Andino",
       avatar: "/profile-avatar.jpg",
-      role: "Technical Game Designer",
+      role: "Game Narrative Designer junior",
     },
     featured: true,
     color: "from-chart-2/20 to-primary/20",
@@ -291,7 +291,7 @@ La inversión inicial de tiempo se recuperó en el segundo proyecto.
     author: {
       name: "Mathías Andino",
       avatar: "/profile-avatar.jpg",
-      role: "Technical Game Designer",
+      role: "Game Narrative Designer junior",
     },
     featured: false,
     color: "from-chart-3/20 to-chart-4/20",
@@ -362,7 +362,7 @@ Tu GDD no es un contrato, es un mapa que se actualiza mientras exploras el terri
     author: {
       name: "Mathías Andino",
       avatar: "/profile-avatar.jpg",
-      role: "Technical Game Designer",
+      role: "Game Narrative Designer junior",
     },
     featured: false,
     color: "from-chart-4/20 to-chart-5/20",
@@ -438,7 +438,7 @@ Godot sigue mejorando a un ritmo impresionante. Para proyectos indie, especialme
     author: {
       name: "Mathías Andino",
       avatar: "/profile-avatar.jpg",
-      role: "Technical Game Designer",
+      role: "Game Narrative Designer junior",
     },
     featured: false,
     color: "from-primary/20 to-chart-3/20",
