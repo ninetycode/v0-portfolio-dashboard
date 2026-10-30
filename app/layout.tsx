@@ -2,12 +2,15 @@ import type { Metadata } from 'next'
 import { Lora, Fira_Code, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { LangProvider } from '@/lib/i18n'
+import { SiteContentProvider } from '@/lib/site-content/context'
+import { readSiteContent } from '@/lib/site-content/store'
 import { CursorProvider } from '@/lib/cursor-context'
 import { AudioProvider } from '@/lib/audio-context'
 import { AdminProvider } from '@/lib/admin-context'
 import { ThemeProvider } from '@/components/theme-provider'
 import { CustomCursor } from '@/components/custom-cursor'
 import { TerminalEasterEgg } from '@/components/terminal-easter-egg'
+import { AdminEditShortcut } from '@/components/admin-content-bar'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import './globals.css'
 
@@ -52,11 +55,13 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const siteContent = await readSiteContent()
+
   return (
     <html lang="es" suppressHydrationWarning>
       <body className={`${lora.variable} ${firaCode.variable} ${inter.variable} font-sans antialiased`} suppressHydrationWarning>
@@ -66,18 +71,21 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LangProvider>
-            <AdminProvider>
-              <CursorProvider>
-                <AudioProvider>
-                  <CustomCursor />
-                  {children}
-                  <ScrollToTop />
-                  <TerminalEasterEgg />
-                </AudioProvider>
-              </CursorProvider>
-            </AdminProvider>
-          </LangProvider>
+          <SiteContentProvider content={siteContent}>
+            <LangProvider>
+              <AdminProvider>
+                <CursorProvider>
+                  <AudioProvider>
+                    <CustomCursor />
+                    {children}
+                    <ScrollToTop />
+                    <AdminEditShortcut />
+                    <TerminalEasterEgg />
+                  </AudioProvider>
+                </CursorProvider>
+              </AdminProvider>
+            </LangProvider>
+          </SiteContentProvider>
         </ThemeProvider>
         <Analytics />
       </body>

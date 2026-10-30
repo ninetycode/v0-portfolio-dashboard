@@ -7,6 +7,7 @@ import { ExperienceTimeline } from "@/components/experience-timeline"
 import { SkillTree } from "@/components/skill-tree"
 import { ToolInventory } from "@/components/tool-inventory"
 import { ContactQuest } from "@/components/contact-quest"
+import { HomeFooter } from "@/components/home-footer"
 import { getGames } from "@/app/actions/games"
 
 export const dynamic = "force-dynamic"
@@ -28,18 +29,7 @@ export default async function Home() {
         <ContactQuest />
       </main>
 
-      <footer className="border-t border-border/50 bg-background/80 backdrop-blur-md py-8 mb-12">
-        <div className="mx-auto max-w-6xl px-4 text-center">
-          <p className="font-mono text-sm text-muted-foreground">
-            {"// "} Diseñado y desarrollado por{" "}
-            <span className="text-primary">Mathías Andino</span>
-            {" // "}
-          </p>
-          <p className="font-mono text-xs text-muted-foreground/60 mt-2">
-            2024 | Game Narrative Designer Junior | Buenos Aires, Argentina
-          </p>
-        </div>
-      </footer>
+      <HomeFooter />
 
       <StatusBar />
     </div>

@@ -4,29 +4,27 @@ import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { ExternalLink, Gamepad2, PlayCircle } from "lucide-react"
 import { RatingBadge } from "@/components/games/star-rating"
-import { useLang } from "@/lib/i18n"
+import { useSiteLang } from "@/lib/site-content/context"
 import type { GameSummary } from "@/lib/games-types"
 
 export function FeaturedGames({ games }: { games: GameSummary[] }) {
-  const { t, lang } = useLang()
-  const f = t.featured
+  const { tx, content } = useSiteLang()
+  const home = content.home
 
   return (
     <section id="featured" className="py-20 px-4">
       <div className="mx-auto max-w-6xl">
         <div className="text-center mb-12">
-          <p className="font-mono text-sm text-primary tracking-widest uppercase mb-3">PORTFOLIO</p>
-          <h2 className="font-serif text-4xl md:text-5xl font-bold mb-4 text-balance">{f.title}</h2>
+          <p className="font-mono text-sm text-primary tracking-widest uppercase mb-3">{tx(home.featuredKicker)}</p>
+          <h2 className="font-serif text-4xl md:text-5xl font-bold mb-4 text-balance">{tx(home.featuredTitle)}</h2>
           <p className="text-muted-foreground max-w-xl mx-auto text-sm leading-relaxed">
-            {lang === "es"
-              ? "Una selección de mis trabajos más recientes en desarrollo y diseño de videojuegos."
-              : "A selection of my most recent work in game development and design."}
+            {tx(home.featuredSubtitle)}
           </p>
         </div>
 
         {games.length === 0 ? (
           <p className="text-center font-mono text-sm text-muted-foreground">
-            {lang === "es" ? "Próximamente." : "Coming soon."}
+            {tx(home.featuredEmpty)}
           </p>
         ) : (
           <div className="grid gap-6 md:grid-cols-2">
@@ -85,7 +83,7 @@ export function FeaturedGames({ games }: { games: GameSummary[] }) {
             href="/games"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border/60 bg-transparent text-foreground font-mono text-sm hover:border-primary hover:text-primary transition-all duration-200"
           >
-            {f.seeAll}
+            {tx(home.featuredSeeAll)}
             <ExternalLink className="h-4 w-4" />
           </Link>
         </div>

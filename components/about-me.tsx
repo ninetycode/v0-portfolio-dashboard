@@ -1,47 +1,42 @@
 "use client"
 
 import { Gamepad2, Code, Target, Trophy } from "lucide-react"
-import { useLang } from "@/lib/i18n"
+import { useSiteLang } from "@/lib/site-content/context"
+import { SectionEditLink } from "@/components/section-edit-link"
+import type { AboutIcon } from "@/lib/site-content/types"
+
+const statIcons: Record<AboutIcon, typeof Gamepad2> = {
+  gamepad: Gamepad2,
+  code: Code,
+  target: Target,
+  trophy: Trophy,
+}
 
 export function AboutMe({ gameCount }: { gameCount: number }) {
-  const { t, lang } = useLang()
-  const about = t.about
+  const { tx, content } = useSiteLang()
+  const about = content.about
 
-  const stats = [
-    {
-      icon: Gamepad2,
-      title: about.stat1Title,
-      description: about.stat1Desc,
-    },
-    {
-      icon: Code,
-      title: `${gameCount} ${lang === "es" ? "juegos" : "games"}`,
-      description: about.stat2Desc,
-    },
-    {
-      icon: Target,
-      title: about.stat3Title,
-      description: about.stat3Desc,
-    },
-    {
-      icon: Trophy,
-      title: about.stat4Title,
-      description: about.stat4Desc,
-    },
-  ]
+  const stats = about.stats.map((stat) => ({
+    icon: statIcons[stat.icon] ?? Gamepad2,
+    title: stat.useGameCount ? `${gameCount} ${tx(stat.countSuffix)}` : tx(stat.title),
+    description: tx(stat.description),
+  }))
 
   return (
     <section id="about" className="py-20 bg-background">
       <div className="mx-auto max-w-6xl px-4">
+        <div className="flex justify-end">
+          <SectionEditLink seccion="sobre" />
+        </div>
         <div className="grid gap-12 lg:grid-cols-2 items-start">
 
           {/* Left: Label + Heading + Text + Stats (all together) */}
           <div>
             <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">
-              {about.label}
+              {tx(about.label)}
             </p>
             <h2 className="font-serif text-4xl md:text-5xl font-bold mb-8 leading-tight">
-              {about.titlePart1}{" "}
+              {tx(about.titlePart1)}{" "}
               <span className="text-primary">{about.titleYear}</span>
             </h2>
           </div>
@@ -51,10 +46,11 @@ export function AboutMe({ gameCount }: { gameCount: number }) {
 
           {/* Body text — spans left col */}
           <div className="space-y-6 text-muted-foreground leading-relaxed lg:-mt-4">
-            <p>{about.paragraph1}</p>
-            <p>{about.paragraph2}</p>
-            <p>{about.paragraph3}</p>
-            <p>{about.paragraph4}</p>
+            {about.paragraphs.map((paragraph, index) => {
+              const text = tx(paragraph)
+              if (!text.trim()) return null
+              return <p key={index} className="whitespace-pre-wrap">{text}</p>
+            })}
           </div>
 
           {/* Stats Grid — spans right col, aligned with body text */}

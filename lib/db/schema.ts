@@ -84,3 +84,11 @@ export type ProjectRow = typeof projects.$inferSelect
 
 export type GameRow = typeof games.$inferSelect
 export type GameReviewRow = typeof gameReviews.$inferSelect
+
+// Homepage, about, experience, tools, and mission-board copy.
+// Missing rows mean "use the code defaults" so the site stays unchanged until an admin saves.
+export const siteSections = pgTable("site_sections", {
+  key: text("key").primaryKey(),
+  data: jsonb("data").$type<Record<string, unknown>>().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+})
