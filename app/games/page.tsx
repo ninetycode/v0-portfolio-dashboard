@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic"
 export const metadata: Metadata = {
   title: "My Games | Mathías Andino",
   description:
-    "Collection of video games designed and developed by Mathías Andino — Technical Game Designer. Play them in the browser, rate them and leave feedback.",
+    "Collection of video games designed and developed by Mathías Andino — Game Narrative Designer junior. Play them in the browser, rate them and leave feedback.",
 }
 
 export default async function GamesPage() {

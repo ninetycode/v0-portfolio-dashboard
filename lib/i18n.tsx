@@ -44,9 +44,10 @@ export const translations = {
       label: "SOBRE MÍ",
       titlePart1: "Creando mundos digitales interactivos desde",
       titleYear: "2025",
-      paragraph1: "Soy un Technical Game Designer de Buenos Aires, Argentina, con 1 año de experiencia, actualmente finalizando la carrera de Técnico/a en Producción de Videojuegos (UNPAZ). Mi enfoque está en crear experiencias de juego que se sientan increíbles — el game feel es el corazón de todo lo que diseño.",
-      paragraph2: "Me especializo en el diseño de mecánicas de gameplay, sistemas de progresión y narrativa interactiva. Utilizo Godot como mi motor principal de desarrollo y participé en la Global Game Jam, donde descubrí mi pasión por crear bajo presión creativa.",
-      paragraph3: "Con 3 videojuegos desarrollados y un primer lanzamiento comercial planeado para mediados de 2027, estoy construyendo mi camino hacia convertirme en Director Creativo. Cada proyecto es una oportunidad para perfeccionar el arte de hacer que los juegos se sientan satisfactorios.",
+      paragraph1: "Soy Mathias Andino, Game Narrative Designer junior de Buenos Aires. Me enfoco en que la historia y las mecánicas cuenten lo mismo: diseño sistemas de juego en los que cada acción del jugador refuerza la narrativa, para que no haya disonancia ludonarrativa.",
+      paragraph2: "En Mask Power (Global Game Jam 2026) convertí el tema \"máscara\" en un sistema de poderes inspirado en dioses ancestrales, donde elegir la máscara correcta es el desafío. En A través de mis ojos, un juego serio hecho en equipo, trasladamos la sobrecarga sensorial de una niña con autismo a un enemigo que ataca con sonido.",
+      paragraph3: "En Oneiric Dread le doy cohesión a la historia y al gameplay en un equipo de cinco personas, con una mecánica de cordura ligada a la contención emocional de la protagonista. Trabajo con Godot y herramientas de IA para prototipar y llegar rápido a versiones jugables, y cuido el game feel y los detalles que hacen que un juego se sienta bien.",
+      paragraph4: "También me interesan la UX y la organización de proyectos. Estoy terminando la carrera de Producción de Videojuegos en la UNPAZ y busco sumarme a un equipo como Narrative Designer o Game Designer junior.",
       stat1Title: "1 año",
       stat1Desc: "Experiencia en desarrollo de videojuegos",
       stat2Title: "3 juegos",
@@ -114,7 +115,7 @@ export const translations = {
           title: "Hollow Depths",
           description:
             "Un metroidvania oscuro con mecánicas de combate fluidas y exploración no lineal en las profundidades de una civilización olvidada.",
-          role: "Technical Game Designer - Responsable del diseño de sistemas de combate, progresión del jugador y arquitectura de niveles. Implementé el sistema de habilidades desbloqueables y el mapa interconectado.",
+          role: "Game Narrative Designer junior - Responsable del diseño de sistemas de combate, progresión del jugador y arquitectura de niveles. Implementé el sistema de habilidades desbloqueables y el mapa interconectado.",
           challenge:
             "El mayor desafío fue balancear la curva de dificultad mientras mantenía la sensación de descubrimiento. Implementamos un sistema de telemetría para ajustar los puntos de control y las recompensas basándonos en datos de playtest.",
           genre: ["Metroidvania", "Acción"],
@@ -196,7 +197,7 @@ export const translations = {
       selectPrompt: "Selecciona un punto en la línea de tiempo para ver los detalles",
       items: [
         {
-          title: "Technical Game Designer",
+          title: "Game Narrative Designer junior",
           company: "Indie Studio Collab",
           overview:
             "Lideré el diseño técnico de un roguelike cooperativo, desde la conceptualización hasta el lanzamiento en Early Access.",
@@ -370,7 +371,7 @@ export const translations = {
     blog: {
       heroSubtitle: "// Reflexiones, tutoriales y post-mortems sobre desarrollo de videojuegos",
       heroDescription:
-        "Comparto mi experiencia como Technical Game Designer: desde los desafíos técnicos de implementar sistemas complejos hasta las lecciones aprendidas en cada proyecto.",
+        "Comparto mi experiencia como Game Narrative Designer junior: desde los desafíos técnicos de implementar sistemas complejos hasta las lecciones aprendidas en cada proyecto.",
       articles: "artículos",
       updatedWeekly: "Actualizado",
       weekly: "semanalmente",
@@ -464,9 +465,10 @@ export const translations = {
       label: "ABOUT ME",
       titlePart1: "Creating interactive digital worlds since",
       titleYear: "2025",
-      paragraph1: "I'm a Technical Game Designer from Buenos Aires, Argentina, with 1 year of experience, currently finishing my degree in Video Game Production (UNPAZ). My focus is on creating gaming experiences that feel incredible — game feel is at the heart of everything I design.",
+      paragraph1: "I'm a Game Narrative Designer junior from Buenos Aires, Argentina, with 1 year of experience, currently finishing my degree in Video Game Production (UNPAZ). My focus is on creating gaming experiences that feel incredible — game feel is at the heart of everything I design.",
       paragraph2: "I specialize in gameplay mechanics design, progression systems, and interactive narrative. I use Godot as my main development engine and participated in the Global Game Jam, where I discovered my passion for creating under creative pressure.",
-      paragraph3: "With 3 video games developed and a first commercial release planned for mid-2027, I'm building my path towards becoming a Creative Director. Every project is an opportunity to perfect the art of making games feel satisfying.",
+      paragraph3: "In Oneiric Dread, I bring cohesion to the story and gameplay as part of a five-person team, with a sanity mechanic tied to the protagonist's emotional containment. I work with Godot and AI tools to prototype and reach playable versions quickly, while caring about game feel and the details that make a game feel good.",
+      paragraph4: "I am also interested in UX and project organization. I am finishing my degree in Video Game Production at UNPAZ and looking to join a team as a Narrative Designer or Junior Game Designer.",
       stat1Title: "1 year",
       stat1Desc: "Experience in video game development",
       stat2Title: "3 games",
@@ -532,7 +534,7 @@ export const translations = {
           title: "Hollow Depths",
           description:
             "A dark metroidvania with fluid combat mechanics and non-linear exploration in the depths of a forgotten civilization.",
-          role: "Technical Game Designer - Led combat systems design, player progression, and level architecture. Implemented the unlockable skills system and interconnected map.",
+          role: "Game Narrative Designer junior - Led combat systems design, player progression, and level architecture. Implemented the unlockable skills system and interconnected map.",
           challenge:
             "The biggest challenge was balancing the difficulty curve while maintaining the sense of discovery. We implemented a telemetry system to adjust checkpoints and rewards based on playtest data.",
           genre: ["Metroidvania", "Action"],
@@ -612,7 +614,7 @@ export const translations = {
       selectPrompt: "Select a point on the timeline to view details",
       items: [
         {
-          title: "Technical Game Designer",
+          title: "Game Narrative Designer junior",
           company: "Indie Studio Collab",
           overview:
             "Led the technical design of a cooperative roguelike, from conceptualization to Early Access launch.",
@@ -782,7 +784,7 @@ export const translations = {
     blog: {
       heroSubtitle: "// Reflections, tutorials and post-mortems on game development",
       heroDescription:
-        "I share my experience as a Technical Game Designer: from the technical challenges of implementing complex systems to the lessons learned in each project.",
+        "I share my experience as a Game Narrative Designer junior: from the technical challenges of implementing complex systems to the lessons learned in each project.",
       articles: "articles",
       updatedWeekly: "Updated",
       weekly: "weekly",

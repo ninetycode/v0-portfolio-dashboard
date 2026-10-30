@@ -30,8 +30,8 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Mathías Andino | Technical Game Designer',
-  description: 'Portfolio de Mathías Andino - Technical Game Designer & Futuro Director Creativo. Diseño de juegos, programación y producción.',
+  title: 'Mathías Andino | Game Narrative Designer Junior',
+  description: 'Portfolio de Mathías Andino, Game Narrative Designer Junior de Buenos Aires. Diseño narrativo, sistemas de juego y desarrollo con Godot.',
   generator: 'v0.app',
   icons: {
     icon: [

@@ -4,7 +4,7 @@ import type { BlogPost } from "@/lib/blog-data"
 const DEFAULT_AUTHOR = {
   name: "Mathías Andino",
   avatar: "/profile-avatar.jpg",
-  role: "Technical Game Designer",
+  role: "Game Narrative Designer junior",
 }
 
 /** Formats a YYYY-MM-DD date into Spanish long form, e.g. "15 de noviembre de 2024" */
