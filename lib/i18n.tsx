@@ -360,7 +360,7 @@ export const translations = {
         {
           title: "Misión: Entrevista Laboral",
           description: "Estoy buscando oportunidades de tiempo completo. Si tu estudio está contratando, hablemos.",
-          requirements: "Contrato full-time / Remoto o Híbrido",
+          requirements: "Contrato full-time o part-time / Remoto, Híbrido o Presencial",
           reward: "Un diseñador dedicado",
           difficulty: "Legendario",
         },
@@ -773,7 +773,7 @@ export const translations = {
         {
           title: "Mission: Job Interview",
           description: "I am looking for full-time opportunities. If your studio is hiring, let's talk.",
-          requirements: "Full-time contract / Remote or Hybrid",
+          requirements: "Full-time or part-time contract / Remote, Hybrid or On-site",
           reward: "A dedicated designer",
           difficulty: "Legendary",
         },
