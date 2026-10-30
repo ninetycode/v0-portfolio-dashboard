@@ -203,7 +203,8 @@ export function TerminalEasterEgg() {
             { type: "system", content: "║  Bienvenido, administrador.        ║" },
             { type: "system", content: "╚════════════════════════════════════╝" },
             { type: "output", content: "" },
-            { type: "output", content: "Ahora puedes gestionar el blog desde /blog" },
+            { type: "output", content: "Blog: /blog    Videojuegos: /games    Proyectos: /proyectos" },
+            { type: "output", content: "Textos del sitio (inicio, sobre mí, experiencia, herramientas, misiones): /contenido" },
             { type: "output", content: "Usa 'adminlogout' para cerrar la sesión." },
           ])
         } else {
@@ -254,6 +255,29 @@ export function TerminalEasterEgg() {
       }
       adminLogoutCtx()
       newLines.push({ type: "system", content: "Sesión de administrador cerrada." })
+      setLines(newLines)
+      return
+    }
+
+    if (trimmedInput === "contenido") {
+      if (!isAdmin) {
+        newLines.push({ type: "error", content: "Necesitas iniciar sesión con adminuser." })
+      } else {
+        newLines.push({ type: "output", content: "Editor de textos: /contenido" })
+        newLines.push({ type: "output", content: "Secciones: inicio, sobre mí, experiencia, herramientas, misiones." })
+      }
+      setLines(newLines)
+      return
+    }
+
+    if (trimmedInput === "help") {
+      const response = staticCommands.help
+      if (Array.isArray(response)) {
+        response.forEach((line) => newLines.push({ type: "output", content: line }))
+      }
+      if (isAdmin) {
+        newLines.push({ type: "output", content: "  contenido - Editor de textos del sitio (/contenido)" })
+      }
       setLines(newLines)
       return
     }
