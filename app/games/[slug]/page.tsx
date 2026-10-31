@@ -5,7 +5,6 @@ import { ArrowLeft, ExternalLink, Keyboard, Pencil } from "lucide-react"
 import { isAdmin } from "@/lib/admin-auth"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { StatusBar } from "@/components/status-bar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { GamePlayer } from "@/components/games/game-player"
@@ -195,10 +194,7 @@ export default async function GamePage({ params }: Props) {
         </section>
       </main>
 
-      <div className="mb-12">
-        <Footer />
-      </div>
-      <StatusBar />
+      <Footer />
     </div>
   )
 }

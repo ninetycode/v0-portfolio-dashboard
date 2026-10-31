@@ -22,7 +22,7 @@ export function HeroSection() {
   }
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center pt-24 md:pt-20 pb-28 md:pb-20">
+    <section id="home" className="relative min-h-screen flex items-center justify-center pt-24 md:pt-20 pb-16">
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
       
@@ -49,10 +49,6 @@ export function HeroSection() {
               className="object-cover"
               priority
             />
-          </div>
-          {/* Level Badge */}
-          <div className="absolute bottom-1 right-1 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-primary bg-background">
-            <span className="font-mono text-sm font-bold text-primary"><RichText value={h.level} /></span>
           </div>
         </div>
 

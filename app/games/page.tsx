@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { Navbar } from "@/components/navbar"
 import { GamesGallery } from "@/components/games-gallery"
-import { StatusBar } from "@/components/status-bar"
 import { Footer } from "@/components/footer"
 import { getGames } from "@/app/actions/games"
 
@@ -23,11 +22,7 @@ export default async function GamesPage() {
         <GamesGallery games={games} />
       </main>
 
-      <div className="mb-12">
-        <Footer />
-      </div>
-
-      <StatusBar />
+      <Footer />
     </div>
   )
 }

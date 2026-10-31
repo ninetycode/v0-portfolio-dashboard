@@ -1,7 +1,6 @@
 import { notFound, redirect } from "next/navigation"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { StatusBar } from "@/components/status-bar"
 import { ProjectEditorForm } from "@/components/projects/project-editor-form"
 import { getProjectById, getProjectTaxonomy } from "@/app/actions/projects"
 import { isAdmin } from "@/lib/admin-auth"
@@ -24,7 +23,6 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
         <ProjectEditorForm project={project} taxonomy={taxonomy} />
       </main>
       <Footer />
-      <StatusBar />
     </div>
   )
 }

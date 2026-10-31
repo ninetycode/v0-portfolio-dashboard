@@ -8,7 +8,7 @@ export function HomeFooter() {
   const home = content.home
 
   return (
-    <footer data-reveal="rise" className="border-t border-border/50 bg-background/80 backdrop-blur-md py-8 mb-12">
+    <footer data-reveal="rise" className="border-t border-border/50 bg-background/80 backdrop-blur-md py-8">
       <div className="mx-auto max-w-6xl px-4 text-center">
         <p className="font-mono text-sm text-muted-foreground">
           {"// "}
