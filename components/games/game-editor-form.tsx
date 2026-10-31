@@ -602,7 +602,7 @@ export function GameEditorForm({ game, taxonomy }: Props) {
         </div>
       </FormSection>
 
-      <div className="sticky bottom-14 z-40 flex flex-wrap items-center gap-3 rounded-lg border border-border bg-card/95 px-4 py-3 shadow-lg backdrop-blur-md">
+      <div className="sticky bottom-4 z-40 flex flex-wrap items-center gap-3 rounded-lg border border-border bg-card/95 px-4 py-3 shadow-lg backdrop-blur-md">
         <div className="min-w-0 flex-1" aria-live="polite">
           {message ? (
             <p className={cn("flex items-center gap-2 text-sm", message.kind === "error" ? "text-destructive" : "text-primary")}>

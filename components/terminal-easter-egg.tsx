@@ -370,7 +370,7 @@ export function TerminalEasterEgg() {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="hidden sm:flex fixed bottom-16 right-4 z-40 items-center gap-2 px-3 py-2 rounded-lg bg-card/90 backdrop-blur-sm border border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 group"
+        className="hidden sm:flex fixed bottom-4 right-4 z-40 items-center gap-2 px-3 py-2 rounded-lg bg-card/90 backdrop-blur-sm border border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-all duration-200 group"
         aria-label="Abrir terminal"
       >
         <Terminal className="h-4 w-4 text-primary" />
@@ -386,8 +386,8 @@ export function TerminalEasterEgg() {
     <div 
       className={`fixed z-50 transition-all duration-300 ${
         isMinimized 
-          ? "bottom-16 right-4 w-auto" 
-          : "bottom-16 right-4 w-full max-w-md sm:max-w-lg"
+          ? "bottom-4 right-4 w-auto" 
+          : "bottom-4 right-4 w-full max-w-md sm:max-w-lg"
       }`}
     >
       <div

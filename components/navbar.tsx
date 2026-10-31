@@ -108,7 +108,7 @@ export function Navbar() {
             <Gamepad2 className="h-5 w-5 text-primary" />
           </div>
           <span className="font-serif text-lg font-semibold tracking-tight hidden sm:block">
-            <span className="text-primary">M</span>athías<span className="text-primary">.</span>dev
+            Mathías Andino
           </span>
         </Link>
 

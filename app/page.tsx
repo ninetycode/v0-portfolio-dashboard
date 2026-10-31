@@ -1,5 +1,4 @@
 import { Navbar } from "@/components/navbar"
-import { StatusBar } from "@/components/status-bar"
 import { HeroSection } from "@/components/hero-section"
 import { AboutMe } from "@/components/about-me"
 import { FeaturedGames } from "@/components/featured-games"
@@ -30,8 +29,6 @@ export default async function Home() {
       </main>
 
       <HomeFooter />
-
-      <StatusBar />
     </div>
   )
 }
