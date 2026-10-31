@@ -14,7 +14,7 @@ function resetPending(node: HTMLElement) {
 export function ScrollReveal() {
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    if (reduce || CSS.supports("animation-timeline", "view()")) return
+    if (reduce) return
 
     let batch: HTMLElement[] = []
     let frame = 0
@@ -29,7 +29,7 @@ export function ScrollReveal() {
         return ra.top - rb.top || ra.left - rb.left
       })
       items.forEach((node, index) => {
-        node.style.setProperty("--reveal-delay", `${Math.min(index, 8) * 70}ms`)
+        node.style.setProperty("--reveal-delay", `${Math.min(index, 6) * 120}ms`)
         node.classList.add("is-revealed")
       })
     }
@@ -44,8 +44,8 @@ export function ScrollReveal() {
       const visible = Math.min(rect.bottom, viewport) - Math.max(rect.top, 0)
       if (visible <= 0 || rect.height <= 0) return false
       const span = Math.min(rect.height, viewport)
-      const center = rect.top + span / 2
-      return visible / span >= 0.55 && center < viewport * 0.88
+      const needed = Math.min(180, Math.max(72, span * 0.34))
+      return visible >= needed && rect.top < viewport * 0.9
     }
 
     const observer = new IntersectionObserver(
