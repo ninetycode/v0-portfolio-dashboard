@@ -3,14 +3,14 @@ export type FontName = "serif" | "sans" | "mono"
 export type RichNode =
   | { t: "text"; v: string }
   | { t: "br" }
-  | { t: "strong" | "em" | "u"; c: RichNode[] }
+  | { t: "strong" | "em" | "u" | "s"; c: RichNode[] }
   | { t: "span"; color?: string; font?: FontName; c: RichNode[] }
   | { t: "ul"; items: RichNode[][] }
   | { t: "img"; src: string; alt: string }
 
 const BLOCKS = new Set(["div", "p", "blockquote", "h1", "h2", "h3", "h4", "h5", "h6", "section", "article", "header", "footer", "tr"])
 
-type Mark = { bold?: boolean; italic?: boolean; under?: boolean; color?: string; font?: FontName }
+type Mark = { bold?: boolean; italic?: boolean; under?: boolean; strike?: boolean; color?: string; font?: FontName }
 
 type Frame =
   | { kind: "block"; tag: string; nodes: RichNode[] }
@@ -78,6 +78,7 @@ function parseStyle(style: string): Mark {
   if (/font-weight\s*:\s*(bold|[6-9]00)\b/i.test(style)) mark.bold = true
   if (/font-style\s*:\s*italic\b/i.test(style)) mark.italic = true
   if (/text-decoration(?:-line)?\s*:\s*[^;]*underline/i.test(style)) mark.under = true
+  if (/text-decoration(?:-line)?\s*:\s*[^;]*line-through/i.test(style)) mark.strike = true
   return mark
 }
 
@@ -108,7 +109,14 @@ function cleanAlt(alt: string): string {
 }
 
 function sameTag(open: string, close: string): boolean {
-  const alias = (tag: string) => (tag === "b" ? "strong" : tag === "i" ? "em" : tag === "ol" ? "ul" : tag)
+  const alias = (tag: string) => {
+    if (tag === "b") return "strong"
+    if (tag === "i") return "em"
+    if (tag === "ol") return "ul"
+    if (tag === "strike" || tag === "del") return "s"
+    if (tag === "font") return "span"
+    return tag
+  }
   return alias(open) === alias(close)
 }
 
@@ -116,6 +124,7 @@ function markFrom(name: string, attrText: string): { tag: string; mark: Mark } |
   if (name === "b" || name === "strong") return { tag: "strong", mark: { bold: true } }
   if (name === "i" || name === "em") return { tag: "em", mark: { italic: true } }
   if (name === "u") return { tag: "u", mark: { under: true } }
+  if (name === "s" || name === "strike" || name === "del") return { tag: "s", mark: { strike: true } }
   if (name === "span" || name === "font") {
     const attrs = parseAttrs(attrText)
     const mark = parseStyle(attrs.style || "")
@@ -135,6 +144,16 @@ function pushNode(out: RichNode[], node: RichNode) {
     const prev = out[out.length - 1]
     if (prev?.t === "text") prev.v += node.v
     else out.push({ t: "text", v: node.v })
+    return
+  }
+  const prev = out[out.length - 1]
+  if ((node.t === "strong" || node.t === "em" || node.t === "u" || node.t === "s") && prev && prev.t === node.t) {
+    const target = prev as { t: string; c: RichNode[] }
+    target.c = normalize([...target.c, ...node.c])
+    return
+  }
+  if (node.t === "span" && prev && prev.t === "span" && prev.color === node.color && prev.font === node.font) {
+    prev.c = normalize([...prev.c, ...node.c])
     return
   }
   out.push(node)
@@ -169,7 +188,7 @@ function clean(node: RichNode): RichNode | RichNode[] | null {
   const children = normalize(node.c)
   if (!children.length) return null
   if (node.t === "span" && !node.color && !node.font) return children
-  if ((node.t === "strong" || node.t === "em" || node.t === "u") && children.length === 1 && children[0].t === node.t) {
+  if ((node.t === "strong" || node.t === "em" || node.t === "u" || node.t === "s") && children.length === 1 && children[0].t === node.t) {
     return children[0]
   }
   if (node.t === "span" && children.length === 1 && children[0].t === "span") {
@@ -185,6 +204,7 @@ function applyMark(nodes: RichNode[], mark: Mark): RichNode[] {
   if (mark.bold) wrapped = [{ t: "strong", c: wrapped }]
   if (mark.italic) wrapped = [{ t: "em", c: wrapped }]
   if (mark.under) wrapped = [{ t: "u", c: wrapped }]
+  if (mark.strike) wrapped = [{ t: "s", c: wrapped }]
   return wrapped
 }
 

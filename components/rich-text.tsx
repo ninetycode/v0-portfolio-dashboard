@@ -37,6 +37,7 @@ function renderNode(node: RichNode, key: string) {
   if (node.t === "strong") return <strong key={key}>{renderNodes(node.c, key)}</strong>
   if (node.t === "em") return <em key={key}>{renderNodes(node.c, key)}</em>
   if (node.t === "u") return <u key={key}>{renderNodes(node.c, key)}</u>
+  if (node.t === "s") return <s key={key}>{renderNodes(node.c, key)}</s>
   if (node.t === "span") {
     return (
       <span key={key} className={node.font ? fontClass[node.font] : undefined} style={node.color ? { color: node.color } : undefined}>
