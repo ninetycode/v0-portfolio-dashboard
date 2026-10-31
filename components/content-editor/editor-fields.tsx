@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import type { Bilingual, Lang } from "@/lib/site-content/types"
+import { RichField } from "./rich-field"
 
 export function newId(prefix: string) {
   return `${prefix}-${crypto.randomUUID().slice(0, 8)}`
@@ -42,14 +43,19 @@ export function TextField({
   onChange,
   multiline,
   hint,
+  plain,
 }: {
   label: string
   value: string
   onChange: (value: string) => void
   multiline?: boolean
   hint?: string
+  plain?: boolean
 }) {
   const id = useId()
+  if (!plain) {
+    return <RichField label={label} value={value} onChange={onChange} multiline={multiline} hint={hint} />
+  }
   return (
     <div className="flex flex-col gap-1.5">
       <Label htmlFor={id} className="font-mono text-xs text-muted-foreground">

@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Briefcase, ChevronRight, BookOpen } from "lucide-react"
 import { useSiteLang } from "@/lib/site-content/context"
 import { SectionEditLink } from "@/components/section-edit-link"
+import { RichText } from "@/components/rich-text"
+import { plainText } from "@/lib/site-content/rich-text"
 import type { ExperienceType } from "@/lib/site-content/types"
 
 export function ExperienceTimeline() {
@@ -24,10 +26,10 @@ export function ExperienceTimeline() {
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 border border-primary/30">
             <Briefcase className="h-5 w-5 text-primary" />
           </div>
-          <h2 className="font-serif text-3xl font-bold">{tx(ex.title)}</h2>
+          <h2 className="font-serif text-3xl font-bold"><RichText value={tx(ex.title)} /></h2>
           <SectionEditLink seccion="experiencia" />
         </div>
-        <p className="text-muted-foreground mb-12 max-w-2xl">{tx(ex.subtitle)}</p>
+        <p className="text-muted-foreground mb-12 max-w-2xl"><RichText value={tx(ex.subtitle)} /></p>
 
         <div className="grid gap-8 lg:grid-cols-[1fr,1.5fr]">
           {/* Timeline */}
@@ -53,7 +55,7 @@ export function ExperienceTimeline() {
                     }`}
                   >
                     <span className="font-mono text-xs font-bold">
-                      {(item.year || "•").slice(-2)}
+                      {(plainText(item.year) || "•").slice(-2)}
                     </span>
                   </div>
 
@@ -64,13 +66,13 @@ export function ExperienceTimeline() {
                   }`}>
                     <div className="flex items-start justify-between gap-2 mb-1">
                       <h3 className="font-serif font-semibold group-hover:text-primary transition-colors">
-                        {tx(item.title)}
+                        <RichText value={tx(item.title)} />
                       </h3>
                       <span className="font-mono text-xs text-muted-foreground shrink-0">
-                        {item.year}
+                        <RichText value={item.year} />
                       </span>
                     </div>
-                    <p className="text-sm text-muted-foreground">{tx(item.company)}</p>
+                    <p className="text-sm text-muted-foreground"><RichText value={tx(item.company)} /></p>
                   </div>
                 </div>
               ))}
@@ -89,22 +91,22 @@ export function ExperienceTimeline() {
                       ? "bg-accent/10 text-accent"
                       : "bg-[var(--akane-mint-dim)]/10 text-[var(--akane-mint-dim)]"
                   }`}>
-                    {selectedType === "work" ? tx(ex.typeWork) : selectedType === "project" ? tx(ex.typeProject) : tx(ex.typeMilestone)}
+                    <RichText value={selectedType === "work" ? tx(ex.typeWork) : selectedType === "project" ? tx(ex.typeProject) : tx(ex.typeMilestone)} />
                   </span>
-                  <span className="font-mono text-sm text-muted-foreground">{selectedYear}</span>
+                  <span className="font-mono text-sm text-muted-foreground">{selectedYear ? <RichText value={selectedYear} /> : null}</span>
                 </div>
 
-                <h3 className="font-serif text-2xl font-bold mb-2">{tx(selectedExp.title)}</h3>
-                <p className="text-primary mb-4">{tx(selectedExp.company)}</p>
-                <p className="text-muted-foreground mb-6 whitespace-pre-wrap">{tx(selectedExp.overview)}</p>
+                <h3 className="font-serif text-2xl font-bold mb-2"><RichText value={tx(selectedExp.title)} /></h3>
+                <p className="text-primary mb-4"><RichText value={tx(selectedExp.company)} /></p>
+                <p className="text-muted-foreground mb-6 whitespace-pre-wrap"><RichText value={tx(selectedExp.overview)} /></p>
 
                 <div className="space-y-3 mb-6">
-                  <h4 className="font-mono text-sm text-muted-foreground">{tx(ex.achievements)}</h4>
+                  <h4 className="font-mono text-sm text-muted-foreground"><RichText value={tx(ex.achievements)} /></h4>
                   <ul className="space-y-2">
                     {selectedExp.highlights.map((highlight, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm">
                         <ChevronRight className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                        <span>{tx(highlight)}</span>
+                        <span><RichText value={tx(highlight)} /></span>
                       </li>
                     ))}
                   </ul>
@@ -114,7 +116,7 @@ export function ExperienceTimeline() {
                   <Button variant="outline" className="gap-2 border-primary/30 hover:border-primary" asChild>
                     <a href="/blog">
                       <BookOpen className="h-4 w-4" />
-                      {tx(ex.readMore)}
+                      <RichText value={tx(ex.readMore)} />
                     </a>
                   </Button>
                 )}
@@ -122,7 +124,7 @@ export function ExperienceTimeline() {
             ) : (
               <div className="p-6 rounded-xl border border-dashed border-border/50 bg-muted/30 flex flex-col items-center justify-center text-center min-h-[300px]">
                 <Briefcase className="h-12 w-12 text-muted-foreground/30 mb-4" />
-                <p className="text-muted-foreground">{tx(ex.selectPrompt)}</p>
+                <p className="text-muted-foreground"><RichText value={tx(ex.selectPrompt)} /></p>
               </div>
             )}
           </div>

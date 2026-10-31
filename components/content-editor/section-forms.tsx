@@ -10,6 +10,7 @@ import type {
   MissionsContent,
   ToolsContent,
 } from "@/lib/site-content/types"
+import { plainText } from "@/lib/site-content/rich-text"
 import {
   AddButton,
   BiField,
@@ -128,7 +129,7 @@ export function AboutForm({ value, lang, onChange }: FormProps<AboutContent>) {
         {value.paragraphs.map((paragraph, index) => (
           <ItemCard
             key={`paragraph-${index}`}
-            title={paragraph[lang] || `Párrafo ${index + 1}`}
+            title={plainText(paragraph[lang]) || `Párrafo ${index + 1}`}
             index={index}
             count={value.paragraphs.length}
             kind="paragraph"
@@ -152,7 +153,7 @@ export function AboutForm({ value, lang, onChange }: FormProps<AboutContent>) {
         {value.stats.map((stat, index) => (
           <ItemCard
             key={stat.id}
-            title={(stat.useGameCount ? stat.countSuffix[lang] : stat.title[lang]) || `Tarjeta ${index + 1}`}
+            title={plainText(stat.useGameCount ? stat.countSuffix[lang] : stat.title[lang]) || `Tarjeta ${index + 1}`}
             index={index}
             count={value.stats.length}
             kind="stat"
@@ -232,7 +233,7 @@ export function ExperienceForm({ value, lang, onChange }: FormProps<ExperienceCo
         {value.items.map((item, index) => (
           <ItemCard
             key={item.id}
-            title={item.title[lang] || `Experiencia ${index + 1}`}
+            title={plainText(item.title[lang]) || `Experiencia ${index + 1}`}
             index={index}
             count={value.items.length}
             kind="exp"
@@ -348,7 +349,7 @@ export function ToolsForm({ value, lang, onChange }: FormProps<ToolsContent>) {
         {value.groups.map((group, groupIndex) => (
           <ItemCard
             key={group.id}
-            title={group.name[lang] || `Grupo ${groupIndex + 1}`}
+            title={plainText(group.name[lang]) || `Grupo ${groupIndex + 1}`}
             index={groupIndex}
             count={value.groups.length}
             kind="group"
@@ -364,7 +365,7 @@ export function ToolsForm({ value, lang, onChange }: FormProps<ToolsContent>) {
             {group.tools.map((tool, toolIndex) => (
               <ItemCard
                 key={tool.id}
-                title={tool.name[lang] || `Herramienta ${toolIndex + 1}`}
+                title={plainText(tool.name[lang]) || `Herramienta ${toolIndex + 1}`}
                 index={toolIndex}
                 count={group.tools.length}
                 kind={`tool-${group.id}`}
@@ -450,6 +451,7 @@ export function ToolsForm({ value, lang, onChange }: FormProps<ToolsContent>) {
                 />
                 {tool.icon.type === "brand" ? (
                   <TextField
+                    plain
                     label="Identificador del logo"
                     value={tool.icon.slug}
                     hint="El nombre en simpleicons.org, por ejemplo godotengine, unity o figma."
@@ -560,7 +562,7 @@ export function MissionsForm({ value, lang, onChange }: FormProps<MissionsConten
         {value.quests.map((quest, index) => (
           <ItemCard
             key={quest.id}
-            title={quest.title[lang] || `Misión ${index + 1}`}
+            title={plainText(quest.title[lang]) || `Misión ${index + 1}`}
             index={index}
             count={value.quests.length}
             kind="quest"
@@ -620,7 +622,7 @@ export function MissionsForm({ value, lang, onChange }: FormProps<MissionsConten
         {value.socials.map((social, index) => (
           <ItemCard
             key={social.id}
-            title={social.name || `Enlace ${index + 1}`}
+            title={plainText(social.name) || `Enlace ${index + 1}`}
             index={index}
             count={value.socials.length}
             kind="social"
@@ -628,7 +630,7 @@ export function MissionsForm({ value, lang, onChange }: FormProps<MissionsConten
             onRemove={() => set({ socials: value.socials.filter((_, i) => i !== index) })}
           >
             <TextField label="Nombre" value={social.name} onChange={(name) => set({ socials: value.socials.map((item, i) => (i === index ? { ...item, name } : item)) })} />
-            <TextField label="Dirección" value={social.href} onChange={(href) => set({ socials: value.socials.map((item, i) => (i === index ? { ...item, href } : item)) })} />
+            <TextField plain label="Dirección" value={social.href} onChange={(href) => set({ socials: value.socials.map((item, i) => (i === index ? { ...item, href } : item)) })} />
             <SelectField
               label="Icono"
               value={social.icon}
