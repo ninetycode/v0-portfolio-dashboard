@@ -191,32 +191,51 @@ html {
 }
 
 @keyframes reveal-rise {
-  from {
+  0% {
     opacity: 0;
-    translate: 0 1.65rem;
+    translate: 0 6.5rem;
+    filter: blur(8px);
   }
-  to {
+  62% {
+    opacity: 1;
+    translate: 0 -0.7rem;
+    filter: blur(0);
+  }
+  100% {
     opacity: 1;
     translate: 0 0;
+    filter: blur(0);
   }
 }
 
 @keyframes reveal-pop {
-  from {
+  0% {
     opacity: 0;
-    translate: 0 2.75rem;
-    scale: 0.94;
+    translate: 0 8.5rem;
+    scale: 0.68;
+    rotate: -7deg;
+    filter: blur(10px);
   }
-  to {
+  58% {
+    opacity: 1;
+    translate: 0 -1.15rem;
+    scale: 1.08;
+    rotate: 2deg;
+    filter: blur(0);
+  }
+  100% {
     opacity: 1;
     translate: 0 0;
     scale: 1;
+    rotate: 0deg;
+    filter: blur(0);
   }
 }
 
 [data-reveal].reveal-arm:not(.is-revealed):not(.reveal-done) {
   opacity: 0;
-  translate: 0 1.65rem;
+  translate: 0 6.5rem;
+  filter: blur(8px);
 }
 
 [data-reveal].reveal-arm:not(.is-revealed):focus-visible,
@@ -224,11 +243,15 @@ html {
   opacity: 1;
   translate: none;
   scale: none;
+  rotate: none;
+  filter: none;
 }
 
 [data-reveal="pop"].reveal-arm:not(.is-revealed):not(.reveal-done) {
-  translate: 0 2.75rem;
-  scale: 0.94;
+  translate: 0 8.5rem;
+  scale: 0.68;
+  rotate: -7deg;
+  filter: blur(10px);
 }
 
 [data-reveal].reveal-arm,
@@ -237,27 +260,12 @@ html {
 }
 
 [data-reveal].is-revealed {
-  animation: reveal-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms) both;
+  animation: reveal-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms) both;
 }
 
 [data-reveal="pop"].is-revealed {
   animation-name: reveal-pop;
-  animation-duration: 0.72s;
-}
-
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    [data-reveal] {
-      animation: reveal-rise linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 42%;
-    }
-
-    [data-reveal="pop"] {
-      animation-name: reveal-pop;
-      animation-range: entry 0% entry 58%;
-    }
-  }
+  animation-duration: 1.05s;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -265,6 +273,8 @@ html {
     opacity: 1;
     translate: none;
     scale: none;
+    rotate: none;
+    filter: none;
   }
 
   [data-reveal].is-revealed {
