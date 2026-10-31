@@ -24,7 +24,10 @@ export async function POST(request: NextRequest) {
     }
 
     const requestedFolder = formData.get("folder")
-    const folder = requestedFolder === "games" || requestedFolder === "projects" ? requestedFolder : "blog"
+    const folder =
+      requestedFolder === "games" || requestedFolder === "projects" || requestedFolder === "content"
+        ? requestedFolder
+        : "blog"
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_")
     const blob = await put(`${folder}/${Date.now()}-${safeName}`, file, {
       access: "public",

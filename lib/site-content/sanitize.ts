@@ -22,15 +22,16 @@ import type {
   ToolItem,
   ToolsContent,
 } from "./types"
+import { plainText, sanitizeRichText } from "./rich-text"
 import { ABOUT_ICONS, DIFFICULTIES, EXPERIENCE_TYPES, LUCIDE_TOOLS, QUEST_KINDS, SOCIAL_ICONS } from "./types"
 
 export type SanitizeResult<T> = { ok: true; value: T } | { ok: false; error: string }
 
 type Mode = "read" | "write"
 
-const SHORT = 240
-const MEDIUM = 800
-const LONG = 5000
+const SHORT = 4000
+const MEDIUM = 8000
+const LONG = 20000
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return !!value && typeof value === "object" && !Array.isArray(value)
@@ -38,7 +39,9 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function str(value: unknown, fallback: string, max: number): string {
   if (typeof value !== "string") return fallback
-  return value.slice(0, max)
+  const clean = sanitizeRichText(value)
+  if (clean.length <= max) return clean
+  return sanitizeRichText(clean.slice(0, max))
 }
 
 function bi(value: unknown, fallback: Bilingual, max: number): Bilingual {
@@ -118,7 +121,7 @@ function toolIcon(value: unknown, fallback: ToolIcon, mode: Mode, errors: string
 function sanitizeHome(data: Record<string, unknown>, base: HomeContent): HomeContent {
   return {
     badge: bi(data.badge, base.badge, SHORT),
-    level: str(data.level, base.level, 8),
+    level: str(data.level, base.level, SHORT),
     title1: bi(data.title1, base.title1, SHORT),
     title2: bi(data.title2, base.title2, SHORT),
     title3: bi(data.title3, base.title3, SHORT),
@@ -150,7 +153,7 @@ function sanitizeAbout(data: Record<string, unknown>, base: AboutContent): About
   return {
     label: bi(data.label, base.label, SHORT),
     titlePart1: bi(data.titlePart1, base.titlePart1, MEDIUM),
-    titleYear: str(data.titleYear, base.titleYear, 20),
+    titleYear: str(data.titleYear, base.titleYear, SHORT),
     paragraphs: biList(data.paragraphs, base.paragraphs, 12, LONG),
     stats: uniqueIds(
       stats.map((item, index): AboutStat => {
@@ -161,7 +164,7 @@ function sanitizeAbout(data: Record<string, unknown>, base: AboutContent): About
           icon: oneOf<AboutIcon>(src.icon, ABOUT_ICONS, fallback?.icon ?? "gamepad"),
           useGameCount: flag(src.useGameCount, fallback?.useGameCount ?? false),
           title: bi(src.title, fallback?.title ?? { es: "", en: "" }, SHORT),
-          countSuffix: bi(src.countSuffix, fallback?.countSuffix ?? { es: "juegos", en: "games" }, 40),
+          countSuffix: bi(src.countSuffix, fallback?.countSuffix ?? { es: "juegos", en: "games" }, SHORT),
           description: bi(src.description, fallback?.description ?? { es: "", en: "" }, MEDIUM),
         }
       }),
@@ -187,7 +190,7 @@ function sanitizeExperience(data: Record<string, unknown>, base: ExperienceConte
         const src = isRecord(item) ? item : {}
         return {
           id: cleanId(src.id, fallback?.id ?? `exp-${index + 1}`),
-          year: str(src.year, fallback?.year ?? "", 32),
+          year: str(src.year, fallback?.year ?? "", SHORT),
           type: oneOf<ExperienceType>(src.type, EXPERIENCE_TYPES, fallback?.type ?? "work"),
           title: bi(src.title, fallback?.title ?? { es: "", en: "" }, SHORT),
           company: bi(src.company, fallback?.company ?? { es: "", en: "" }, SHORT),
@@ -280,11 +283,11 @@ function sanitizeMissions(data: Record<string, unknown>, base: MissionsContent, 
       socials.map((social, index): SocialLink => {
         const fallback = base.socials[index]
         const src = isRecord(social) ? social : {}
-        const name = str(src.name, fallback?.name ?? "", 80)
+        const name = str(src.name, fallback?.name ?? "", SHORT)
         return {
           id: cleanId(src.id, fallback?.id ?? `social-${index + 1}`),
           name,
-          href: hrefOf(src.href, fallback?.href ?? "", mode, name, errors),
+          href: hrefOf(src.href, fallback?.href ?? "", mode, plainText(name).slice(0, 80), errors),
           icon: oneOf<SocialIcon>(src.icon, SOCIAL_ICONS, fallback?.icon ?? "mail"),
         }
       }),

@@ -189,3 +189,21 @@ html {
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
+
+[data-font="serif"] { font-family: var(--font-serif), Georgia, serif; }
+[data-font="sans"] { font-family: var(--font-sans), Inter, sans-serif; }
+[data-font="mono"] { font-family: var(--font-mono), ui-monospace, monospace; }
+
+.rich-editor img {
+  display: inline-block;
+  max-height: 8rem;
+  max-width: 100%;
+  vertical-align: middle;
+  object-fit: contain;
+}
+
+.rich-editor ul {
+  margin: 0.25rem 0;
+  list-style: disc;
+  padding-left: 1.25rem;
+}

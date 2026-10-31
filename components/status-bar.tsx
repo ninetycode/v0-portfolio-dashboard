@@ -1,6 +1,7 @@
 "use client"
 
 import { Heart, Sparkles, Target, MapPin } from "lucide-react"
+import { RichText } from "@/components/rich-text"
 import { useSiteLang } from "@/lib/site-content/context"
 
 export function StatusBar() {
@@ -39,15 +40,15 @@ export function StatusBar() {
         {/* Current Goal */}
         <div className="hidden sm:flex items-center gap-2 shrink-0">
           <Target className="h-4 w-4 text-primary" />
-          <span className="font-mono text-xs text-muted-foreground">{tx(s.objectiveLabel)}</span>
-          <span className="font-mono text-xs text-primary">{tx(s.objectiveValue)}</span>
+          <span className="font-mono text-xs text-muted-foreground"><RichText value={tx(s.objectiveLabel)} /></span>
+          <span className="font-mono text-xs text-primary"><RichText value={tx(s.objectiveValue)} /></span>
         </div>
 
         {/* Location */}
         <div className="hidden md:flex items-center gap-2 shrink-0">
           <MapPin className="h-4 w-4 text-primary" />
-          <span className="font-mono text-xs text-muted-foreground">{tx(s.locationLabel)}</span>
-          <span className="font-mono text-xs text-primary">{tx(s.locationValue)}</span>
+          <span className="font-mono text-xs text-muted-foreground"><RichText value={tx(s.locationLabel)} /></span>
+          <span className="font-mono text-xs text-primary"><RichText value={tx(s.locationValue)} /></span>
         </div>
       </div>
     </div>
