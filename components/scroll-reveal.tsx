@@ -41,11 +41,10 @@ export function ScrollReveal() {
 
     const readyToReveal = (rect: DOMRect) => {
       const viewport = window.innerHeight
+      if (rect.height <= 0 || rect.bottom <= 8 || rect.top >= viewport) return false
       const visible = Math.min(rect.bottom, viewport) - Math.max(rect.top, 0)
-      if (visible <= 0 || rect.height <= 0) return false
-      const span = Math.min(rect.height, viewport)
-      const needed = Math.min(180, Math.max(72, span * 0.34))
-      return visible >= needed && rect.top < viewport * 0.9
+      const needed = Math.min(rect.height, Math.max(16, rect.height * 0.55))
+      return visible + 0.5 >= needed && rect.top < viewport * 0.94
     }
 
     const observer = new IntersectionObserver(
@@ -87,6 +86,23 @@ export function ScrollReveal() {
 
     document.querySelectorAll<HTMLElement>(SELECTOR).forEach((node) => arm(node, false))
 
+    let scanFrame = 0
+    const scanArmed = () => {
+      scanFrame = 0
+      document
+        .querySelectorAll<HTMLElement>(`${SELECTOR}.reveal-arm:not(.is-revealed):not(.reveal-done)`)
+        .forEach((node) => {
+          if (!readyToReveal(node.getBoundingClientRect())) return
+          observer.unobserve(node)
+          queue(node)
+        })
+    }
+    const requestScan = () => {
+      if (!scanFrame) scanFrame = requestAnimationFrame(scanArmed)
+    }
+    window.addEventListener("scroll", requestScan, { passive: true })
+    window.addEventListener("resize", requestScan)
+
     const mutations = new MutationObserver((records) => {
       for (const record of records) {
         record.addedNodes.forEach((added) => {
@@ -103,7 +119,10 @@ export function ScrollReveal() {
       observer.disconnect()
       mutations.disconnect()
       document.removeEventListener("animationend", onAnimationEnd)
+      window.removeEventListener("scroll", requestScan)
+      window.removeEventListener("resize", requestScan)
       if (frame) cancelAnimationFrame(frame)
+      if (scanFrame) cancelAnimationFrame(scanFrame)
       document.querySelectorAll<HTMLElement>(SELECTOR).forEach((node) => {
         if (!node.classList.contains("reveal-done")) resetPending(node)
       })
