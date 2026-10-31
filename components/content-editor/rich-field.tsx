@@ -1,11 +1,26 @@
 "use client"
 
 import { useEffect, useId, useRef, useState } from "react"
-import { Bold, ImagePlus, Italic, List, RemoveFormatting, Underline } from "lucide-react"
+import { Bold, ImagePlus, Italic, List, RemoveFormatting, Strikethrough, Underline } from "lucide-react"
 import { Label } from "@/components/ui/label"
+import {
+  NO_FORMATS,
+  commandFor,
+  currentRange,
+  formatsAt,
+  setColor,
+  setFont,
+  toggleFormat,
+  wholeRange,
+  wordAt,
+  type ActiveFormats,
+  type InlineFormat,
+} from "@/lib/site-content/format-dom"
 import { editorValue, splitIntoItems, stripInlineFormatting, type FontName } from "@/lib/site-content/rich-text"
 
 const SWATCHES = ["#1e293b", "#3d5a9e", "#478cbf", "#16a34a", "#b45309"]
+const FORMAT_KEYS: InlineFormat[] = ["bold", "italic", "underline", "strike"]
+const SHORTCUTS: Record<string, InlineFormat> = { b: "bold", i: "italic", u: "underline" }
 
 function writeEditor(el: HTMLElement, value: string) {
   if (!value.includes("<")) {
@@ -33,6 +48,7 @@ export function RichField({
   const fileRef = useRef<HTMLInputElement>(null)
   const rangeRef = useRef<Range | null>(null)
   const last = useRef<string | null>(null)
+  const [active, setActive] = useState<ActiveFormats>(NO_FORMATS)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState("")
 
@@ -82,56 +98,80 @@ export function RichField({
     next?.addRange(range)
   }
 
-  function selectAll(el: HTMLElement) {
-    const range = document.createRange()
-    range.selectNodeContents(el)
+  function select(range: Range) {
     const selection = window.getSelection()
     selection?.removeAllRanges()
     selection?.addRange(range)
+    rangeRef.current = range.cloneRange()
   }
 
-  function withSelection(apply: () => void) {
+  function refreshActive(range: Range | null) {
+    const el = fieldRef.current
+    if (!el || !range) return
+    const target = range.collapsed ? (wordAt(range)?.range ?? range) : range
+    const next = formatsAt(el, target)
+    setActive((prev) => (FORMAT_KEYS.every((key) => prev[key] === next[key]) ? prev : next))
+  }
+
+  // Runs a formatting operation on the selection. A caret inside a word targets only that word,
+  // and with no selection at all the whole field is the target.
+  function format(operation: (root: HTMLElement, range: Range) => Range | null, fallbackCommand?: string) {
     const el = fieldRef.current
     if (!el) return
-    focusField()
-    const selection = window.getSelection()
-    const inside = !!selection && selection.rangeCount > 0 && !!selection.anchorNode && el.contains(selection.anchorNode)
-    if (!inside || selection!.isCollapsed) selectAll(el)
-    apply()
-    rangeRef.current = null
+    el.focus()
+    const base = currentRange(el, rangeRef.current) ?? wholeRange(el)
+    const word = base.collapsed ? wordAt(base) : null
+    if (base.collapsed && !word) {
+      if (fallbackCommand && base.startContainer !== el) {
+        select(base)
+        document.execCommand(fallbackCommand)
+        emit()
+      }
+      return
+    }
+    const result = operation(el, word ? word.range : base)
+    if (result) {
+      const caretOnWord = word && result.startContainer === result.endContainer && result.startContainer.nodeType === 3
+      if (caretOnWord) {
+        const node = result.startContainer as Text
+        const caret = document.createRange()
+        caret.setStart(node, Math.min(node.length, Math.max(0, base.startOffset - word.start)))
+        caret.collapse(true)
+        select(caret)
+      } else {
+        select(result)
+      }
+    }
     emit()
+    refreshActive(window.getSelection()?.rangeCount ? window.getSelection()!.getRangeAt(0) : result)
   }
 
-  function applyCommand(command: string, arg?: string) {
-    withSelection(() => document.execCommand(command, false, arg))
+  function toggle(kind: InlineFormat) {
+    format((root, range) => toggleFormat(root, range, kind), commandFor(kind))
   }
 
-  function applyFont(font: FontName | "" | "clear") {
-    withSelection(() => {
-      const el = fieldRef.current
+  function applyColor(color: string | null) {
+    format((root, range) => setColor(root, range, color))
+  }
+
+  function applyFont(font: FontName | "clear") {
+    format((root, range) => setFont(root, range, font === "clear" ? null : font))
+  }
+
+  useEffect(() => {
+    const el = fieldRef.current
+    if (!el) return
+    function onSelectionChange() {
       const selection = window.getSelection()
       if (!el || !selection || selection.rangeCount === 0) return
+      if (!el.contains(selection.anchorNode) || !el.contains(selection.focusNode)) return
       const range = selection.getRangeAt(0)
-      if (!font || font === "clear") {
-        for (const span of Array.from(el.querySelectorAll<HTMLElement>("[data-font]"))) {
-          if (!range.intersectsNode(span)) continue
-          const parent = span.parentNode
-          if (!parent) continue
-          while (span.firstChild) parent.insertBefore(span.firstChild, span)
-          parent.removeChild(span)
-        }
-        return
-      }
-      const wrapper = document.createElement("span")
-      wrapper.setAttribute("data-font", font)
-      try {
-        range.surroundContents(wrapper)
-      } catch {
-        wrapper.appendChild(range.extractContents())
-        range.insertNode(wrapper)
-      }
-    })
-  }
+      rangeRef.current = range.cloneRange()
+      refreshActive(range)
+    }
+    document.addEventListener("selectionchange", onSelectionChange)
+    return () => document.removeEventListener("selectionchange", onSelectionChange)
+  }, [])
 
   function clearFormatting() {
     const el = fieldRef.current
@@ -205,18 +245,27 @@ export function RichField({
       </Label>
       <div className="overflow-hidden rounded-md border border-input bg-transparent focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50">
         <div className="flex flex-wrap items-center gap-1 border-b border-border bg-muted/40 px-1.5 py-1">
-          <button type="button" className={toolClass} title="Negrita" onMouseDown={(event) => event.preventDefault()} onClick={() => applyCommand("bold")}>
-            <Bold className="h-3.5 w-3.5" />
-            Negrita
-          </button>
-          <button type="button" className={toolClass} title="Subrayado" onMouseDown={(event) => event.preventDefault()} onClick={() => applyCommand("underline")}>
-            <Underline className="h-3.5 w-3.5" />
-            Subrayado
-          </button>
-          <button type="button" className={toolClass} title="Cursiva" onMouseDown={(event) => event.preventDefault()} onClick={() => applyCommand("italic")}>
-            <Italic className="h-3.5 w-3.5" />
-            Cursiva
-          </button>
+          {(
+            [
+              ["bold", "Negrita", Bold],
+              ["underline", "Subrayado", Underline],
+              ["italic", "Cursiva", Italic],
+              ["strike", "Tachado", Strikethrough],
+            ] as const
+          ).map(([kind, text, Icon]) => (
+            <button
+              key={kind}
+              type="button"
+              className={`${toolClass} ${active[kind] ? "border-primary bg-primary/10 text-primary" : ""}`}
+              title={text}
+              aria-pressed={active[kind]}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => toggle(kind)}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              {text}
+            </button>
+          ))}
           <select
             aria-label="Fuente"
             defaultValue=""
@@ -242,19 +291,19 @@ export function RichField({
               className="h-5 w-5 rounded-sm border border-border"
               style={{ backgroundColor: color }}
               onMouseDown={(event) => event.preventDefault()}
-              onClick={() => applyCommand("foreColor", color)}
+              onClick={() => applyColor(color)}
             />
           ))}
+          <button type="button" className={toolClass} title="Quitar color" onMouseDown={(event) => event.preventDefault()} onClick={() => applyColor(null)}>
+            Sin color
+          </button>
           <input
             type="color"
             aria-label="Otro color"
             title="Otro color"
             defaultValue="#3d5a9e"
             className="h-7 w-8 cursor-pointer rounded-sm border border-border bg-background p-0.5"
-            onChange={(event) => {
-              const color = event.target.value
-              applyCommand("foreColor", color)
-            }}
+            onChange={(event) => applyColor(event.target.value)}
           />
           <button
             type="button"
@@ -302,6 +351,15 @@ export function RichField({
             onKeyUp={saveRange}
             onMouseUp={saveRange}
             onKeyDown={(event) => {
+              if ((event.ctrlKey || event.metaKey) && !event.altKey) {
+                const key = event.key.toLowerCase()
+                const kind = event.shiftKey && key === "x" ? "strike" : !event.shiftKey ? SHORTCUTS[key] : undefined
+                if (kind) {
+                  event.preventDefault()
+                  toggle(kind)
+                  return
+                }
+              }
               if (event.key !== "Enter") return
               event.preventDefault()
               if (!multiline) return

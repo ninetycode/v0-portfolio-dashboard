@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { CheckCircle2, Loader2, Save } from "lucide-react"
@@ -22,6 +22,10 @@ export function ContentEditor({ initial, initialSection }: { initial: SiteConten
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState<Message>(null)
 
+  const contentRef = useRef(content)
+  const savingRef = useRef(false)
+  contentRef.current = content
+
   const current = sectionByKey(section)
   const dirty = JSON.stringify(content[section]) !== JSON.stringify(saved[section])
 
@@ -41,17 +45,27 @@ export function ContentEditor({ initial, initialSection }: { initial: SiteConten
   }
 
   const save = async () => {
+    if (savingRef.current) return
+    const target = section
+    const payload = contentRef.current[target]
+    savingRef.current = true
     setSaving(true)
     setMessage(null)
-    const result = await saveSiteSection(section, content[section])
-    setSaving(false)
-    if (result.success) {
-      setSaved((prev) => ({ ...prev, [section]: content[section] }))
-      setMessage({ kind: "success", text: "Guardado. Ya se ve en la página pública." })
-      router.refresh()
-      return
+    try {
+      const result = await saveSiteSection(target, payload)
+      if (result.success) {
+        setSaved((prev) => ({ ...prev, [target]: payload }))
+        setMessage({ kind: "success", text: "Guardado. Ya se ve en la página pública." })
+        router.refresh()
+      } else {
+        setMessage({ kind: "error", text: result.error })
+      }
+    } catch {
+      setMessage({ kind: "error", text: "No se pudo guardar. Revisa tu conexión e inténtalo de nuevo." })
+    } finally {
+      savingRef.current = false
+      setSaving(false)
     }
-    setMessage({ kind: "error", text: result.error })
   }
 
   return (
