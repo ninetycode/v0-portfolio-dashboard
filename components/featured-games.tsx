@@ -15,7 +15,7 @@ export function FeaturedGames({ games }: { games: GameSummary[] }) {
   return (
     <section id="featured" className="py-20 px-4">
       <div className="mx-auto max-w-6xl">
-        <div className="text-center mb-12">
+        <div data-reveal="rise" className="text-center mb-12">
           <p className="font-mono text-sm text-primary tracking-widest uppercase mb-3"><RichText value={tx(home.featuredKicker)} /></p>
           <h2 className="font-serif text-4xl md:text-5xl font-bold mb-4 text-balance"><RichText value={tx(home.featuredTitle)} /></h2>
           <p className="text-muted-foreground max-w-xl mx-auto text-sm leading-relaxed">
@@ -24,7 +24,7 @@ export function FeaturedGames({ games }: { games: GameSummary[] }) {
         </div>
 
         {games.length === 0 ? (
-          <p className="text-center font-mono text-sm text-muted-foreground">
+          <p data-reveal="rise" className="text-center font-mono text-sm text-muted-foreground">
             <RichText value={tx(home.featuredEmpty)} />
           </p>
         ) : (
@@ -33,6 +33,7 @@ export function FeaturedGames({ games }: { games: GameSummary[] }) {
               <Link
                 key={game.id}
                 href={`/games/${game.slug}`}
+                data-reveal="pop"
                 className="group relative rounded-2xl overflow-hidden border border-border/40 bg-card hover:border-primary/50 transition-all duration-300"
               >
                 <div className="relative aspect-[16/9] overflow-hidden bg-muted">
@@ -82,6 +83,7 @@ export function FeaturedGames({ games }: { games: GameSummary[] }) {
         <div className="mt-12 text-center">
           <Link
             href="/games"
+            data-reveal="rise"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-border/60 bg-transparent text-foreground font-mono text-sm hover:border-primary hover:text-primary transition-all duration-200"
           >
             <RichText value={tx(home.featuredSeeAll)} />

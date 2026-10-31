@@ -22,14 +22,14 @@ export function ExperienceTimeline() {
     <section id="experience" className="py-20 px-4">
       <div className="mx-auto max-w-6xl">
         {/* Section Header */}
-        <div className="flex items-center gap-3 mb-4">
+        <div data-reveal="rise" className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 border border-primary/30">
             <Briefcase className="h-5 w-5 text-primary" />
           </div>
           <h2 className="font-serif text-3xl font-bold"><RichText value={tx(ex.title)} /></h2>
           <SectionEditLink seccion="experiencia" />
         </div>
-        <p className="text-muted-foreground mb-12 max-w-2xl"><RichText value={tx(ex.subtitle)} /></p>
+        <p data-reveal="rise" className="text-muted-foreground mb-12 max-w-2xl"><RichText value={tx(ex.subtitle)} /></p>
 
         <div className="grid gap-8 lg:grid-cols-[1fr,1.5fr]">
           {/* Timeline */}
@@ -40,6 +40,7 @@ export function ExperienceTimeline() {
               {ex.items.map((item, index) => (
                 <div
                   key={item.id}
+                  data-reveal="pop"
                   className="relative pl-12 cursor-pointer group"
                   onClick={() => setSelectedIdx(index)}
                 >
@@ -82,7 +83,7 @@ export function ExperienceTimeline() {
           {/* Detail Panel */}
           <div className="lg:sticky lg:top-24 h-fit">
             {selectedExp ? (
-              <div className="p-6 rounded-xl border border-border/50 bg-card">
+              <div data-reveal="rise" className="p-6 rounded-xl border border-border/50 bg-card">
                 <div className="flex items-center gap-2 mb-4">
                   <span className={`px-2 py-1 rounded text-xs font-mono ${
                     selectedType === "work"
@@ -122,7 +123,7 @@ export function ExperienceTimeline() {
                 )}
               </div>
             ) : (
-              <div className="p-6 rounded-xl border border-dashed border-border/50 bg-muted/30 flex flex-col items-center justify-center text-center min-h-[300px]">
+              <div data-reveal="rise" className="p-6 rounded-xl border border-dashed border-border/50 bg-muted/30 flex flex-col items-center justify-center text-center min-h-[300px]">
                 <Briefcase className="h-12 w-12 text-muted-foreground/30 mb-4" />
                 <p className="text-muted-foreground"><RichText value={tx(ex.selectPrompt)} /></p>
               </div>

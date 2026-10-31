@@ -44,6 +44,7 @@ function toAverage(value: string | null): number | null {
 }
 
 export async function getGames(): Promise<GameSummary[]> {
+  if (!process.env.DATABASE_URL) return []
   const rows = await db
     .select({
       id: games.id,

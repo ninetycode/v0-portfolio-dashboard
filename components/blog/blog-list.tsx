@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Clock, Calendar, Star, ArrowRight, Pencil, Trash2 } from "lucide-react"
@@ -17,34 +16,8 @@ interface BlogListProps {
 }
 
 export function BlogList({ posts, isAdmin = false, onEdit, onDelete }: BlogListProps) {
-  const [visiblePosts, setVisiblePosts] = useState<Set<string>>(new Set())
-  const observerRef = useRef<IntersectionObserver | null>(null)
   const { t } = useLang()
   const tb = t.blog
-
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const postId = entry.target.getAttribute("data-post-id")
-            if (postId) {
-              setVisiblePosts((prev) => new Set([...prev, postId]))
-            }
-          }
-        })
-      },
-      { threshold: 0.1, rootMargin: "50px" }
-    )
-
-    return () => observerRef.current?.disconnect()
-  }, [])
-
-  useEffect(() => {
-    const cards = document.querySelectorAll("[data-post-id]")
-    cards.forEach((card) => observerRef.current?.observe(card))
-    return () => observerRef.current?.disconnect()
-  }, [posts])
 
   if (posts.length === 0) {
     return (
@@ -58,19 +31,11 @@ export function BlogList({ posts, isAdmin = false, onEdit, onDelete }: BlogListP
 
   return (
     <div className="space-y-6">
-      {posts.map((post, index) => (
+      {posts.map((post) => (
         <article
           key={post.id}
-          data-post-id={post.id}
-          className={`
-            group relative rounded-lg border border-border bg-card overflow-hidden
-            transition-all duration-300 hover:border-primary/50
-            ${visiblePosts.has(post.id) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}
-          `}
-          style={{ 
-            transitionDelay: `${index * 100}ms`,
-            transitionProperty: "opacity, transform, border-color, box-shadow"
-          }}
+          data-reveal="pop"
+          className="group relative rounded-lg border border-border bg-card overflow-hidden transition-all duration-300 hover:border-primary/50"
         >
           {/* Gradient overlay on hover */}
           <div className={`absolute inset-0 bg-gradient-to-br ${post.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />

@@ -190,6 +190,88 @@ html {
   animation: float 3s ease-in-out infinite;
 }
 
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    translate: 0 1.65rem;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes reveal-pop {
+  from {
+    opacity: 0;
+    translate: 0 2.75rem;
+    scale: 0.94;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+[data-reveal].reveal-arm:not(.is-revealed):not(.reveal-done) {
+  opacity: 0;
+  translate: 0 1.65rem;
+}
+
+[data-reveal].reveal-arm:not(.is-revealed):focus-visible,
+[data-reveal].reveal-arm:not(.is-revealed):focus-within {
+  opacity: 1;
+  translate: none;
+  scale: none;
+}
+
+[data-reveal="pop"].reveal-arm:not(.is-revealed):not(.reveal-done) {
+  translate: 0 2.75rem;
+  scale: 0.94;
+}
+
+[data-reveal].reveal-arm,
+[data-reveal].is-revealed {
+  transition: none !important;
+}
+
+[data-reveal].is-revealed {
+  animation: reveal-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms) both;
+}
+
+[data-reveal="pop"].is-revealed {
+  animation-name: reveal-pop;
+  animation-duration: 0.72s;
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal] {
+      animation: reveal-rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 42%;
+    }
+
+    [data-reveal="pop"] {
+      animation-name: reveal-pop;
+      animation-range: entry 0% entry 58%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal].reveal-arm:not(.is-revealed):not(.reveal-done) {
+    opacity: 1;
+    translate: none;
+    scale: none;
+  }
+
+  [data-reveal].is-revealed {
+    animation: none;
+  }
+}
+
 [data-font="serif"] { font-family: var(--font-serif), Georgia, serif; }
 [data-font="sans"] { font-family: var(--font-sans), Inter, sans-serif; }
 [data-font="mono"] { font-family: var(--font-mono), ui-monospace, monospace; }

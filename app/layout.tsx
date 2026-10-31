@@ -12,6 +12,7 @@ import { CustomCursor } from '@/components/custom-cursor'
 import { TerminalEasterEgg } from '@/components/terminal-easter-egg'
 import { AdminEditShortcut } from '@/components/admin-content-bar'
 import { ScrollToTop } from '@/components/scroll-to-top'
+import { ScrollReveal } from '@/components/scroll-reveal'
 import './globals.css'
 
 const lora = Lora({ 
@@ -77,6 +78,7 @@ export default async function RootLayout({
                 <CursorProvider>
                   <AudioProvider>
                     <CustomCursor />
+                    <ScrollReveal />
                     {children}
                     <ScrollToTop />
                     <AdminEditShortcut />

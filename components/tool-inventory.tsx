@@ -47,19 +47,19 @@ export function ToolInventory() {
   return (
     <section id="tools" className="py-20 px-4">
       <div className="mx-auto max-w-6xl">
-        <div className="flex items-center gap-3 mb-4">
+        <div data-reveal="rise" className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-accent/10 border border-accent/30">
             <Wrench className="h-5 w-5 text-accent" />
           </div>
           <h2 className="font-serif text-3xl font-bold"><RichText value={tx(tl.title)} /></h2>
           <SectionEditLink seccion="herramientas" />
         </div>
-        <p className="text-muted-foreground mb-12 max-w-2xl"><RichText value={tx(tl.subtitle)} /></p>
+        <p data-reveal="rise" className="text-muted-foreground mb-12 max-w-2xl"><RichText value={tx(tl.subtitle)} /></p>
 
         <div className="flex flex-col gap-10">
           {tl.groups.map((group) => (
             <div key={group.id}>
-              <h3 className="font-mono text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: toolColor }}>
+              <h3 data-reveal="rise" className="font-mono text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: toolColor }}>
                 <RichText value={tx(group.name)} />
               </h3>
 
@@ -67,6 +67,7 @@ export function ToolInventory() {
                 {group.tools.map((tool) => (
                   <div
                     key={tool.id}
+                    data-reveal="pop"
                     className="group relative p-4 rounded-xl border border-border/50 bg-card hover:border-primary/50 transition-all duration-300"
                   >
                     <div

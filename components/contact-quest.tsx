@@ -81,14 +81,14 @@ export function ContactQuest() {
   return (
     <section id="contact" className="py-20 px-4">
       <div className="mx-auto max-w-6xl">
-        <div className="flex items-center gap-3 mb-4">
+        <div data-reveal="rise" className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-accent/10 border border-accent/30">
             <Scroll className="h-5 w-5 text-accent" />
           </div>
           <h2 className="font-serif text-3xl font-bold"><RichText value={tx(ct.title)} /></h2>
           <SectionEditLink seccion="misiones" />
         </div>
-        <p className="text-muted-foreground mb-12 max-w-2xl"><RichText value={tx(ct.subtitle)} /></p>
+        <p data-reveal="rise" className="text-muted-foreground mb-12 max-w-2xl"><RichText value={tx(ct.subtitle)} /></p>
 
         <div className="grid gap-6 sm:grid-cols-2 mb-12">
           {ct.quests.map((quest, index) => {
@@ -99,6 +99,7 @@ export function ContactQuest() {
             return (
               <Card
                 key={quest.id}
+                data-reveal="pop"
                 className="group relative overflow-hidden border-border/50 bg-card hover:border-primary/50 transition-all duration-300 flex flex-col"
               >
                 <div
@@ -153,6 +154,7 @@ export function ContactQuest() {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-reveal="rise"
                 className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border/50 bg-card hover:border-primary/50 hover:bg-primary/5 transition-all duration-200"
               >
                 {socialIcons[link.icon]}

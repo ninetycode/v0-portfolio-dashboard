@@ -37,6 +37,7 @@ function slugify(text: string): string {
 }
 
 export async function getAllPosts(): Promise<BlogPostRow[]> {
+  if (!process.env.DATABASE_URL) return []
   return db.select().from(blogPosts).orderBy(desc(blogPosts.publishedAt))
 }
 

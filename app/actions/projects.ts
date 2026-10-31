@@ -50,6 +50,7 @@ function toProject(row: ProjectRow): Project {
 }
 
 export async function getProjects(): Promise<Project[]> {
+  if (!process.env.DATABASE_URL) return []
   const rows = await db.select().from(projects).orderBy(asc(projects.sortOrder), asc(projects.createdAt))
   return rows.map(toProject)
 }

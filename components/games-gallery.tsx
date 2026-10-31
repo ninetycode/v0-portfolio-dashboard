@@ -80,13 +80,13 @@ export function GamesGallery({ games }: { games: GameSummary[] }) {
   return (
     <section className="py-20 px-4">
       <div className="mx-auto max-w-6xl">
-        <div className="flex items-center gap-3 mb-4">
+        <div data-reveal="rise" className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 border border-primary/30">
             <Gamepad2 className="h-5 w-5 text-primary" />
           </div>
           <h1 className="font-serif text-3xl font-bold text-balance">{gm.title}</h1>
         </div>
-        <p className="text-muted-foreground mb-10 max-w-2xl leading-relaxed">{gm.subtitle}</p>
+        <p data-reveal="rise" className="text-muted-foreground mb-10 max-w-2xl leading-relaxed">{gm.subtitle}</p>
 
         {isAdmin && (
           <div className="mb-8 flex flex-wrap items-center gap-3 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3">
@@ -112,7 +112,7 @@ export function GamesGallery({ games }: { games: GameSummary[] }) {
         {error && <p className="mb-6 font-mono text-sm text-destructive">{error}</p>}
 
         {items.length === 0 ? (
-          <div className="rounded-lg border border-dashed border-border p-12 text-center">
+          <div data-reveal="rise" className="rounded-lg border border-dashed border-border p-12 text-center">
             <p className="font-mono text-sm text-muted-foreground">{"Todavía no hay juegos publicados."}</p>
           </div>
         ) : (
@@ -135,6 +135,7 @@ export function GamesGallery({ games }: { games: GameSummary[] }) {
                   persistOrder()
                 }}
                 onDragEnd={() => draggingId && persistOrder()}
+                data-reveal="pop"
                 className={cn(
                   "group relative overflow-hidden rounded-lg border border-border/50 bg-card transition-all duration-300 hover:border-primary/50",
                   isAdmin && "cursor-grab active:cursor-grabbing",
@@ -221,7 +222,7 @@ export function GamesGallery({ games }: { games: GameSummary[] }) {
           </ul>
         )}
 
-        <div className="mt-12 flex justify-center">
+        <div data-reveal="rise" className="mt-12 flex justify-center">
           <Button
             asChild
             variant="outline"
