@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { StatusBar } from "@/components/status-bar"
 import { ProjectEditorForm } from "@/components/projects/project-editor-form"
 import { getProjectTaxonomy } from "@/app/actions/projects"
 import { isAdmin } from "@/lib/admin-auth"
@@ -23,7 +22,6 @@ export default async function NewProjectPage() {
         <ProjectEditorForm taxonomy={taxonomy} />
       </main>
       <Footer />
-      <StatusBar />
     </div>
   )
 }

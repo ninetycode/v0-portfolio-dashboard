@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { StatusBar } from "@/components/status-bar"
 import { ContentEditor } from "@/components/content-editor/content-editor"
 import { isAdmin } from "@/lib/admin-auth"
 import { sectionFromSlug } from "@/lib/site-content/sections"
@@ -23,11 +22,10 @@ export default async function ContenidoPage({ searchParams }: { searchParams: Pr
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="mx-auto max-w-3xl px-4 pt-24 pb-28">
+      <main className="mx-auto max-w-3xl px-4 pt-24 pb-16">
         <ContentEditor initial={content} initialSection={sectionFromSlug(params.seccion)} />
       </main>
       <Footer />
-      <StatusBar />
     </div>
   )
 }

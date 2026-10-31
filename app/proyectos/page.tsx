@@ -1,7 +1,6 @@
 import { Metadata } from "next"
 import { Navbar } from "@/components/navbar"
 import { ProjectsGallery } from "@/components/projects-gallery"
-import { StatusBar } from "@/components/status-bar"
 import { Footer } from "@/components/footer"
 import { getProjects } from "@/app/actions/projects"
 
@@ -21,11 +20,7 @@ export default async function ProjectsPage() {
         <ProjectsGallery projects={projects} />
       </main>
 
-      <div className="mb-12">
-        <Footer />
-      </div>
-
-      <StatusBar />
+      <Footer />
     </div>
   )
 }

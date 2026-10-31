@@ -81,7 +81,6 @@ export function HomeForm({ value, lang, onChange }: FormProps<HomeContent>) {
     <div className="flex flex-col gap-6">
       <Group title="Portada" hint="El bloque grande de arriba, con la foto.">
         <BiField label="Etiqueta superior" value={value.badge} lang={lang} onChange={(badge) => set({ badge })} />
-        <TextField label="Nivel" value={value.level} onChange={(level) => set({ level })} hint="El número del círculo junto a la foto." />
         <BiField label="Título, primera línea" value={value.title1} lang={lang} onChange={(title1) => set({ title1 })} />
         <BiField label="Título destacado" value={value.title2} lang={lang} onChange={(title2) => set({ title2 })} />
         <BiField label="Título, segunda línea" value={value.title3} lang={lang} onChange={(title3) => set({ title3 })} />
@@ -93,12 +92,6 @@ export function HomeForm({ value, lang, onChange }: FormProps<HomeContent>) {
         <BiField label="Botón de proyectos" value={value.ctaProjects} lang={lang} onChange={(ctaProjects) => set({ ctaProjects })} />
         <BiField label="Botón de contacto" value={value.ctaContact} lang={lang} onChange={(ctaContact) => set({ ctaContact })} />
         <BiField label="Texto de bajar" value={value.scrollDown} lang={lang} onChange={(scrollDown) => set({ scrollDown })} />
-      </Group>
-      <Group title="Barra de estado" hint="La barra fija de abajo: objetivo y ubicación.">
-        <BiField label="Etiqueta de objetivo" value={value.objectiveLabel} lang={lang} onChange={(objectiveLabel) => set({ objectiveLabel })} />
-        <BiField label="Objetivo" value={value.objectiveValue} lang={lang} onChange={(objectiveValue) => set({ objectiveValue })} />
-        <BiField label="Etiqueta de ubicación" value={value.locationLabel} lang={lang} onChange={(locationLabel) => set({ locationLabel })} />
-        <BiField label="Ubicación" value={value.locationValue} lang={lang} onChange={(locationValue) => set({ locationValue })} />
       </Group>
       <Group title="Pie de la página de inicio">
         <BiField label="Crédito" value={value.footerCredit} lang={lang} onChange={(footerCredit) => set({ footerCredit })} />
