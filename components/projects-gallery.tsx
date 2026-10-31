@@ -126,7 +126,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
   return (
     <section className="px-4 py-20">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+        <div data-reveal="rise" className="mb-4 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-md border border-accent/30 bg-accent/10">
               <FolderOpen className="h-5 w-5 text-accent" />
@@ -142,7 +142,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
             </Button>
           )}
         </div>
-        <p className="mb-8 max-w-3xl text-muted-foreground">{pr.subtitle}</p>
+        <p data-reveal="rise" className="mb-8 max-w-3xl text-muted-foreground">{pr.subtitle}</p>
 
         <div className="mb-8 flex flex-col gap-4">
           <div className="relative max-w-md">
@@ -253,7 +253,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
             const StatusIcon = statusIcons[project.status]
             const index = items.findIndex((p) => p.id === project.id)
             return (
-              <div key={project.id} className="relative">
+              <div key={project.id} data-reveal="pop" className="relative">
                 <Link href={`/proyectos/${project.slug}`} className="block h-full">
                   <Card className="group relative h-full cursor-pointer overflow-hidden border-border/50 bg-card transition-all duration-300 hover:border-primary/50">
                     <div className="relative aspect-video overflow-hidden bg-muted">

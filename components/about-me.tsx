@@ -39,7 +39,7 @@ export function AboutMe({ gameCount }: { gameCount: number }) {
         <div className="grid gap-12 lg:grid-cols-2 items-start">
 
           {/* Left: Label + Heading + Text + Stats (all together) */}
-          <div>
+          <div data-reveal="rise">
             <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">
               <RichText value={tx(about.label)} />
             </p>
@@ -53,7 +53,7 @@ export function AboutMe({ gameCount }: { gameCount: number }) {
           <div className="hidden lg:block" />
 
           {/* Body text — spans left col */}
-          <div className="space-y-6 text-muted-foreground leading-relaxed lg:-mt-4">
+          <div data-reveal="rise" className="space-y-6 text-muted-foreground leading-relaxed lg:-mt-4">
             {about.paragraphs.map((paragraph, index) => {
               const text = tx(paragraph)
               if (!plainText(text).trim() && !text.includes("<img")) return null
@@ -66,6 +66,7 @@ export function AboutMe({ gameCount }: { gameCount: number }) {
             {stats.map((stat, index) => (
               <div
                 key={index}
+                data-reveal="pop"
                 className="p-6 rounded-xl border border-border/50 bg-card hover:border-primary/30 transition-colors group"
               >
                 <stat.icon className="h-8 w-8 text-primary mb-4 transition-transform duration-200 group-hover:scale-125" />

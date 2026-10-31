@@ -50,13 +50,13 @@ export function SkillTree() {
   return (
     <section id="skills" className="py-20 px-4">
       <div className="mx-auto max-w-6xl">
-        <div className="flex items-center gap-3 mb-4">
+        <div data-reveal="rise" className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 border border-primary/30">
             <GraduationCap className="h-5 w-5 text-primary" />
           </div>
           <h2 className="font-serif text-3xl font-bold">{sk.title}</h2>
         </div>
-        <p className="text-muted-foreground mb-12 max-w-2xl">{sk.subtitle}</p>
+        <p data-reveal="rise" className="text-muted-foreground mb-12 max-w-2xl">{sk.subtitle}</p>
 
         <div className="grid gap-8 lg:grid-cols-[1fr,1.2fr]">
           {/* Skill Tree Visual */}
@@ -98,7 +98,7 @@ export function SkillTree() {
             {activeSkill ? (() => {
               const s = buildSkill(activeSkill as SkillId)
               return (
-                <Card className="border-border/50 bg-card overflow-hidden">
+                <Card data-reveal="rise" className="border-border/50 bg-card overflow-hidden">
                   <div className="h-1" style={{ backgroundColor: s.color }} />
                   <CardContent className="p-6">
                     <div className="flex items-center gap-3 mb-4">
@@ -143,7 +143,7 @@ export function SkillTree() {
                 </Card>
               )
             })() : (
-              <Card className="border-dashed border-border/50 bg-muted/30">
+              <Card data-reveal="rise" className="border-dashed border-border/50 bg-muted/30">
                 <CardContent className="p-6 flex flex-col items-center justify-center text-center min-h-[250px]">
                   <GraduationCap className="h-12 w-12 text-muted-foreground/30 mb-4" />
                   <p className="text-muted-foreground">{sk.hoverPrompt}</p>
@@ -182,6 +182,7 @@ function SkillNode({ skill, isActive, isSelected, onHover, onLeave, onClick }: S
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
       onClick={onClick}
+      data-reveal="rise"
       className={`relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-300 ${
         isActive || isSelected
           ? "scale-110"
