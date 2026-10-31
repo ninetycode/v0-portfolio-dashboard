@@ -3,6 +3,8 @@
 import { Gamepad2, Code, Target, Trophy } from "lucide-react"
 import { useSiteLang } from "@/lib/site-content/context"
 import { SectionEditLink } from "@/components/section-edit-link"
+import { RichText } from "@/components/rich-text"
+import { plainText } from "@/lib/site-content/rich-text"
 import type { AboutIcon } from "@/lib/site-content/types"
 
 const statIcons: Record<AboutIcon, typeof Gamepad2> = {
@@ -18,7 +20,13 @@ export function AboutMe({ gameCount }: { gameCount: number }) {
 
   const stats = about.stats.map((stat) => ({
     icon: statIcons[stat.icon] ?? Gamepad2,
-    title: stat.useGameCount ? `${gameCount} ${tx(stat.countSuffix)}` : tx(stat.title),
+    title: stat.useGameCount ? (
+      <>
+        {gameCount} <RichText value={tx(stat.countSuffix)} />
+      </>
+    ) : (
+      <RichText value={tx(stat.title)} />
+    ),
     description: tx(stat.description),
   }))
 
@@ -33,11 +41,11 @@ export function AboutMe({ gameCount }: { gameCount: number }) {
           {/* Left: Label + Heading + Text + Stats (all together) */}
           <div>
             <p className="font-mono text-sm text-primary mb-4 tracking-widest uppercase">
-              {tx(about.label)}
+              <RichText value={tx(about.label)} />
             </p>
             <h2 className="font-serif text-4xl md:text-5xl font-bold mb-8 leading-tight">
-              {tx(about.titlePart1)}{" "}
-              <span className="text-primary">{about.titleYear}</span>
+              <RichText value={tx(about.titlePart1)} />{" "}
+              <span className="text-primary"><RichText value={about.titleYear} /></span>
             </h2>
           </div>
 
@@ -48,8 +56,8 @@ export function AboutMe({ gameCount }: { gameCount: number }) {
           <div className="space-y-6 text-muted-foreground leading-relaxed lg:-mt-4">
             {about.paragraphs.map((paragraph, index) => {
               const text = tx(paragraph)
-              if (!text.trim()) return null
-              return <p key={index} className="whitespace-pre-wrap">{text}</p>
+              if (!plainText(text).trim() && !text.includes("<img")) return null
+              return <p key={index} className="whitespace-pre-wrap"><RichText value={text} /></p>
             })}
           </div>
 
@@ -62,7 +70,7 @@ export function AboutMe({ gameCount }: { gameCount: number }) {
               >
                 <stat.icon className="h-8 w-8 text-primary mb-4 transition-transform duration-200 group-hover:scale-125" />
                 <h3 className="font-bold text-lg mb-1">{stat.title}</h3>
-                <p className="text-sm text-muted-foreground">{stat.description}</p>
+                <p className="text-sm text-muted-foreground"><RichText value={stat.description} /></p>
               </div>
             ))}
           </div>

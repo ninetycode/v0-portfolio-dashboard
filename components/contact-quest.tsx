@@ -10,6 +10,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Scroll, Briefcase, Mail, MessageSquare, Gamepad2, Github, Linkedin, Send, Youtube, Instagram, X, Bug } from "lucide-react"
 import { useSiteLang } from "@/lib/site-content/context"
 import { SectionEditLink } from "@/components/section-edit-link"
+import { RichText } from "@/components/rich-text"
+import { plainText } from "@/lib/site-content/rich-text"
 import type { Difficulty, QuestKind, SocialIcon } from "@/lib/site-content/types"
 
 const difficultyColorMap: Record<"dark" | "light", Record<Difficulty, string>> = {
@@ -83,10 +85,10 @@ export function ContactQuest() {
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-accent/10 border border-accent/30">
             <Scroll className="h-5 w-5 text-accent" />
           </div>
-          <h2 className="font-serif text-3xl font-bold">{tx(ct.title)}</h2>
+          <h2 className="font-serif text-3xl font-bold"><RichText value={tx(ct.title)} /></h2>
           <SectionEditLink seccion="misiones" />
         </div>
-        <p className="text-muted-foreground mb-12 max-w-2xl">{tx(ct.subtitle)}</p>
+        <p className="text-muted-foreground mb-12 max-w-2xl"><RichText value={tx(ct.subtitle)} /></p>
 
         <div className="grid gap-6 sm:grid-cols-2 mb-12">
           {ct.quests.map((quest, index) => {
@@ -103,7 +105,7 @@ export function ContactQuest() {
                   className="absolute top-0 right-0 px-3 py-1 text-xs font-mono rounded-bl-lg font-semibold"
                   style={{ backgroundColor: bgTint, color }}
                 >
-                  {difficultyLabel(quest.difficulty)}
+                  <RichText value={difficultyLabel(quest.difficulty)} />
                 </div>
 
                 <CardHeader className="pb-2">
@@ -113,20 +115,20 @@ export function ContactQuest() {
                   >
                     {questIcons[quest.kind]}
                   </div>
-                  <CardTitle className="font-serif text-lg">{tx(quest.title)}</CardTitle>
+                  <CardTitle className="font-serif text-lg"><RichText value={tx(quest.title)} /></CardTitle>
                 </CardHeader>
 
                 <CardContent className="flex flex-col flex-1">
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed whitespace-pre-wrap">{tx(quest.description)}</p>
+                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed whitespace-pre-wrap"><RichText value={tx(quest.description)} /></p>
 
                   <div className="flex items-start gap-2 mb-3 p-2 rounded-md bg-muted/40">
-                    <span className="font-mono text-xs text-muted-foreground shrink-0 mt-0.5">{tx(ct.requirementsLabel)}</span>
-                    <span className="font-mono text-xs text-foreground/80">{tx(quest.requirements)}</span>
+                    <span className="font-mono text-xs text-muted-foreground shrink-0 mt-0.5"><RichText value={tx(ct.requirementsLabel)} /></span>
+                    <span className="font-mono text-xs text-foreground/80"><RichText value={tx(quest.requirements)} /></span>
                   </div>
 
                   <div className="flex items-start gap-2 mb-4 p-2 rounded-md bg-muted/50">
-                    <span className="font-mono text-xs text-muted-foreground shrink-0 mt-0.5">{tx(ct.rewardLabel)}</span>
-                    <span className="font-mono text-xs font-semibold" style={{ color }}>{tx(quest.reward)}</span>
+                    <span className="font-mono text-xs text-muted-foreground shrink-0 mt-0.5"><RichText value={tx(ct.rewardLabel)} /></span>
+                    <span className="font-mono text-xs font-semibold" style={{ color }}><RichText value={tx(quest.reward)} /></span>
                   </div>
 
                   <Button
@@ -134,7 +136,7 @@ export function ContactQuest() {
                     className="w-full gap-2 mt-auto"
                     style={{ backgroundColor: color, color: "#ffffff" }}
                   >
-                    {tx(ct.accept)}
+                    <RichText value={tx(ct.accept)} />
                   </Button>
                 </CardContent>
               </Card>
@@ -143,7 +145,7 @@ export function ContactQuest() {
         </div>
 
         <div className="text-center">
-          <p className="font-mono text-sm text-muted-foreground mb-4">{tx(ct.findMe)}</p>
+          <p className="font-mono text-sm text-muted-foreground mb-4"><RichText value={tx(ct.findMe)} /></p>
           <div className="flex items-center justify-center gap-4">
             {ct.socials.map((link) => (
               <a
@@ -154,7 +156,7 @@ export function ContactQuest() {
                 className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border/50 bg-card hover:border-primary/50 hover:bg-primary/5 transition-all duration-200"
               >
                 {socialIcons[link.icon]}
-                <span className="font-sans text-sm">{link.name}</span>
+                <span className="font-sans text-sm"><RichText value={link.name} /></span>
               </a>
             ))}
           </div>
@@ -176,21 +178,21 @@ export function ContactQuest() {
                   >
                     {questIcons[selectedQuest.kind]}
                   </div>
-                  <DialogTitle className="font-serif text-xl">{tx(selectedQuest.title)}</DialogTitle>
+                  <DialogTitle className="font-serif text-xl"><RichText value={tx(selectedQuest.title)} /></DialogTitle>
                 </div>
-                <DialogDescription>{tx(ct.completeForm)}</DialogDescription>
+                <DialogDescription><RichText value={tx(ct.completeForm)} /></DialogDescription>
               </DialogHeader>
 
               <form onSubmit={handleSubmit} className="space-y-4 mt-4">
                 <div>
                   <label htmlFor="name" className="block font-mono text-sm text-muted-foreground mb-1">
-                    {tx(ct.nameLabel)}
+                    <RichText value={tx(ct.nameLabel)} />
                   </label>
                   <Input
                     id="name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder={tx(ct.namePlaceholder)}
+                    placeholder={plainText(tx(ct.namePlaceholder))}
                     required
                     className="bg-card/50 border-border/50"
                   />
@@ -198,14 +200,14 @@ export function ContactQuest() {
 
                 <div>
                   <label htmlFor="email" className="block font-mono text-sm text-muted-foreground mb-1">
-                    {tx(ct.emailLabel)}
+                    <RichText value={tx(ct.emailLabel)} />
                   </label>
                   <Input
                     id="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder={tx(ct.emailPlaceholder)}
+                    placeholder={plainText(tx(ct.emailPlaceholder))}
                     required
                     className="bg-card/50 border-border/50"
                   />
@@ -213,13 +215,13 @@ export function ContactQuest() {
 
                 <div>
                   <label htmlFor="message" className="block font-mono text-sm text-muted-foreground mb-1">
-                    {messageLabel()}
+                    <RichText value={messageLabel()} />
                   </label>
                   <Textarea
                     id="message"
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder={tx(ct.messagePlaceholder)}
+                    placeholder={plainText(tx(ct.messagePlaceholder))}
                     required
                     rows={4}
                     className="bg-card/50 border-border/50 resize-none"
@@ -233,7 +235,7 @@ export function ContactQuest() {
                     onClick={() => setSelectedIdx(null)}
                     className="flex-1 border-border/50"
                   >
-                    {tx(ct.cancel)}
+                    <RichText value={tx(ct.cancel)} />
                   </Button>
                   <Button
                     type="submit"
@@ -244,7 +246,7 @@ export function ContactQuest() {
                     }}
                   >
                     <Send className="h-4 w-4" />
-                    {tx(ct.send)}
+                    <RichText value={tx(ct.send)} />
                   </Button>
                 </div>
               </form>
