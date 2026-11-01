@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { Terminal, Minus, X, Maximize2, Volume2, VolumeX } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useCursor } from "@/lib/cursor-context"
@@ -74,7 +75,7 @@ const staticCommands: Record<string, string | string[]> = {
   clear: "CLEAR",
 }
 
-export function TerminalEasterEgg() {
+function AkaneTerminal() {
   const { glowEnabled, toggleGlow } = useCursor()
   const { resolvedTheme } = useTheme()
   const { isPlaying, isMuted, play: playAudio, stop: stopAudio, toggleMute } = useAudio()
@@ -503,4 +504,10 @@ export function TerminalEasterEgg() {
       </div>
     </div>
   )
+}
+
+export function TerminalEasterEgg() {
+  const pathname = usePathname()
+  if (pathname.startsWith("/contactos")) return null
+  return <AkaneTerminal />
 }

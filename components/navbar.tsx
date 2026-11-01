@@ -31,7 +31,7 @@ export function Navbar() {
     { label: t.nav.experience, hash: "experience" },
     { label: t.nav.skills, hash: "skills" },
     { label: t.nav.blog, href: "/blog" },
-    { label: t.nav.contact, hash: "contact" },
+    { label: t.nav.contact, href: "/contactos" },
   ]
 
   const resolveHref = (item: NavItem) => {

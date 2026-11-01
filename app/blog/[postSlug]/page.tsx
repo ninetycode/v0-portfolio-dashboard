@@ -5,6 +5,7 @@ import { BlogPostContent } from "@/components/blog/blog-post-content"
 import { getPostBySlug, getAllPosts } from "@/app/actions/blog"
 import { rowToPost } from "@/lib/blog-mapper"
 import { generateBlogPostingSchema } from "@/lib/structured-data"
+import { siteBaseUrl } from "@/lib/site-url"
 import { Footer } from "@/components/footer"
 
 export const dynamic = "force-dynamic"
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const post = rowToPost(row)
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://mathias.dev"
+  const baseUrl = siteBaseUrl()
 
   return {
     title: `${post.title} | Mathías Andino`,
@@ -67,7 +68,7 @@ export default async function BlogPostPage({ params }: Props) {
     .slice(0, 3)
     .map(rowToPost)
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://mathias.dev"
+  const baseUrl = siteBaseUrl()
   const structuredData = generateBlogPostingSchema(post, baseUrl)
 
   return (

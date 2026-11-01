@@ -92,3 +92,14 @@ export const siteSections = pgTable("site_sections", {
   data: jsonb("data").$type<Record<string, unknown>>().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 })
+
+// Click analytics for /contactos links. Rows are created on demand by lib/db/link-clicks.ts.
+export const linkClicks = pgTable("link_clicks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  slug: text("slug").notNull(),
+  referrer: text("referrer"),
+  userAgent: text("user_agent"),
+  deviceType: text("device_type"),
+  country: text("country"),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+})

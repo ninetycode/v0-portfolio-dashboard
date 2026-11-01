@@ -7,7 +7,7 @@ import type { SectionKey, SiteContent } from "./types"
 
 let ensuring: Promise<void> | null = null
 
-function ensureTable(): Promise<void> {
+export function ensureSiteSectionsTable(): Promise<void> {
   if (!ensuring) {
     ensuring = pool
       .query(
@@ -30,7 +30,7 @@ export async function readSiteContent(): Promise<SiteContent> {
   noStore()
   if (!process.env.DATABASE_URL) return structuredClone(defaultSiteContent)
   try {
-    await ensureTable()
+    await ensureSiteSectionsTable()
     const rows = await db.select({ key: siteSections.key, data: siteSections.data }).from(siteSections)
     return mergeStoredContent(rows)
   } catch {
@@ -46,7 +46,7 @@ export async function writeSiteSection(key: SectionKey, data: unknown): Promise<
   const sanitized = sanitizeSection(key, data, "write")
   if (!sanitized.ok) return { success: false, error: sanitized.error }
   try {
-    await ensureTable()
+    await ensureSiteSectionsTable()
     const payload = sanitized.value as unknown as Record<string, unknown>
     await db
       .insert(siteSections)

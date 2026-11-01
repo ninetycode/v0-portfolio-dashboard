@@ -1,9 +1,16 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { ChevronUp } from "lucide-react"
 
 export function ScrollToTop() {
+  const pathname = usePathname()
+  if (pathname.startsWith("/contactos")) return null
+  return <ScrollToTopButton />
+}
+
+function ScrollToTopButton() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
