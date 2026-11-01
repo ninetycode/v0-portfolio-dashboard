@@ -353,7 +353,7 @@ const missions: MissionsContent = {
     { id: "social-github", name: "GitHub", href: "https://github.com/ninetycode", icon: "github" },
     { id: "social-instagram", name: "Instagram", href: "https://www.instagram.com/mathiasandino.ar", icon: "instagram" },
     { id: "social-youtube", name: "YouTube", href: "https://www.youtube.com/@Mattez", icon: "youtube" },
-    { id: "social-x", name: "X", href: "https://x.com/mathigamedev", icon: "x" },
+    { id: "social-x", name: "X", href: "https://x.com/mathiasandinoar", icon: "x" }
   ],
 }
 

@@ -186,7 +186,7 @@ export const defaultContactLinks: ContactLinksContent = {
       slug: "x",
       title: "X",
       subtitle: "",
-      url: "https://x.com/mathigamedev",
+      url: "https://x.com/mathiasandinoar",
       icon: "x",
       category: "Redes",
       featured: false,
