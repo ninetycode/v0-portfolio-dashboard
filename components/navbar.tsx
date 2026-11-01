@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useTheme } from "next-themes"
-import { Menu, X, Globe } from "lucide-react"
+import { Menu, X, Gamepad2, Globe } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useLang } from "@/lib/i18n"
@@ -109,23 +109,8 @@ export function Navbar() {
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Link href={isHome ? "#home" : "/"} className="flex shrink-0 items-center gap-2 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-md group-hover:box-glow transition-all duration-300">
-            <span
-              aria-hidden="true"
-              className="h-6 w-6 bg-primary"
-              style={{
-                maskImage: "url('/favicon.png')",
-                maskMode: "luminance",
-                WebkitMaskImage: "url('/favicon.png')",
-                WebkitMaskMode: "luminance",
-                maskPosition: "center",
-                maskRepeat: "no-repeat",
-                maskSize: "contain",
-                WebkitMaskPosition: "center",
-                WebkitMaskRepeat: "no-repeat",
-                WebkitMaskSize: "contain",
-              }}
-            />
+          <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 border border-primary/30 group-hover:box-glow transition-all duration-300">
+            <Gamepad2 className="h-5 w-5 text-primary" />
           </div>
           <span className="font-serif text-lg font-semibold tracking-tight hidden sm:block">
             Mathías Andino
