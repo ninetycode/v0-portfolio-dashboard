@@ -7,13 +7,13 @@ import { Check, Moon, Share2, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { toast } from "sonner"
 import { Toaster } from "@/components/ui/sonner"
-import { LinkIcon } from "@/components/contacto/link-icon"
+import { LinkIcon } from "@/components/contactos/link-icon"
 import { CONTACT_SHARE_URL } from "@/lib/site-url"
 import { visibleContactLinks, type ContactLink, type ContactLinksContent } from "@/lib/site-content/contact-links"
 import { cn } from "@/lib/utils"
 
 const ContactEditorDialog = dynamic(() =>
-  import("@/components/contacto/contact-editor").then((mod) => mod.ContactEditorDialog),
+  import("@/components/contactos/contact-editor").then((mod) => mod.ContactEditorDialog),
 )
 
 function isSiteLink(link: ContactLink): boolean {
