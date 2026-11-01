@@ -112,7 +112,19 @@ export function Navbar() {
           <div className="flex h-9 w-9 items-center justify-center rounded-md group-hover:box-glow transition-all duration-300">
             <span
               aria-hidden="true"
-              className="h-5 w-6 bg-primary [clip-path:polygon(50%_0%,_100%_100%,_0%_100%)]"
+              className="h-6 w-6 bg-primary"
+              style={{
+                maskImage: "url('/favicon.png')",
+                maskMode: "luminance",
+                WebkitMaskImage: "url('/favicon.png')",
+                WebkitMaskMode: "luminance",
+                maskPosition: "center",
+                maskRepeat: "no-repeat",
+                maskSize: "contain",
+                WebkitMaskPosition: "center",
+                WebkitMaskRepeat: "no-repeat",
+                WebkitMaskSize: "contain",
+              }}
             />
           </div>
           <span className="font-serif text-lg font-semibold tracking-tight hidden sm:block">
