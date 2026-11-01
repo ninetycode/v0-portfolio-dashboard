@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useTheme } from "next-themes"
-import { Menu, X, Gamepad2, Globe } from "lucide-react"
+import { Menu, X, Globe } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useLang } from "@/lib/i18n"
@@ -110,7 +110,12 @@ export function Navbar() {
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Link href={isHome ? "#home" : "/"} className="flex shrink-0 items-center gap-2 group">
           <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 border border-primary/30 group-hover:box-glow transition-all duration-300">
-            <Gamepad2 className="h-5 w-5 text-primary" />
+            <img
+              src="/navbar-logo.jpg"
+              alt=""
+              aria-hidden="true"
+              className="h-6 w-6 object-contain"
+            />
           </div>
           <span className="font-serif text-lg font-semibold tracking-tight hidden sm:block">
             Mathías Andino
