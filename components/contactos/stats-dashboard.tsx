@@ -51,10 +51,10 @@ export function StatsDashboard({ links, metrics }: { links: ContactLink[]; metri
           <h1 className="mt-2 font-serif text-3xl font-bold">Clics</h1>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Link href="/contactos" className={navClass}>
+          <Link href="/contacto" className={navClass}>
             Volver a contactos
           </Link>
-          <Link href="/contactos/editor" className={navClass}>
+          <Link href="/contacto/editor" className={navClass}>
             Editar enlaces
           </Link>
         </div>

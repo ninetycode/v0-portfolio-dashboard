@@ -263,7 +263,7 @@ export function contactProfileSchema(data: ContactLinksContent, baseUrl = siteBa
   return {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
-    url: `${baseUrl}/contactos`,
+    url: `${baseUrl}/contacto`,
     mainEntity: {
       "@type": "Person",
       name: data.header.displayName,

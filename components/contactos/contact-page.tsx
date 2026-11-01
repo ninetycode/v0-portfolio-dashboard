@@ -7,13 +7,13 @@ import { Check, Moon, Share2, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { toast } from "sonner"
 import { Toaster } from "@/components/ui/sonner"
-import { LinkIcon } from "@/components/contactos/link-icon"
+import { LinkIcon } from "@/components/contacto/link-icon"
 import { CONTACT_SHARE_URL } from "@/lib/site-url"
 import { visibleContactLinks, type ContactLink, type ContactLinksContent } from "@/lib/site-content/contact-links"
 import { cn } from "@/lib/utils"
 
 const ContactEditorDialog = dynamic(() =>
-  import("@/components/contactos/contact-editor").then((mod) => mod.ContactEditorDialog),
+  import("@/components/contacto/contact-editor").then((mod) => mod.ContactEditorDialog),
 )
 
 function isSiteLink(link: ContactLink): boolean {
@@ -36,7 +36,7 @@ export function ContactPage({ data, canEdit }: { data: ContactLinksContent; canE
             <div className="flex flex-wrap items-center gap-2">
               <ContactEditorDialog data={data} />
               <Link
-                href="/contactos/stats"
+                href="/contacto/stats"
                 className="rounded-md border border-border/70 px-2.5 py-1 text-primary hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 Estadísticas

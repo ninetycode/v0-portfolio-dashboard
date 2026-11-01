@@ -63,7 +63,7 @@ export function AdminLoginPanel({ title, description }: { title: string; descrip
           {pending ? "Entrando…" : "Entrar"}
         </Button>
       </form>
-      <Link href="/contactos" className="mt-6 font-mono text-xs text-primary hover:underline">
+      <Link href="/contacto" className="mt-6 font-mono text-xs text-primary hover:underline">
         Volver a contactos
       </Link>
     </div>
