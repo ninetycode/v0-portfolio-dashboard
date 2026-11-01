@@ -37,7 +37,7 @@ export function AdminContentBar() {
 export function AdminEditShortcut() {
   const { isAdmin } = useAdmin()
   const pathname = usePathname()
-  if (!isAdmin || pathname === "/" || pathname.startsWith("/contenido")) return null
+  if (!isAdmin || pathname === "/" || pathname.startsWith("/contenido") || pathname.startsWith("/contactos")) return null
 
   return (
     <Link

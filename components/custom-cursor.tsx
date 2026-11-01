@@ -1,12 +1,15 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { usePathname } from "next/navigation"
 import { useTheme } from "next-themes"
 import { useCursor } from "@/lib/cursor-context"
 
 export function CustomCursor() {
+  const pathname = usePathname()
   const { resolvedTheme } = useTheme()
   const { glowEnabled } = useCursor()
+  const hidden = pathname.startsWith("/contactos")
   const [mounted, setMounted] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
@@ -43,7 +46,7 @@ export function CustomCursor() {
   }, [glowEnabled])
 
   useEffect(() => {
-    if (!mounted || isTouchDevice) return
+    if (!mounted || isTouchDevice || hidden) return
 
     const cursor = cursorRef.current
     const follower = followerRef.current
@@ -123,9 +126,9 @@ export function CustomCursor() {
       const styleEl = document.getElementById('custom-cursor-style')
       if (styleEl) styleEl.remove()
     }
-  }, [mounted, isTouchDevice])
+  }, [mounted, isTouchDevice, hidden])
 
-  if (!mounted || isTouchDevice) return null
+  if (!mounted || isTouchDevice || hidden) return null
 
   const isDark = resolvedTheme === 'dark'
 

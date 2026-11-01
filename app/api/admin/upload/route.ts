@@ -25,7 +25,10 @@ export async function POST(request: NextRequest) {
 
     const requestedFolder = formData.get("folder")
     const folder =
-      requestedFolder === "games" || requestedFolder === "projects" || requestedFolder === "content"
+      requestedFolder === "games" ||
+      requestedFolder === "projects" ||
+      requestedFolder === "content" ||
+      requestedFolder === "contactos"
         ? requestedFolder
         : "blog"
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_")

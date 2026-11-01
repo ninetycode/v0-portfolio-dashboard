@@ -13,6 +13,7 @@ import { TerminalEasterEgg } from '@/components/terminal-easter-egg'
 import { AdminEditShortcut } from '@/components/admin-content-bar'
 import { ScrollToTop } from '@/components/scroll-to-top'
 import { ScrollReveal } from '@/components/scroll-reveal'
+import { siteBaseUrl } from '@/lib/site-url'
 import './globals.css'
 
 const lora = Lora({ 
@@ -34,6 +35,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteBaseUrl()),
   title: 'Mathías Andino | Game Narrative Designer Junior',
   description: 'Portfolio de Mathías Andino, Game Narrative Designer Junior de Buenos Aires. Diseño narrativo, sistemas de juego y desarrollo con Godot.',
   generator: 'v0.app',
