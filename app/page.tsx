@@ -8,6 +8,7 @@ import { ToolInventory } from "@/components/tool-inventory"
 import { ContactQuest } from "@/components/contact-quest"
 import { HomeFooter } from "@/components/home-footer"
 import { getGames } from "@/app/actions/games"
+import { SHOW_EXPERIENCE_AND_SKILLS } from "@/lib/home-visibility"
 
 export const dynamic = "force-dynamic"
 
@@ -22,8 +23,12 @@ export default async function Home() {
         <HeroSection />
         <AboutMe gameCount={games.length} />
         <FeaturedGames games={games} />
-        <ExperienceTimeline />
-        <SkillTree />
+        {SHOW_EXPERIENCE_AND_SKILLS && (
+          <>
+            <ExperienceTimeline />
+            <SkillTree />
+          </>
+        )}
         <ToolInventory />
         <ContactQuest />
       </main>
