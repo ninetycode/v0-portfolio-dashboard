@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { Suspense } from "react"
-import { ContactPage } from "@/components/contactos/contact-page"
+import { ContactPage } from "@/components/contacto/contact-page"
 import ContactosLoading from "./loading"
 import { isAdmin } from "@/lib/admin-auth"
 import { contactProfileSchema, visibleContactLinks } from "@/lib/site-content/contact-links"
@@ -19,11 +19,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title,
     description,
-    alternates: { canonical: `${base}/contactos` },
+    alternates: { canonical: `${base}/contacto` },
     openGraph: {
       title,
       description,
-      url: `${base}/contactos`,
+      url: `${base}/contacto`,
       siteName: data.header.displayName,
       type: "profile",
       locale: "es_AR",

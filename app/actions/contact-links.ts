@@ -11,8 +11,8 @@ export async function saveContactLinks(
   if (!(await isAdmin())) return { success: false, error: "No autorizado." }
   const result = await writeContactLinks(data)
   if (!result.success) return result
-  revalidatePath("/contactos")
-  revalidatePath("/contactos/editor")
-  revalidatePath("/contactos/stats")
+  revalidatePath("/contacto")
+  revalidatePath("/contacto/editor")
+  revalidatePath("/contacto/stats")
   return result
 }

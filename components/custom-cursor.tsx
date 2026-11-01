@@ -9,7 +9,7 @@ export function CustomCursor() {
   const pathname = usePathname()
   const { resolvedTheme } = useTheme()
   const { glowEnabled } = useCursor()
-  const hidden = pathname.startsWith("/contactos")
+  const hidden = pathname.startsWith("/contacto")
   const [mounted, setMounted] = useState(false)
   const [isHovering, setIsHovering] = useState(false)
   const [isVisible, setIsVisible] = useState(false)

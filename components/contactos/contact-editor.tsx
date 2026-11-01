@@ -145,7 +145,7 @@ export function ContactLinksForm({
     try {
       const body = new FormData()
       body.set("file", file)
-      body.set("folder", "contactos")
+      body.set("folder", "contacto")
       const response = await fetch("/api/admin/upload", { method: "POST", body })
       const payload = (await response.json()) as { url?: string; error?: string }
       if (!response.ok || !payload.url) {

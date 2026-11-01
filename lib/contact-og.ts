@@ -107,7 +107,7 @@ export async function renderContactOg() {
           "div",
           { style: { display: "flex", flexDirection: "column", gap: 18 } },
           createElement("div", { style: { fontSize: 28, lineHeight: 1.35, color: "#d9d3e6", maxWidth: 900 } }, bio),
-          createElement("div", { style: { fontSize: 22, color: "#b6e3a8" } }, "/contactos"),
+          createElement("div", { style: { fontSize: 22, color: "#b6e3a8" } }, "/contacto"),
         ),
       ),
     ),

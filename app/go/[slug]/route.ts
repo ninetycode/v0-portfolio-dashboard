@@ -36,7 +36,7 @@ export async function GET(request: Request, context: { params: Promise<{ slug: s
   }
 
   const origin = publicOrigin(request)
-  const fallback = new URL("/contactos", origin)
+  const fallback = new URL("/contacto", origin)
   const content = await readContactLinks()
   const link = findActiveContactLink(content, slug)
   if (!link) return redirectTo(fallback)

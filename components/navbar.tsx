@@ -36,7 +36,7 @@ export function Navbar() {
         ]
       : []),
     { label: t.nav.blog, href: "/blog" },
-    { label: t.nav.contact, href: "/contactos" },
+    { label: t.nav.contact, href: "/contacto" },
   ]
 
   const resolveHref = (item: NavItem) => {

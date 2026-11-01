@@ -508,6 +508,6 @@ function AkaneTerminal() {
 
 export function TerminalEasterEgg() {
   const pathname = usePathname()
-  if (pathname.startsWith("/contactos")) return null
+  if (pathname.startsWith("/contacto")) return null
   return <AkaneTerminal />
 }
