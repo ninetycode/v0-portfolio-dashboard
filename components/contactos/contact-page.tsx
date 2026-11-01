@@ -16,8 +16,14 @@ const ContactEditorDialog = dynamic(() =>
   import("@/components/contactos/contact-editor").then((mod) => mod.ContactEditorDialog),
 )
 
+function isSiteLink(link: ContactLink): boolean {
+  return link.category.trim().toLocaleLowerCase("es") === "sitio"
+}
+
 export function ContactPage({ data, canEdit }: { data: ContactLinksContent; canEdit: boolean }) {
   const links = visibleContactLinks(data)
+  const siteLinks = links.filter(isSiteLink)
+  const detailLinks = links.filter((link) => !isSiteLink(link))
   let previousCategory = ""
 
   return (
@@ -39,33 +45,65 @@ export function ContactPage({ data, canEdit }: { data: ContactLinksContent; canE
           </div>
         ) : null}
 
-        <div className="mb-6 flex items-center justify-end gap-2">
-          <ThemeButton />
-          <ShareButton />
-        </div>
+        <section className="rounded-3xl border-2 border-primary bg-card px-7 pt-6 pb-10 sm:px-8 sm:pt-7 sm:pb-12">
+          <div className="flex items-center justify-end gap-2">
+            <ThemeButton />
+            <ShareButton />
+          </div>
 
-        <ProfileHeader header={data.header} />
+          <ProfileHeader header={data.header} />
 
-        {links.length === 0 ? (
-          <p className="mt-10 text-center text-sm text-muted-foreground">No hay enlaces activos.</p>
-        ) : (
-          <ul className="mt-8 flex flex-col gap-3">
-            {links.map((link, index) => {
-              const showCategory = Boolean(link.category) && link.category !== previousCategory
-              if (link.category) previousCategory = link.category
-              return (
-                <li key={link.id} className="flex flex-col gap-2">
-                  {showCategory ? (
-                    <p className={cn("px-1 font-mono text-xs text-muted-foreground", index > 0 && "pt-2")}>{link.category}</p>
-                  ) : null}
-                  <ContactLinkButton link={link} />
-                </li>
-              )
-            })}
-          </ul>
-        )}
+          {siteLinks.length > 0 ? (
+            <nav aria-label="Sitio" className="mt-6">
+              <ul className="flex items-center justify-center gap-5">
+                {siteLinks.map((link) => (
+                  <li key={link.id}>
+                    <SiteIconLink link={link} />
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null}
+
+          {detailLinks.length > 0 ? (
+            <ul className="mt-8 flex flex-col gap-3">
+              {detailLinks.map((link, index) => {
+                const showCategory = Boolean(link.category) && link.category !== previousCategory
+                if (link.category) previousCategory = link.category
+                return (
+                  <li key={link.id} className="flex flex-col gap-2">
+                    {showCategory ? (
+                      <p className={cn("px-1 text-center font-mono text-xs text-muted-foreground", index > 0 && "pt-3")}>
+                        {link.category}
+                      </p>
+                    ) : null}
+                    <ContactLinkButton link={link} />
+                  </li>
+                )
+              })}
+            </ul>
+          ) : null}
+
+          {links.length === 0 ? (
+            <p className="mt-8 text-center text-sm text-muted-foreground">No hay enlaces activos.</p>
+          ) : null}
+        </section>
       </div>
     </main>
+  )
+}
+
+function SiteIconLink({ link }: { link: ContactLink }) {
+  return (
+    <Link
+      href={`/go/${link.slug}`}
+      prefetch={false}
+      aria-label={link.title}
+      title={link.title}
+      className="inline-flex h-11 w-11 items-center justify-center rounded-md text-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      <LinkIcon name={link.icon} className="h-6 w-6" />
+    </Link>
   )
 }
 
@@ -104,10 +142,8 @@ function ContactLinkButton({ link }: { link: ContactLink }) {
       href={`/go/${link.slug}`}
       prefetch={false}
       className={cn(
-        "flex min-h-14 items-center gap-3 rounded-xl border px-3 py-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        link.featured
-          ? "border-primary/50 bg-primary/10 box-glow-subtle"
-          : "border-border bg-card hover:border-primary/40",
+        "flex min-h-14 items-center gap-3 rounded-xl border bg-background px-3 py-3 transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card",
+        link.featured ? "border-primary/50 bg-primary/10" : "border-border",
       )}
     >
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/70 text-primary">
