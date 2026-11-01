@@ -8,6 +8,7 @@ import { Menu, X, Gamepad2, Globe } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useLang } from "@/lib/i18n"
+import { SHOW_EXPERIENCE_AND_SKILLS } from "@/lib/home-visibility"
 
 type NavItem =
   | { label: string; hash: string; href?: never }
@@ -28,8 +29,12 @@ export function Navbar() {
     { label: t.nav.about, hash: "about" },
     { label: t.nav.games, href: "/games" },
     { label: t.nav.projects, href: "/proyectos" },
-    { label: t.nav.experience, hash: "experience" },
-    { label: t.nav.skills, hash: "skills" },
+    ...(SHOW_EXPERIENCE_AND_SKILLS
+      ? [
+          { label: t.nav.experience, hash: "experience" } as NavItem,
+          { label: t.nav.skills, hash: "skills" } as NavItem,
+        ]
+      : []),
     { label: t.nav.blog, href: "/blog" },
     { label: t.nav.contact, href: "/contactos" },
   ]
