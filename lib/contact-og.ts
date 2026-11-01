@@ -2,10 +2,31 @@ import { readFile } from "node:fs/promises"
 import { join, sep } from "node:path"
 import { createElement } from "react"
 import { ImageResponse } from "next/og"
-import sharp from "sharp"
 import { readContactLinks } from "@/lib/site-content/contact-links-store"
 
 export const ogSize = { width: 1200, height: 630 }
+
+const MAX_AVATAR_BYTES = 1_500_000
+
+function imageMime(file: Buffer): "image/png" | "image/jpeg" | "image/gif" | null {
+  if (
+    file.length >= 8 &&
+    file[0] === 0x89 &&
+    file[1] === 0x50 &&
+    file[2] === 0x4e &&
+    file[3] === 0x47
+  ) {
+    return "image/png"
+  }
+  if (file.length >= 3 && file[0] === 0xff && file[1] === 0xd8 && file[2] === 0xff) {
+    return "image/jpeg"
+  }
+  if (file.length >= 6) {
+    const magic = file.toString("ascii", 0, 6)
+    if (magic === "GIF87a" || magic === "GIF89a") return "image/gif"
+  }
+  return null
+}
 
 async function avatarDataUrl(url: string): Promise<string | null> {
   if (!url.startsWith("/") || url.includes("..") || url.includes("\\")) return null
@@ -15,10 +36,12 @@ async function avatarDataUrl(url: string): Promise<string | null> {
   if (filePath !== root && !filePath.startsWith(`${root}${sep}`)) return null
   try {
     const file = await readFile(filePath)
-    // public/profile-avatar.jpg is a PNG despite the extension. Satori only
-    // decodes the declared data-URL type, so always re-encode a small PNG.
-    const png = await sharp(file).resize(256, 256, { fit: "cover" }).png().toBuffer()
-    return `data:image/png;base64,${png.toString("base64")}`
+    if (file.length === 0 || file.length > MAX_AVATAR_BYTES) return null
+    // The public avatar is named .jpg but its bytes are PNG. Satori decodes
+    // only the type declared in the data URL, so trust the magic bytes.
+    const mime = imageMime(file)
+    if (!mime) return null
+    return `data:${mime};base64,${file.toString("base64")}`
   } catch {
     return null
   }
