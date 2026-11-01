@@ -110,17 +110,20 @@ export function Navbar() {
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Link href={isHome ? "#home" : "/"} className="flex shrink-0 items-center gap-2 group">
           <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 border border-primary/30 group-hover:box-glow transition-all duration-300">
-            <img
-              src="/brand-mark-light.svg"
-              alt=""
+            <span
               aria-hidden="true"
-              className="h-5 w-6 object-contain dark:hidden"
-            />
-            <img
-              src="/brand-mark-dark.svg"
-              alt=""
-              aria-hidden="true"
-              className="hidden h-5 w-6 object-contain dark:block"
+              className="h-6 w-6 bg-primary"
+              style={{
+                maskImage: "url('/favicon.png')",
+                maskMode: "luminance",
+                maskPosition: "center",
+                maskRepeat: "no-repeat",
+                maskSize: "contain",
+                WebkitMaskImage: "url('/favicon.png')",
+                WebkitMaskPosition: "center",
+                WebkitMaskRepeat: "no-repeat",
+                WebkitMaskSize: "contain",
+              }}
             />
           </div>
           <span className="font-serif text-lg font-semibold tracking-tight hidden sm:block">
