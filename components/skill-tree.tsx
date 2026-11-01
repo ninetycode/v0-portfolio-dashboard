@@ -48,7 +48,7 @@ export function SkillTree() {
   })
 
   return (
-    <section id="skills" className="py-20 px-4">
+    <section id="skills" className="scroll-mt-24 px-4 py-20">
       <div className="mx-auto max-w-6xl">
         <div data-reveal="rise" className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10 border border-primary/30">
@@ -58,9 +58,9 @@ export function SkillTree() {
         </div>
         <p data-reveal="rise" className="text-muted-foreground mb-12 max-w-2xl">{sk.subtitle}</p>
 
-        <div className="grid gap-8 lg:grid-cols-[1fr,1.2fr]">
+        <div className="grid min-w-0 gap-8 lg:grid-cols-[1fr,1.2fr]">
           {/* Skill Tree Visual */}
-          <div className="relative flex flex-col items-center py-8">
+          <div className="relative flex w-full min-w-0 flex-col items-center py-8">
             <SkillNode
               skill={buildSkill("foundation")}
               isActive={activeSkill === "foundation"}
@@ -70,7 +70,7 @@ export function SkillTree() {
               onClick={() => setSelectedSkill(selectedSkill === "foundation" ? null : "foundation")}
             />
 
-            <div className="relative w-full h-16">
+            <div className="relative h-16 w-full min-w-0">
               <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
                 <line x1="50%" y1="0" x2="16.66%" y2="100%" stroke="var(--border)" strokeWidth="2" strokeDasharray="4 4" />
                 <line x1="50%" y1="0" x2="50%" y2="100%" stroke="var(--border)" strokeWidth="2" strokeDasharray="4 4" />
@@ -78,10 +78,11 @@ export function SkillTree() {
               </svg>
             </div>
 
-            <div className="flex justify-between w-full max-w-md">
+            <div className="flex w-full min-w-0 max-w-md justify-between gap-1.5">
               {(["programming", "level-design", "production"] as const).map((id) => (
                 <SkillNode
                   key={id}
+                  compact
                   skill={buildSkill(id)}
                   isActive={activeSkill === id}
                   isSelected={selectedSkill === id}
@@ -169,6 +170,7 @@ interface SkillData {
 
 interface SkillNodeProps {
   skill: SkillData
+  compact?: boolean
   isActive: boolean
   isSelected: boolean
   onHover: () => void
@@ -176,17 +178,19 @@ interface SkillNodeProps {
   onClick: () => void
 }
 
-function SkillNode({ skill, isActive, isSelected, onHover, onLeave, onClick }: SkillNodeProps) {
+function SkillNode({ skill, compact = false, isActive, isSelected, onHover, onLeave, onClick }: SkillNodeProps) {
   return (
     <button
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
       onClick={onClick}
       data-reveal="rise"
-      className={`relative flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all duration-300 ${
+      className={`relative flex flex-col items-center rounded-xl border-2 transition-all duration-300 ${
+        compact ? "min-w-0 flex-1 gap-1 px-1 py-2 sm:gap-2 sm:p-3" : "gap-2 p-4"
+      } ${
         isActive || isSelected
-          ? "scale-110"
-          : "hover:scale-105"
+          ? "z-10 sm:scale-105"
+          : "sm:hover:scale-105"
       }`}
       style={{
         borderColor: isActive || isSelected ? skill.color : "var(--border)",
@@ -199,7 +203,7 @@ function SkillNode({ skill, isActive, isSelected, onHover, onLeave, onClick }: S
       }}
     >
       <div 
-        className="h-10 w-10 rounded-lg flex items-center justify-center transition-colors"
+        className={`flex items-center justify-center rounded-lg transition-colors ${compact ? "h-8 w-8 sm:h-10 sm:w-10" : "h-10 w-10"}`}
         style={{ 
           backgroundColor: `color-mix(in oklch, ${skill.color} 20%, transparent)`,
           color: skill.color 
@@ -207,7 +211,7 @@ function SkillNode({ skill, isActive, isSelected, onHover, onLeave, onClick }: S
       >
         {skill.icon}
       </div>
-      <span className="font-mono text-xs text-center max-w-[80px] leading-tight">
+      <span className={`text-center font-mono leading-tight ${compact ? "max-w-full text-[10px] sm:text-xs" : "max-w-[80px] text-xs"}`}>
         {skill.name}
       </span>
       

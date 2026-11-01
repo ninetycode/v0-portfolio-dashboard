@@ -61,7 +61,7 @@ export function HeroSection() {
         </h1>
 
         {/* Subtitle */}
-        <p className="font-sans text-lg md:text-xl text-muted-foreground mb-2">
+        <p className="mb-2 text-balance font-sans text-lg text-muted-foreground md:text-xl">
           <RichText value={tx(h.subtitle)} />
         </p>
 

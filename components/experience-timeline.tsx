@@ -19,7 +19,7 @@ export function ExperienceTimeline() {
   const selectedYear = selectedExp?.year ?? null
 
   return (
-    <section id="experience" className="py-20 px-4">
+    <section id="experience" className="scroll-mt-24 px-4 py-20">
       <div className="mx-auto max-w-6xl">
         {/* Section Header */}
         <div data-reveal="rise" className="flex items-center gap-3 mb-4">

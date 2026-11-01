@@ -13,7 +13,7 @@ export function FeaturedGames({ games }: { games: GameSummary[] }) {
   const home = content.home
 
   return (
-    <section id="featured" className="py-20 px-4">
+    <section id="featured" className="scroll-mt-24 px-4 py-20">
       <div className="mx-auto max-w-6xl">
         <div data-reveal="rise" className="text-center mb-12">
           <p className="font-mono text-sm text-primary tracking-widest uppercase mb-3"><RichText value={tx(home.featuredKicker)} /></p>

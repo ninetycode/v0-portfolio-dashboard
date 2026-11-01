@@ -3,6 +3,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 @custom-variant dark (&:is(.dark *));
@@ -137,6 +138,7 @@ html {
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: clip;
   }
 }
 
