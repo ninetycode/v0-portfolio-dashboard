@@ -71,7 +71,7 @@ export const defaultContactLinks: ContactLinksContent = {
       category: "Contacto",
       featured: true,
       active: true,
-      sortOrder: 0,
+      sortOrder: 4,
     },
     {
       id: "link-portfolio",
@@ -83,7 +83,7 @@ export const defaultContactLinks: ContactLinksContent = {
       category: "Sitio",
       featured: true,
       active: true,
-      sortOrder: 1,
+      sortOrder: 0,
     },
     {
       id: "link-juegos",
@@ -95,7 +95,7 @@ export const defaultContactLinks: ContactLinksContent = {
       category: "Sitio",
       featured: false,
       active: true,
-      sortOrder: 2,
+      sortOrder: 1,
     },
     {
       id: "link-proyectos",
@@ -107,7 +107,7 @@ export const defaultContactLinks: ContactLinksContent = {
       category: "Sitio",
       featured: false,
       active: true,
-      sortOrder: 3,
+      sortOrder: 2,
     },
     {
       id: "link-blog",
@@ -119,7 +119,7 @@ export const defaultContactLinks: ContactLinksContent = {
       category: "Sitio",
       featured: false,
       active: true,
-      sortOrder: 4,
+      sortOrder: 3,
     },
     {
       id: "link-linkedin",
@@ -228,10 +228,23 @@ export function resolveRedirectTarget(url: string, requestUrl: string): string |
   return url
 }
 
+function categoryRank(category: string): number {
+  const key = category.trim().toLocaleLowerCase("es")
+  if (key === "sitio") return 0
+  if (key === "contacto") return 1
+  if (key === "redes") return 2
+  if (!key) return 4
+  return 3
+}
+
 export function visibleContactLinks(data: ContactLinksContent): ContactLink[] {
   return data.links
     .filter((link) => link.active)
-    .toSorted((a, b) => a.sortOrder - b.sortOrder || a.title.localeCompare(b.title, "es"))
+    .toSorted((a, b) => {
+      const byCategory = categoryRank(a.category) - categoryRank(b.category)
+      if (byCategory !== 0) return byCategory
+      return a.sortOrder - b.sortOrder || a.title.localeCompare(b.title, "es")
+    })
 }
 
 export function findActiveContactLink(data: ContactLinksContent, slug: string): ContactLink | undefined {

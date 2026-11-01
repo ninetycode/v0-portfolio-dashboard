@@ -49,20 +49,22 @@ export function ContactPage({ data, canEdit }: { data: ContactLinksContent; canE
         {links.length === 0 ? (
           <p className="mt-10 text-center text-sm text-muted-foreground">No hay enlaces activos.</p>
         ) : (
-          <ul className="mt-8 flex flex-col gap-3">
-            {links.map((link, index) => {
-              const showCategory = Boolean(link.category) && link.category !== previousCategory
-              if (link.category) previousCategory = link.category
-              return (
-                <li key={link.id} className="flex flex-col gap-2">
-                  {showCategory ? (
-                    <p className={cn("px-1 font-mono text-xs text-muted-foreground", index > 0 && "pt-2")}>{link.category}</p>
-                  ) : null}
-                  <ContactLinkButton link={link} />
-                </li>
-              )
-            })}
-          </ul>
+          <div className="mt-8 rounded-md border-2 border-[#2f7d45] bg-[#f4faf5] p-3 dark:border-[#b6e3a8] dark:bg-card/70">
+            <ul className="flex flex-col gap-3">
+              {links.map((link, index) => {
+                const showCategory = Boolean(link.category) && link.category !== previousCategory
+                if (link.category) previousCategory = link.category
+                return (
+                  <li key={link.id} className="flex flex-col gap-2">
+                    {showCategory ? (
+                      <p className={cn("px-1 font-mono text-xs text-muted-foreground", index > 0 && "pt-2")}>{link.category}</p>
+                    ) : null}
+                    <ContactLinkButton link={link} />
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
         )}
       </div>
     </main>
@@ -104,10 +106,8 @@ function ContactLinkButton({ link }: { link: ContactLink }) {
       href={`/go/${link.slug}`}
       prefetch={false}
       className={cn(
-        "flex min-h-14 items-center gap-3 rounded-xl border px-3 py-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-        link.featured
-          ? "border-primary/50 bg-primary/10 box-glow-subtle"
-          : "border-border bg-card hover:border-primary/40",
+        "flex min-h-14 items-center gap-3 rounded-md border-2 border-[#2f7d45] bg-background px-3 py-3 transition-colors hover:bg-[#2f7d45]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:border-[#b6e3a8] dark:hover:bg-[#b6e3a8]/10",
+        link.featured && "bg-[#2f7d45]/10 dark:bg-[#b6e3a8]/15",
       )}
     >
       <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-background/70 text-primary">
