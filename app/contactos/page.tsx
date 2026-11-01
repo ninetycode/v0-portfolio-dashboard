@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import { Suspense } from "react"
-import { ContactPage } from "@/components/contacto/contact-page"
+import { ContactPage } from "@/components/contactos/contact-page"
 import ContactosLoading from "./loading"
 import { isAdmin } from "@/lib/admin-auth"
 import { contactProfileSchema, visibleContactLinks } from "@/lib/site-content/contact-links"
