@@ -260,7 +260,7 @@ export const translations = {
         "Mi árbol de habilidades como Game Designer. Cada nodo representa una especialización con sus certificaciones y conocimientos asociados.",
       level: "Nivel:",
       certs: "// Certificaciones y Conocimientos",
-      hoverPrompt: "Pasa el cursor sobre un nodo para ver sus detalles",
+      hoverPrompt: "Elegí un nodo para ver sus detalles",
       nodes: {
         foundation: {
           name: "Técnico en Computación",
@@ -676,7 +676,7 @@ export const translations = {
         "My skill tree as a Game Designer. Each node represents a specialization with its certifications and associated knowledge.",
       level: "Level:",
       certs: "// Certifications & Knowledge",
-      hoverPrompt: "Hover over a node to see its details",
+      hoverPrompt: "Select a node to see its details",
       nodes: {
         foundation: {
           name: "Computer Technician",

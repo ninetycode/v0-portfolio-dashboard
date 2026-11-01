@@ -45,7 +45,7 @@ export function ToolInventory() {
   const toolColor = !mounted ? "#86efac" : resolvedTheme === "dark" ? "#86efac" : "#478cbf"
 
   return (
-    <section id="tools" className="py-20 px-4">
+    <section id="tools" className="scroll-mt-24 px-4 py-20">
       <div className="mx-auto max-w-6xl">
         <div data-reveal="rise" className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-accent/10 border border-accent/30">

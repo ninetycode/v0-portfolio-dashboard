@@ -79,7 +79,7 @@ export function ContactQuest() {
   }
 
   return (
-    <section id="contact" className="py-20 px-4">
+    <section id="contact" className="scroll-mt-24 px-4 py-20">
       <div className="mx-auto max-w-6xl">
         <div data-reveal="rise" className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-accent/10 border border-accent/30">
@@ -147,7 +147,7 @@ export function ContactQuest() {
 
         <div className="text-center">
           <p className="font-mono text-sm text-muted-foreground mb-4"><RichText value={tx(ct.findMe)} /></p>
-          <div className="flex items-center justify-center gap-4">
+          <div className="flex w-full flex-wrap items-center justify-center gap-3">
             {ct.socials.map((link) => (
               <a
                 key={link.id}
@@ -155,7 +155,7 @@ export function ContactQuest() {
                 target="_blank"
                 rel="noopener noreferrer"
                 data-reveal="rise"
-                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border/50 bg-card hover:border-primary/50 hover:bg-primary/5 transition-all duration-200"
+                className="flex max-w-full items-center gap-2 px-4 py-2 rounded-lg border border-border/50 bg-card hover:border-primary/50 hover:bg-primary/5 transition-all duration-200"
               >
                 {socialIcons[link.icon]}
                 <span className="font-sans text-sm"><RichText value={link.name} /></span>

@@ -31,7 +31,7 @@ export function AboutMe({ gameCount }: { gameCount: number }) {
   }))
 
   return (
-    <section id="about" className="py-20 bg-background">
+    <section id="about" className="scroll-mt-24 bg-background py-20">
       <div className="mx-auto max-w-6xl px-4">
         <div className="flex justify-end">
           <SectionEditLink seccion="sobre" />
@@ -62,15 +62,15 @@ export function AboutMe({ gameCount }: { gameCount: number }) {
           </div>
 
           {/* Stats Grid — spans right col, aligned with body text */}
-          <div className="grid grid-cols-2 gap-4 lg:-mt-4">
+          <div className="grid min-w-0 grid-cols-2 gap-3 sm:gap-4 lg:-mt-4">
             {stats.map((stat, index) => (
               <div
                 key={index}
                 data-reveal="pop"
-                className="p-6 rounded-xl border border-border/50 bg-card hover:border-primary/30 transition-colors group"
+                className="min-w-0 rounded-xl border border-border/50 bg-card p-4 transition-colors group hover:border-primary/30 sm:p-6"
               >
-                <stat.icon className="h-8 w-8 text-primary mb-4 transition-transform duration-200 group-hover:scale-125" />
-                <h3 className="font-bold text-lg mb-1">{stat.title}</h3>
+                <stat.icon className="mb-3 h-7 w-7 text-primary transition-transform duration-200 group-hover:scale-125 sm:mb-4 sm:h-8 sm:w-8" />
+                <h3 className="mb-1 break-words text-base font-bold sm:text-lg">{stat.title}</h3>
                 <p className="text-sm text-muted-foreground"><RichText value={stat.description} /></p>
               </div>
             ))}
