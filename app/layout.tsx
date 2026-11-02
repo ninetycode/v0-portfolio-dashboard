@@ -40,8 +40,12 @@ export const metadata: Metadata = {
   description: 'Portfolio de Mathías Andino, Game Narrative Designer Junior de Buenos Aires. Diseño narrativo, sistemas de juego y desarrollo con Godot.',
   generator: 'v0.app',
   icons: {
-    icon: '/favicon.png',
-    apple: '/favicon.png',
+    icon: [
+      { url: '/icon-light.svg', type: 'image/svg+xml', media: '(prefers-color-scheme: light)' },
+      { url: '/icon-dark.svg', type: 'image/svg+xml', media: '(prefers-color-scheme: dark)' },
+      { url: '/favicon.png', type: 'image/png' },
+    ],
+    apple: '/apple-icon.png',
   },
 }
 
