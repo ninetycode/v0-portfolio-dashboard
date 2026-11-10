@@ -249,7 +249,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
         </p>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((project, index) => {
+          {filteredProjects.map((project, position) => {
             const StatusIcon = statusIcons[project.status]
             const index = items.findIndex((p) => p.id === project.id)
             return (
@@ -261,7 +261,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                         <img
                           src={project.coverImage || "/placeholder.svg"}
                           alt={project.title}
-                          loading={index < 3 ? "eager" : "lazy"}
+                          loading={position < 3 ? "eager" : "lazy"}
                           decoding="async"
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
