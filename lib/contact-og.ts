@@ -37,7 +37,7 @@ async function avatarDataUrl(url: string): Promise<string | null> {
   try {
     const file = await readFile(filePath)
     if (file.length === 0 || file.length > MAX_AVATAR_BYTES) return null
-    // The public avatar is named .jpg but its bytes are PNG. Satori decodes
+    // An uploaded avatar's extension may not match its bytes. Satori decodes
     // only the type declared in the data URL, so trust the magic bytes.
     const mime = imageMime(file)
     if (!mime) return null

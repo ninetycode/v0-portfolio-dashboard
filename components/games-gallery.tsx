@@ -117,7 +117,7 @@ export function GamesGallery({ games }: { games: GameSummary[] }) {
           </div>
         ) : (
           <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((game) => (
+            {items.map((game, index) => (
               <li
                 key={game.id}
                 draggable={isAdmin}
@@ -168,6 +168,8 @@ export function GamesGallery({ games }: { games: GameSummary[] }) {
                       <img
                         src={game.coverImage}
                         alt={`Portada de ${game.title}`}
+                        loading={index < 3 ? "eager" : "lazy"}
+                        decoding="async"
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         draggable={false}
                         style={{ imageRendering: "pixelated" }}

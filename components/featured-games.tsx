@@ -41,6 +41,8 @@ export function FeaturedGames({ games }: { games: GameSummary[] }) {
                     <img
                       src={game.coverImage}
                       alt={`Portada de ${game.title}`}
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       style={{ imageRendering: "pixelated" }}
                     />

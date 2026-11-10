@@ -27,6 +27,10 @@ function ToolGlyph({ icon, color }: { icon: ToolIcon; color: string }) {
       src={`https://cdn.simpleicons.org/${icon.slug}/${color.replace("#", "")}`}
       alt=""
       aria-hidden="true"
+      width={28}
+      height={28}
+      loading="lazy"
+      decoding="async"
       className="h-7 w-7 object-contain"
     />
   )
