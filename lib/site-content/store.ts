@@ -1,4 +1,3 @@
-import { unstable_noStore as noStore } from "next/cache"
 import { db, pool } from "@/lib/db"
 import { siteSections } from "@/lib/db/schema"
 import { defaultSiteContent } from "./defaults"
@@ -27,7 +26,6 @@ export function ensureSiteSectionsTable(): Promise<void> {
 }
 
 export async function readSiteContent(): Promise<SiteContent> {
-  noStore()
   if (!process.env.DATABASE_URL) return structuredClone(defaultSiteContent)
   try {
     await ensureSiteSectionsTable()

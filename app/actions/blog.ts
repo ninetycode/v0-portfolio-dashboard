@@ -97,6 +97,8 @@ export async function updatePost(
     if (existing && existing.id !== id) {
       return { success: false, error: `Ya existe otra entrada con el slug "${slug}"` }
     }
+    const previous = await getPostById(id)
+    if (previous && previous.slug !== slug) revalidatePath(`/blog/${previous.slug}`)
     await db
       .update(blogPosts)
       .set({
@@ -125,7 +127,8 @@ export async function updatePost(
 export async function deletePost(id: string): Promise<{ success: boolean; error?: string }> {
   try {
     await requireAdmin()
-    await db.delete(blogPosts).where(eq(blogPosts.id, id))
+    const deleted = await db.delete(blogPosts).where(eq(blogPosts.id, id)).returning({ slug: blogPosts.slug })
+    if (deleted[0]) revalidatePath(`/blog/${deleted[0].slug}`)
     revalidatePath("/blog")
     revalidatePath("/")
     return { success: true }
