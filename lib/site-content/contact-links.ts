@@ -57,7 +57,7 @@ export const defaultContactLinks: ContactLinksContent = {
   header: {
     avatarUrl: "/profile-avatar.jpg",
     displayName: "Mathías Andino",
-    roleBadge: "Game Narrative Designer Junior",
+    roleBadge: "Game Designer Junior",
     bio: "Diseño narrativa y sistemas de juego en Buenos Aires. Escribime, o entrá al portfolio, los juegos y el blog.",
   },
   links: [

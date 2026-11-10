@@ -31,7 +31,7 @@ const staticCommands: Record<string, string | string[]> = {
   about: [
     "╔══════════════════════════════════════╗",
     "║  MATHÍAS ANDINO                      ║",
-    "║  Game Narrative Designer junior             ║",
+    "║  Game Designer Junior                ║",
     "║  Nivel: 27  |  Clase: Designer       ║",
     "║  Ubicación: González Catán, AR       ║",
     "╚══════════════════════════════════════╝",

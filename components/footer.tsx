@@ -14,7 +14,7 @@ export function Footer() {
           {" // "}
         </p>
         <p className="mt-2 text-balance font-mono text-xs text-muted-foreground/60">
-          2024 | Game Narrative Designer Junior | Buenos Aires, Argentina
+          2024 | Game Designer Junior | Buenos Aires, Argentina
         </p>
       </div>
     </footer>
