@@ -123,6 +123,7 @@ export function BlogList({ posts, isAdmin = false, onEdit, onDelete }: BlogListP
                     src={post.author.avatar}
                     alt={post.author.name}
                     fill
+                    sizes="32px"
                     className="object-cover"
                   />
                 </div>

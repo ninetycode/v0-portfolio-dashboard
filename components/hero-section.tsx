@@ -46,6 +46,7 @@ export function HeroSection() {
               src="/profile-avatar.jpg"
               alt={plainText(tx(h.footerName))}
               fill
+              sizes="(min-width: 768px) 240px, 192px"
               className="object-cover"
               priority
             />

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { ExternalLink, Gamepad2, PlayCircle } from "lucide-react"
 import { RatingBadge } from "@/components/games/star-rating"
 import { RichText } from "@/components/rich-text"
+import { CoverImage } from "@/components/cover-image"
 import { useSiteLang } from "@/lib/site-content/context"
 import type { GameSummary } from "@/lib/games-types"
 
@@ -38,12 +39,11 @@ export function FeaturedGames({ games }: { games: GameSummary[] }) {
               >
                 <div className="relative aspect-[16/9] overflow-hidden bg-muted">
                   {game.coverImage ? (
-                    <img
+                    <CoverImage
                       src={game.coverImage}
                       alt={`Portada de ${game.title}`}
-                      loading="lazy"
-                      decoding="async"
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(min-width: 1152px) 564px, (min-width: 768px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
                       style={{ imageRendering: "pixelated" }}
                     />
                   ) : (

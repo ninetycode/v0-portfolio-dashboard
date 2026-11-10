@@ -18,6 +18,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { RatingBadge } from "@/components/games/star-rating"
+import { CoverImage } from "@/components/cover-image"
 import { useAdmin } from "@/lib/admin-context"
 import { useLang } from "@/lib/i18n"
 import { deleteGame, reorderGames } from "@/app/actions/games"
@@ -165,12 +166,12 @@ export function GamesGallery({ games }: { games: GameSummary[] }) {
                 <Link href={`/games/${game.slug}`} className="block" draggable={false}>
                   <div className="relative aspect-video overflow-hidden bg-muted">
                     {game.coverImage ? (
-                      <img
+                      <CoverImage
                         src={game.coverImage}
                         alt={`Portada de ${game.title}`}
-                        loading={index < 3 ? "eager" : "lazy"}
-                        decoding="async"
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        priority={index < 3}
+                        sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                         draggable={false}
                         style={{ imageRendering: "pixelated" }}
                       />
