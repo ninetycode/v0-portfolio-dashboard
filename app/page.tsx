@@ -10,7 +10,7 @@ import { HomeFooter } from "@/components/home-footer"
 import { getGames } from "@/app/actions/games"
 import { SHOW_EXPERIENCE_AND_SKILLS } from "@/lib/home-visibility"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 3600
 
 export default async function Home() {
   const games = await getGames()

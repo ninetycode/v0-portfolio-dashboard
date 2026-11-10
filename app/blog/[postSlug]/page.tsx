@@ -8,10 +8,15 @@ import { generateBlogPostingSchema } from "@/lib/structured-data"
 import { siteBaseUrl } from "@/lib/site-url"
 import { Footer } from "@/components/footer"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 3600
 
 interface Props {
   params: Promise<{ postSlug: string }>
+}
+
+export async function generateStaticParams() {
+  const rows = await getAllPosts()
+  return rows.map((row) => ({ postSlug: row.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

@@ -4,7 +4,7 @@ import { ProjectsGallery } from "@/components/projects-gallery"
 import { Footer } from "@/components/footer"
 import { getProjects } from "@/app/actions/projects"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: "Proyectos | Mathías Andino",

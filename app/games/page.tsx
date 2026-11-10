@@ -4,7 +4,7 @@ import { GamesGallery } from "@/components/games-gallery"
 import { Footer } from "@/components/footer"
 import { getGames } from "@/app/actions/games"
 
-export const dynamic = "force-dynamic"
+export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: "My Games | Mathías Andino",
