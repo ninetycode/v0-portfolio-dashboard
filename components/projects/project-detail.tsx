@@ -98,7 +98,7 @@ export function ProjectDetail({ project, admin }: { project: Project; admin: boo
                     i === current ? "border-primary ring-2 ring-primary/20" : "border-transparent hover:border-primary/50",
                   )}
                 >
-                  <img src={src || "/placeholder.svg"} alt="" className="h-full w-full object-cover" />
+                  <img src={src || "/placeholder.svg"} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
                 </button>
               ))}
             </div>

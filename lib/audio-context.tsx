@@ -18,7 +18,11 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
   useEffect(() => {
-    const audio = new Audio("/audio/moonlit-vale.ogg")
+    // new Audio(src) preloads the whole 3 MB track on every page view;
+    // preload="none" defers the download until play() is called.
+    const audio = new Audio()
+    audio.preload = "none"
+    audio.src = "/audio/moonlit-vale.ogg"
     audio.loop = true
     audio.volume = 0.5
     audioRef.current = audio
