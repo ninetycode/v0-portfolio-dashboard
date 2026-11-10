@@ -38,7 +38,7 @@ export function generateBlogListSchema(baseUrl: string) {
     author: {
       "@type": "Person",
       name: "Mathías Andino",
-      jobTitle: "Game Narrative Designer junior",
+      jobTitle: "Game Designer Junior",
     },
   }
 }

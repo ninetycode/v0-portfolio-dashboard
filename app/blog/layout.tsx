@@ -2,7 +2,7 @@ import { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Devlog & Blog | Mathías Andino",
-  description: "Articles about game development, project post-mortems, and reflections on the gaming industry. Follow my journey as a Game Narrative Designer junior.",
+  description: "Articles about game development, project post-mortems, and reflections on the gaming industry. Follow my journey as a Game Designer Junior.",
 }
 
 export default function BlogLayout({

@@ -37,7 +37,7 @@ const home: HomeContent = {
   // The homepage footer is Spanish in both languages today. Keep that until it is edited.
   footerCredit: s("Diseñado y desarrollado por"),
   footerName: s("Mathías Andino"),
-  footerTagline: s("2024 | Game Narrative Designer Junior | Buenos Aires, Argentina"),
+  footerTagline: s("2024 | Game Designer Junior | Buenos Aires, Argentina"),
   featuredKicker: s("PORTFOLIO"),
   featuredTitle: b("Videojuegos Destacados", "Featured Games"),
   featuredSubtitle: b(
@@ -54,8 +54,8 @@ const about: AboutContent = {
   titleYear: "2025",
   paragraphs: [
     b(
-      "Soy Mathias Andino, Game Narrative Designer junior de Buenos Aires. Me enfoco en que la historia y las mecánicas cuenten lo mismo: diseño sistemas de juego en los que cada acción del jugador refuerza la narrativa, para que no haya disonancia ludonarrativa.",
-      "I'm a Game Narrative Designer junior from Buenos Aires, Argentina, with 1 year of experience, currently finishing my degree in Video Game Production (UNPAZ). My focus is on creating gaming experiences that feel incredible — game feel is at the heart of everything I design.",
+      "Soy Mathias Andino, Game Designer Junior de Buenos Aires. Me enfoco en que la historia y las mecánicas cuenten lo mismo: diseño sistemas de juego en los que cada acción del jugador refuerza la narrativa, para que no haya disonancia ludonarrativa.",
+      "I'm a Game Designer Junior from Buenos Aires, Argentina, with 1 year of experience, currently finishing my degree in Video Game Production (UNPAZ). My focus is on creating gaming experiences that feel incredible — game feel is at the heart of everything I design.",
     ),
     b(
       "En Mask Power (Global Game Jam 2026) convertí el tema \"máscara\" en un sistema de poderes inspirado en dioses ancestrales, donde elegir la máscara correcta es el desafío. En A través de mis ojos, un juego serio hecho en equipo, trasladamos la sobrecarga sensorial de una niña con autismo a un enemigo que ataca con sonido.",
@@ -66,8 +66,8 @@ const about: AboutContent = {
       "In Oneiric Dread, I bring cohesion to the story and gameplay as part of a five-person team, with a sanity mechanic tied to the protagonist's emotional containment. I work with Godot and AI tools to prototype and reach playable versions quickly, while caring about game feel and the details that make a game feel good.",
     ),
     b(
-      "También me interesan la UX y la organización de proyectos. Estoy terminando la carrera de Producción de Videojuegos en la UNPAZ y busco sumarme a un equipo como Narrative Designer o Game Designer junior.",
-      "I am also interested in UX and project organization. I am finishing my degree in Video Game Production at UNPAZ and looking to join a team as a Narrative Designer or Junior Game Designer.",
+      "También me interesan la UX y la organización de proyectos. Estoy terminando la carrera de Producción de Videojuegos en la UNPAZ y busco sumarme a un equipo como Game Designer Junior.",
+      "I am also interested in UX and project organization. I am finishing my degree in Video Game Production at UNPAZ and looking to join a team as a Game Designer Junior.",
     ),
   ],
   stats: [
@@ -127,7 +127,7 @@ const experience: ExperienceContent = {
       year: "2024",
       type: "work",
       showReadMore: true,
-      title: s("Game Narrative Designer junior"),
+      title: s("Game Designer Junior"),
       company: s("Indie Studio Collab"),
       overview: b(
         "Lideré el diseño técnico de un roguelike cooperativo, desde la conceptualización hasta el lanzamiento en Early Access.",

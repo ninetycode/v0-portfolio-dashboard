@@ -9,7 +9,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: "My Games | Mathías Andino",
   description:
-    "Collection of video games designed and developed by Mathías Andino — Game Narrative Designer junior. Play them in the browser, rate them and leave feedback.",
+    "Collection of video games designed and developed by Mathías Andino — Game Designer Junior. Play them in the browser, rate them and leave feedback.",
 }
 
 export default async function GamesPage() {

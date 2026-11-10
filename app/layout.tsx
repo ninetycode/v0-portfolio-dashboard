@@ -36,15 +36,16 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteBaseUrl()),
-  title: 'Mathías Andino | Game Narrative Designer Junior',
-  description: 'Portfolio de Mathías Andino, Game Narrative Designer Junior de Buenos Aires. Diseño narrativo, sistemas de juego y desarrollo con Godot.',
+  title: 'Mathías Andino | Game Designer Junior',
+  description: 'Portfolio de Mathías Andino, Game Designer Junior de Buenos Aires. Diseño de sistemas de juego, mecánicas y desarrollo con Godot.',
   generator: 'v0.app',
   icons: {
     icon: [
-      { url: '/icon-light.svg', type: 'image/svg+xml', media: '(prefers-color-scheme: light)' },
-      { url: '/icon-dark.svg', type: 'image/svg+xml', media: '(prefers-color-scheme: dark)' },
-      { url: '/favicon.png', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.png', type: 'image/png', sizes: '256x256' },
     ],
+    shortcut: '/favicon.ico',
     apple: '/apple-icon.png',
   },
 }
