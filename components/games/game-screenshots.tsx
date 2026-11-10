@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog"
+import { CoverImage } from "@/components/cover-image"
 
 export function GameScreenshots({ title, screenshots }: { title: string; screenshots: string[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null)
@@ -23,13 +24,15 @@ export function GameScreenshots({ title, screenshots }: { title: string; screens
               className="group block w-full overflow-hidden rounded-md border border-border bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               aria-label={`Ampliar captura ${i + 1}`}
             >
-              <img
-                src={src || "/placeholder.svg"}
-                alt={`Captura ${i + 1} de ${title}`}
-                className="aspect-video w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                style={{ imageRendering: "pixelated" }}
-                loading="lazy"
-              />
+              <span className="relative block aspect-video w-full">
+                <CoverImage
+                  src={src}
+                  alt={`Captura ${i + 1} de ${title}`}
+                  sizes="(min-width: 1024px) 320px, (min-width: 640px) 33vw, 50vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  style={{ imageRendering: "pixelated" }}
+                />
+              </span>
             </button>
           </li>
         ))}

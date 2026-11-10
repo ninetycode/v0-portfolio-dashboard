@@ -38,6 +38,7 @@ import { useAdmin } from "@/lib/admin-context"
 import { deleteProject, reorderProjects } from "@/app/actions/projects"
 import { PROJECT_STATUSES, statusConfig, type Project, type ProjectStatus } from "@/lib/projects-types"
 import { PlatformIcon } from "@/components/projects/platform-icon"
+import { CoverImage } from "@/components/cover-image"
 
 export const statusIcons: Record<ProjectStatus, typeof Lightbulb> = {
   idea: Lightbulb,
@@ -258,12 +259,12 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                   <Card className="group relative h-full cursor-pointer overflow-hidden border-border/50 bg-card transition-all duration-300 hover:border-primary/50">
                     <div className="relative aspect-video overflow-hidden bg-muted">
                       {project.coverImage ? (
-                        <img
-                          src={project.coverImage || "/placeholder.svg"}
+                        <CoverImage
+                          src={project.coverImage}
                           alt={project.title}
-                          loading={position < 3 ? "eager" : "lazy"}
-                          decoding="async"
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          priority={position < 3}
+                          sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center">

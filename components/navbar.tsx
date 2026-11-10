@@ -109,7 +109,11 @@ export function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
-        <Link href={isHome ? "#home" : "/"} className="flex shrink-0 items-center gap-2 group">
+        <Link
+          href={isHome ? "#home" : "/"}
+          aria-label={lang === "es" ? "Mathías Andino, inicio" : "Mathías Andino, home"}
+          className="flex shrink-0 items-center gap-2 group"
+        >
           <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/10 border border-primary/30 group-hover:box-glow transition-all duration-300">
             <BrandLogo className="h-6 w-6 text-primary" />
           </div>

@@ -3,6 +3,7 @@
 import { useRef, useState } from "react"
 import { Maximize2, Play } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { CoverImage } from "@/components/cover-image"
 
 interface GamePlayerProps {
   title: string
@@ -43,10 +44,12 @@ export function GamePlayer({ title, embedUrl, width, height, coverImage }: GameP
             aria-label={`Cargar y jugar ${title}`}
           >
             {coverImage && (
-              <img
+              <CoverImage
                 src={coverImage}
                 alt=""
-                className="absolute inset-0 h-full w-full object-cover opacity-60 transition-opacity group-hover:opacity-40"
+                priority
+                sizes="(min-width: 1024px) 960px, 100vw"
+                className="object-cover opacity-60 transition-opacity group-hover:opacity-40"
                 style={{ imageRendering: "pixelated" }}
               />
             )}
