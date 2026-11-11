@@ -273,22 +273,26 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
                       <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-                        <Badge className={`gap-1 border font-mono text-xs ${statusConfig[project.status].color}`}>
-                          <StatusIcon className="h-3 w-3" />
-                          {getStatusLabel(project.status)}
-                        </Badge>
-                        {project.embedUrl && (
-                          <Badge className="gap-1 border border-accent/30 bg-accent/20 font-mono text-xs text-accent">
-                            <Play className="h-3 w-3" />
-                            {lang === "en" ? "Playable" : "Jugable"}
+                        <span className="rounded-md bg-background">
+                          <Badge className={`gap-1 border font-mono text-xs ${statusConfig[project.status].color}`}>
+                            <StatusIcon className="h-3 w-3" />
+                            {getStatusLabel(project.status)}
                           </Badge>
+                        </span>
+                        {project.embedUrl && (
+                          <span className="rounded-md bg-background">
+                            <Badge className="gap-1 border border-accent/30 bg-accent/20 font-mono text-xs text-accent">
+                              <Play className="h-3 w-3" />
+                              {lang === "en" ? "Playable" : "Jugable"}
+                            </Badge>
+                          </span>
                         )}
                       </div>
-                      <div className="absolute top-3 right-3 flex gap-1">
+                      <div className="absolute bottom-3 left-3 flex gap-1">
                         {project.platforms.map((platform) => (
                           <div
                             key={platform}
-                            className="flex h-6 w-6 items-center justify-center rounded border border-border/50 bg-background/80 backdrop-blur-sm"
+                            className="flex h-7 w-7 items-center justify-center rounded-md border border-border bg-background text-foreground"
                             title={platform}
                           >
                             <PlatformIcon platform={platform} />
