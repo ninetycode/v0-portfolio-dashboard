@@ -37,11 +37,34 @@ export function ContactQuest() {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null)
   const [formData, setFormData] = useState({ name: "", email: "", message: "" })
   const [mounted, setMounted] = useState(false)
-  const { tx, content } = useSiteLang()
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle")
+  const [trap, setTrap] = useState("")
+  const { tx, content, lang } = useSiteLang()
   const ct = content.missions
   const { resolvedTheme } = useTheme()
 
   useEffect(() => { setMounted(true) }, [])
+
+  const ui = lang === "en"
+    ? {
+        sending: "Sending...",
+        sentTitle: "Quest accepted!",
+        sentBody: "Your message was delivered. I'll get back to you at the email you provided.",
+        close: "Close",
+        error: "Something went wrong sending your message. Please try again in a moment.",
+      }
+    : {
+        sending: "Enviando...",
+        sentTitle: "¡Misión aceptada!",
+        sentBody: "Tu mensaje fue entregado. Te respondo al correo que dejaste.",
+        close: "Cerrar",
+        error: "No se pudo enviar el mensaje. Probá de nuevo en un momento.",
+      }
+
+  const closeDialog = () => {
+    setSelectedIdx(null)
+    setStatus("idle")
+  }
 
 
   const difficultyLabel = (difficulty: Difficulty) => {
@@ -50,13 +73,30 @@ export function ContactQuest() {
     return tx(ct.difficultyNormal)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setSelectedIdx(null)
-    setFormData({ name: "", email: "", message: "" })
-  }
-
   const selectedQuest = selectedIdx !== null ? ct.quests[selectedIdx] : null
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (status === "sending" || !selectedQuest) return
+    setStatus("sending")
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          questTitle: plainText(tx(selectedQuest.title)),
+          questKind: selectedQuest.kind,
+          website: trap,
+        }),
+      })
+      if (!res.ok) throw new Error("request failed")
+      setFormData({ name: "", email: "", message: "" })
+      setStatus("sent")
+    } catch {
+      setStatus("error")
+    }
+  }
 
   const messageLabel = () => {
     if (!selectedQuest) return tx(ct.linkGame)
@@ -150,7 +190,7 @@ export function ContactQuest() {
         </div>
       </div>
 
-      <Dialog open={!!selectedQuest} onOpenChange={() => setSelectedIdx(null)}>
+      <Dialog open={!!selectedQuest} onOpenChange={closeDialog}>
         <DialogContent className="max-w-md bg-background/95 backdrop-blur-md border-border/50">
           {selectedQuest && (
             <>
@@ -170,7 +210,20 @@ export function ContactQuest() {
                 <DialogDescription><RichText value={tx(ct.completeForm)} /></DialogDescription>
               </DialogHeader>
 
+              {status === "sent" ? (
+                <div role="status" className="mt-4 space-y-4 text-center">
+                  <p className="font-serif text-lg font-semibold">{ui.sentTitle}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{ui.sentBody}</p>
+                  <Button type="button" onClick={closeDialog} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+                    {ui.close}
+                  </Button>
+                </div>
+              ) : (
               <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+                <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+                  <label htmlFor="website">Website</label>
+                  <input id="website" tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} />
+                </div>
                 <div>
                   <label htmlFor="name" className="block font-mono text-sm text-muted-foreground mb-1">
                     <RichText value={tx(ct.nameLabel)} />
@@ -215,24 +268,30 @@ export function ContactQuest() {
                   />
                 </div>
 
+                {status === "error" && (
+                  <p role="alert" className="text-sm text-destructive">{ui.error}</p>
+                )}
+
                 <div className="flex gap-3 pt-2">
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => setSelectedIdx(null)}
+                    onClick={closeDialog}
                     className="flex-1 border-border/50"
                   >
                     <RichText value={tx(ct.cancel)} />
                   </Button>
                   <Button
                     type="submit"
+                    disabled={status === "sending"}
                     className="flex-1 gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
                   >
                     <Send className="h-4 w-4" />
-                    <RichText value={tx(ct.send)} />
+                    {status === "sending" ? ui.sending : <RichText value={tx(ct.send)} />}
                   </Button>
                 </div>
               </form>
+              )}
             </>
           )}
         </DialogContent>
