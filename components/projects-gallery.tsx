@@ -19,13 +19,13 @@ import {
 } from "@/components/ui/alert-dialog"
 import {
   Archive,
-  ArrowDown,
-  ArrowUp,
   CheckCircle2,
   Clock,
   Filter,
   FolderOpen,
+  GripVertical,
   Lightbulb,
+  Loader2,
   Pencil,
   Play,
   Plus,
@@ -40,6 +40,7 @@ import { PROJECT_STATUSES, statusConfig, type Project, type ProjectStatus } from
 import { PlatformIcon } from "@/components/projects/platform-icon"
 import { CoverImage } from "@/components/cover-image"
 import { coverFocusStyle } from "@/lib/cover-focus"
+import { cn } from "@/lib/utils"
 
 export const statusIcons: Record<ProjectStatus, typeof Lightbulb> = {
   idea: Lightbulb,
@@ -64,6 +65,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
   const [activeTags, setActiveTags] = useState<string[]>([])
   const [showFilters, setShowFilters] = useState(false)
   const [pendingDelete, setPendingDelete] = useState<Project | null>(null)
+  const [draggingId, setDraggingId] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
   useEffect(() => setItems(projects), [projects])
@@ -101,15 +103,27 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
 
   const getStatusLabel = (status: ProjectStatus) => (lang === "en" ? statusConfig[status].labelEn : statusConfig[status].label)
 
-  const move = (id: string, direction: -1 | 1) => {
-    const index = items.findIndex((p) => p.id === id)
-    const target = index + direction
-    if (index < 0 || target < 0 || target >= items.length) return
-    const next = [...items]
-    ;[next[index], next[target]] = [next[target], next[index]]
-    setItems(next)
+  const canReorder = isAdmin && !hasActiveFilters
+
+  const moveItem = (fromId: string, toId: string) => {
+    if (fromId === toId) return
+    setItems((prev) => {
+      const from = prev.findIndex((p) => p.id === fromId)
+      const to = prev.findIndex((p) => p.id === toId)
+      if (from < 0 || to < 0) return prev
+      const next = [...prev]
+      const [moved] = next.splice(from, 1)
+      next.splice(to, 0, moved)
+      return next
+    })
+  }
+
+  const persistOrder = () => {
+    setDraggingId(null)
+    const ids = items.map((p) => p.id)
+    if (ids.join() === projects.map((p) => p.id).join()) return
     startTransition(async () => {
-      await reorderProjects(next.map((p) => p.id))
+      await reorderProjects(ids)
       router.refresh()
     })
   }
@@ -246,18 +260,54 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
           )}
         </div>
 
-        <p className="mb-6 text-sm text-muted-foreground">
-          {filteredProjects.length} {pr.projectsFound}
-        </p>
+        <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-1">
+          <p className="text-sm text-muted-foreground">
+            {filteredProjects.length} {pr.projectsFound}
+          </p>
+          {isAdmin && (
+            <span className="font-mono text-xs text-muted-foreground">
+              {canReorder ? "Arrastra las tarjetas para reordenarlas" : "Quita los filtros para reordenar"}
+            </span>
+          )}
+          {isPending && (
+            <span className="flex items-center gap-2 font-mono text-xs text-muted-foreground">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              Guardando orden...
+            </span>
+          )}
+        </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredProjects.map((project, position) => {
             const StatusIcon = statusIcons[project.status]
-            const index = items.findIndex((p) => p.id === project.id)
             return (
-              <div key={project.id} data-reveal="pop" className="relative">
-                <Link href={`/proyectos/${project.slug}`} className="block h-full">
-                  <Card className="group relative h-full cursor-pointer overflow-hidden border-border/50 bg-card transition-all duration-300 hover:border-primary/50">
+              <div
+                key={project.id}
+                draggable={canReorder}
+                onDragStart={(e) => {
+                  if (!canReorder) return
+                  setDraggingId(project.id)
+                  e.dataTransfer.effectAllowed = "move"
+                }}
+                onDragOver={(e) => {
+                  if (!canReorder || !draggingId) return
+                  e.preventDefault()
+                  moveItem(draggingId, project.id)
+                }}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  persistOrder()
+                }}
+                onDragEnd={() => draggingId && persistOrder()}
+                data-reveal="pop"
+                className={cn(
+                  "relative rounded-lg transition-opacity",
+                  canReorder && "cursor-grab active:cursor-grabbing",
+                  draggingId === project.id && "opacity-40 ring-2 ring-primary",
+                )}
+              >
+                <Link href={`/proyectos/${project.slug}`} className="block h-full" draggable={false}>
+                  <Card className="group relative h-full cursor-pointer gap-0 overflow-hidden rounded-lg border-border/50 bg-card py-0 shadow-none transition-all duration-300 hover:border-primary/50">
                     <div className="relative aspect-video overflow-hidden bg-muted">
                       {project.coverImage ? (
                         <CoverImage
@@ -273,7 +323,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                           <FolderOpen className="h-10 w-10 text-muted-foreground/40" />
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-card via-card/10 to-transparent" />
                       <div className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-2">
                         <div className="flex flex-wrap gap-1.5">
                           <span className="rounded-md bg-background">
@@ -308,9 +358,9 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                         <span className="font-mono text-sm text-primary">{pr.seeDetails}</span>
                       </div>
                     </div>
-                    <CardContent className="p-4">
-                      <h3 className="mb-2 font-serif text-lg font-semibold transition-colors group-hover:text-primary">{project.title}</h3>
-                      <p className="mb-3 line-clamp-2 text-sm text-muted-foreground">{project.shortDescription}</p>
+                    <CardContent className="flex flex-col gap-3 p-4">
+                      <h3 className="font-serif text-lg font-semibold transition-colors group-hover:text-primary">{project.title}</h3>
+                      <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">{project.shortDescription}</p>
                       <div className="flex flex-wrap gap-1">
                         {project.categories.map((category) => (
                           <Badge key={category} variant="secondary" className="border-primary/20 bg-primary/10 font-mono text-xs text-primary">
@@ -322,14 +372,17 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                   </Card>
                 </Link>
 
+                {canReorder && (
+                  <span
+                    className="pointer-events-none absolute top-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-md border border-border bg-card text-muted-foreground"
+                    aria-hidden="true"
+                  >
+                    <GripVertical className="h-4 w-4" />
+                  </span>
+                )}
+
                 {isAdmin && (
                   <div className="absolute right-3 bottom-3 z-10 flex gap-1">
-                    <Button size="icon" variant="secondary" className="h-8 w-8" disabled={isPending || index <= 0} onClick={() => move(project.id, -1)} aria-label="Mover antes">
-                      <ArrowUp className="h-3.5 w-3.5" />
-                    </Button>
-                    <Button size="icon" variant="secondary" className="h-8 w-8" disabled={isPending || index >= items.length - 1} onClick={() => move(project.id, 1)} aria-label="Mover después">
-                      <ArrowDown className="h-3.5 w-3.5" />
-                    </Button>
                     <Button size="icon" variant="secondary" className="h-8 w-8" asChild>
                       <Link href={`/proyectos/editor/${project.id}`} aria-label={`Editar ${project.title}`}>
                         <Pencil className="h-3.5 w-3.5" />
