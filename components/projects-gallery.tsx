@@ -307,7 +307,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                 )}
               >
                 <Link href={`/proyectos/${project.slug}`} className="block h-full" draggable={false}>
-                  <Card className="group relative h-full cursor-pointer overflow-hidden border-border/50 bg-card transition-all duration-300 hover:border-primary/50">
+                  <Card className="group relative h-full cursor-pointer gap-0 overflow-hidden rounded-lg border-border/50 bg-card py-0 shadow-none transition-all duration-300 hover:border-primary/50">
                     <div className="relative aspect-video overflow-hidden bg-muted">
                       {project.coverImage ? (
                         <CoverImage
@@ -323,7 +323,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                           <FolderOpen className="h-10 w-10 text-muted-foreground/40" />
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-card via-card/10 to-transparent" />
                       <div className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-2">
                         <div className="flex flex-wrap gap-1.5">
                           <span className="rounded-md bg-background">
@@ -358,9 +358,9 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                         <span className="font-mono text-sm text-primary">{pr.seeDetails}</span>
                       </div>
                     </div>
-                    <CardContent className="p-4">
-                      <h3 className="mb-2 font-serif text-lg font-semibold transition-colors group-hover:text-primary">{project.title}</h3>
-                      <p className="mb-3 line-clamp-2 text-sm text-muted-foreground">{project.shortDescription}</p>
+                    <CardContent className="flex flex-col gap-3 p-4">
+                      <h3 className="font-serif text-lg font-semibold transition-colors group-hover:text-primary">{project.title}</h3>
+                      <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">{project.shortDescription}</p>
                       <div className="flex flex-wrap gap-1">
                         {project.categories.map((category) => (
                           <Badge key={category} variant="secondary" className="border-primary/20 bg-primary/10 font-mono text-xs text-primary">
