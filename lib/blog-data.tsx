@@ -1,3 +1,5 @@
+import { siteConfig } from "@/lib/site-config"
+
 export interface Author {
   name: string
   avatar: string
@@ -92,14 +94,14 @@ Después de 18 meses:
 
 El proyecto nos enseñó que la comunicación entre equipo es tan importante como la comunicación entre cliente y servidor.
     `,
-    date: "15 de noviembre de 2024",
+    date: "15 de noviembre de 2025",
     readTime: "12 min",
     category: "Post-Mortems",
     tags: ["Godot", "Roguelike", "Netcode", "Cooperativo", "Indie"],
     author: {
       name: "Mathías Andino",
       avatar: "/profile-avatar.jpg",
-      role: "Game Designer Junior",
+      role: siteConfig.role.es,
     },
     featured: true,
     color: "from-primary/20 to-accent/20",
@@ -181,14 +183,14 @@ func _process(delta):
 
 El game feel no se agrega al final, se diseña desde el principio. Cada mecánica debe preguntarse: *¿cómo se siente esto?*
     `,
-    date: "28 de octubre de 2024",
+    date: "28 de octubre de 2025",
     readTime: "8 min",
     category: "Tutoriales",
     tags: ["Game Design", "Unity", "Godot", "Programación"],
     author: {
       name: "Mathías Andino",
       avatar: "/profile-avatar.jpg",
-      role: "Game Designer Junior",
+      role: siteConfig.role.es,
     },
     featured: true,
     color: "from-chart-2/20 to-primary/20",
@@ -284,14 +286,14 @@ Este sistema ahora lo uso en 3 proyectos diferentes:
 
 La inversión inicial de tiempo se recuperó en el segundo proyecto.
     `,
-    date: "12 de octubre de 2024",
+    date: "12 de octubre de 2025",
     readTime: "6 min",
     category: "Devlogs",
     tags: ["Unity", "Programación", "Game Design", "Sistemas"],
     author: {
       name: "Mathías Andino",
       avatar: "/profile-avatar.jpg",
-      role: "Game Designer Junior",
+      role: siteConfig.role.es,
     },
     featured: false,
     color: "from-chart-3/20 to-chart-4/20",
@@ -355,14 +357,14 @@ Un GDD moderno debe ser:
 
 Tu GDD no es un contrato, es un mapa que se actualiza mientras exploras el territorio de tu juego.
     `,
-    date: "20 de septiembre de 2024",
+    date: "20 de septiembre de 2025",
     readTime: "10 min",
     category: "Opinión",
     tags: ["Game Design", "Documentación", "Producción"],
     author: {
       name: "Mathías Andino",
       avatar: "/profile-avatar.jpg",
-      role: "Game Designer Junior",
+      role: siteConfig.role.es,
     },
     featured: false,
     color: "from-chart-4/20 to-chart-5/20",
@@ -431,14 +433,14 @@ La migración es relativamente suave:
 
 Godot sigue mejorando a un ritmo impresionante. Para proyectos indie, especialmente 2D, es una opción cada vez más sólida.
     `,
-    date: "5 de agosto de 2024",
+    date: "5 de agosto de 2025",
     readTime: "7 min",
     category: "Noticias",
     tags: ["Godot", "Indie", "Noticias", "2D"],
     author: {
       name: "Mathías Andino",
       avatar: "/profile-avatar.jpg",
-      role: "Game Designer Junior",
+      role: siteConfig.role.es,
     },
     featured: false,
     color: "from-primary/20 to-chart-3/20",

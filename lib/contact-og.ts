@@ -1,3 +1,4 @@
+import { siteConfig } from "@/lib/site-config"
 import { readFile } from "node:fs/promises"
 import { join, sep } from "node:path"
 import { createElement } from "react"
@@ -51,7 +52,7 @@ export async function renderContactOg() {
   const data = await readContactLinks()
   const avatar = await avatarDataUrl(data.header.avatarUrl)
   const name = data.header.displayName.slice(0, 42) || "Mathías Andino"
-  const role = (data.header.roleBadge || "Game Designer Junior").slice(0, 70)
+  const role = (data.header.roleBadge || siteConfig.role.es).slice(0, 70)
   const bioSource = data.header.bio || "Portfolio, juegos, proyectos y redes."
   const bio = bioSource.length > 160 ? `${bioSource.slice(0, 157)}…` : bioSource
 

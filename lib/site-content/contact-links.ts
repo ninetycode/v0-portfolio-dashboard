@@ -1,3 +1,4 @@
+import { siteConfig } from "@/lib/site-config"
 import { siteBaseUrl } from "@/lib/site-url"
 
 export const CONTACT_LINKS_KEY = "contact_links"
@@ -57,7 +58,7 @@ export const defaultContactLinks: ContactLinksContent = {
   header: {
     avatarUrl: "/profile-avatar.jpg",
     displayName: "Mathías Andino",
-    roleBadge: "Game Designer Junior",
+    roleBadge: siteConfig.role.es,
     bio: "Diseño narrativa y sistemas de juego en Buenos Aires. Escribime, o entrá al portfolio, los juegos y el blog.",
   },
   links: [

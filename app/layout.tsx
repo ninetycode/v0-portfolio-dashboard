@@ -1,3 +1,4 @@
+import { siteConfig } from '@/lib/site-config'
 import type { Metadata } from 'next'
 import { Lora, Fira_Code, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
@@ -36,8 +37,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteBaseUrl()),
-  title: 'Mathías Andino | Game Designer Junior',
-  description: 'Portfolio de Mathías Andino, Game Designer Junior de Buenos Aires. Diseño de sistemas de juego, mecánicas y desarrollo con Godot.',
+  title: `${siteConfig.name} | ${siteConfig.role.es}`,
+  description: `Portfolio de ${siteConfig.name}, ${siteConfig.role.es} de Buenos Aires. Diseño de sistemas de juego, mecánicas y desarrollo con Godot.`,
   generator: 'v0.app',
   icons: {
     icon: [

@@ -93,11 +93,6 @@ export function HomeForm({ value, lang, onChange }: FormProps<HomeContent>) {
         <BiField label="Botón de contacto" value={value.ctaContact} lang={lang} onChange={(ctaContact) => set({ ctaContact })} />
         <BiField label="Texto de bajar" value={value.scrollDown} lang={lang} onChange={(scrollDown) => set({ scrollDown })} />
       </Group>
-      <Group title="Pie de la página de inicio">
-        <BiField label="Crédito" value={value.footerCredit} lang={lang} onChange={(footerCredit) => set({ footerCredit })} />
-        <BiField label="Nombre" value={value.footerName} lang={lang} onChange={(footerName) => set({ footerName })} />
-        <BiField label="Línea inferior" value={value.footerTagline} lang={lang} onChange={(footerTagline) => set({ footerTagline })} />
-      </Group>
       <Group title="Videojuegos destacados" hint="Solo el título de esa sección. Los juegos se editan en Mis Videojuegos.">
         <BiField label="Etiqueta" value={value.featuredKicker} lang={lang} onChange={(featuredKicker) => set({ featuredKicker })} />
         <BiField label="Título" value={value.featuredTitle} lang={lang} onChange={(featuredTitle) => set({ featuredTitle })} />

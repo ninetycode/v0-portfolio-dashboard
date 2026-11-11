@@ -1,3 +1,4 @@
+import { siteConfig } from "@/lib/site-config"
 import type { BlogPost } from "./blog-data"
 
 export function generateBlogPostingSchema(post: BlogPost, baseUrl: string) {
@@ -38,7 +39,7 @@ export function generateBlogListSchema(baseUrl: string) {
     author: {
       "@type": "Person",
       name: "Mathías Andino",
-      jobTitle: "Game Designer Junior",
+      jobTitle: siteConfig.role.es,
     },
   }
 }

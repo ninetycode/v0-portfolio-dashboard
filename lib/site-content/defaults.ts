@@ -1,3 +1,4 @@
+import { siteConfig } from "@/lib/site-config"
 import type {
   AboutContent,
   Bilingual,
@@ -22,8 +23,8 @@ const home: HomeContent = {
   title1: b("Bienvenido al", "Welcome to"),
   title2: b("Centro de Mando", "Command Center"),
   title3: b("de Mathías Andino", "of Mathías Andino"),
-  subtitle: b("Game Designer Junior & Godot Dev", "Junior Game Designer & Godot Dev"),
-  classLabel: b("Clase: Game Designer Junior", "Class: Junior Game Designer"),
+  subtitle: b(`${siteConfig.role.es} & Godot Dev`, `${siteConfig.role.en} & Godot Dev`),
+  classLabel: b(`Clase: ${siteConfig.role.es}`, `Class: ${siteConfig.role.en}`),
   spec: b("Especialización: Narrative", "Specialization: Narrative"),
   region: b("Región: Buenos Aires, Argentina.", "Region: Buenos Aires, Argentina."),
   ctaGames: b("Mis Videojuegos", "My Games"),
@@ -35,9 +36,6 @@ const home: HomeContent = {
   locationLabel: b("Ubicación:", "Location:"),
   locationValue: s("Buenos Aires, AR"),
   // The homepage footer is Spanish in both languages today. Keep that until it is edited.
-  footerCredit: s("Diseñado y desarrollado por"),
-  footerName: s("Mathías Andino"),
-  footerTagline: s("2024 | Game Designer Junior | Buenos Aires, Argentina"),
   featuredKicker: s("PORTFOLIO"),
   featuredTitle: b("Videojuegos Destacados", "Featured Games"),
   featuredSubtitle: b(
@@ -54,8 +52,8 @@ const about: AboutContent = {
   titleYear: "2025",
   paragraphs: [
     b(
-      "Soy Mathias Andino, Game Designer Junior de Buenos Aires. Me enfoco en que la historia y las mecánicas cuenten lo mismo: diseño sistemas de juego en los que cada acción del jugador refuerza la narrativa, para que no haya disonancia ludonarrativa.",
-      "I'm a Game Designer Junior from Buenos Aires, Argentina, with 1 year of experience, currently finishing my degree in Video Game Production (UNPAZ). My focus is on creating gaming experiences that feel incredible — game feel is at the heart of everything I design.",
+      "Soy Mathias Andino, " + siteConfig.role.es + " de Buenos Aires. Me enfoco en que la historia y las mecánicas cuenten lo mismo: diseño sistemas de juego en los que cada acción del jugador refuerza la narrativa, para que no haya disonancia ludonarrativa.",
+      "I'm a " + siteConfig.role.en + " from Buenos Aires, Argentina, with 1 year of experience, currently finishing my degree in Video Game Production (UNPAZ). My focus is on creating gaming experiences that feel incredible — game feel is at the heart of everything I design.",
     ),
     b(
       "En Mask Power (Global Game Jam 2026) convertí el tema \"máscara\" en un sistema de poderes inspirado en dioses ancestrales, donde elegir la máscara correcta es el desafío. En A través de mis ojos, un juego serio hecho en equipo, trasladamos la sobrecarga sensorial de una niña con autismo a un enemigo que ataca con sonido.",
@@ -66,8 +64,8 @@ const about: AboutContent = {
       "In Oneiric Dread, I bring cohesion to the story and gameplay as part of a five-person team, with a sanity mechanic tied to the protagonist's emotional containment. I work with Godot and AI tools to prototype and reach playable versions quickly, while caring about game feel and the details that make a game feel good.",
     ),
     b(
-      "También me interesan la UX y la organización de proyectos. Estoy terminando la carrera de Producción de Videojuegos en la UNPAZ y busco sumarme a un equipo como Game Designer Junior.",
-      "I am also interested in UX and project organization. I am finishing my degree in Video Game Production at UNPAZ and looking to join a team as a Game Designer Junior.",
+      "También me interesan la UX y la organización de proyectos. Estoy terminando la carrera de Producción de Videojuegos en la UNPAZ y busco sumarme a un equipo como " + siteConfig.role.es + ".",
+      "I am also interested in UX and project organization. I am finishing my degree in Video Game Production at UNPAZ and looking to join a team as a " + siteConfig.role.en + ".",
     ),
   ],
   stats: [
@@ -124,10 +122,10 @@ const experience: ExperienceContent = {
   items: [
     {
       id: "exp-2024",
-      year: "2024",
+      year: "2025",
       type: "work",
       showReadMore: true,
-      title: s("Game Designer Junior"),
+      title: b(siteConfig.role.es, siteConfig.role.en),
       company: s("Indie Studio Collab"),
       overview: b(
         "Lideré el diseño técnico de un roguelike cooperativo, desde la conceptualización hasta el lanzamiento en Early Access.",
@@ -147,7 +145,7 @@ const experience: ExperienceContent = {
       year: "2023",
       type: "project",
       showReadMore: true,
-      title: s("Game Designer & Programmer"),
+      title: b(`${siteConfig.discipline.es} & Programmer`, `${siteConfig.discipline.en} & Programmer`),
       company: s("Game Jam Team"),
       overview: b(
         "Participé en múltiples game jams, obteniendo Top 10 en Ludum Dare 54 con un puzzle game sobre limitaciones espaciales.",
@@ -164,7 +162,7 @@ const experience: ExperienceContent = {
       year: "2022",
       type: "work",
       showReadMore: true,
-      title: s("Junior Game Designer"),
+      title: b(siteConfig.role.es, siteConfig.role.en),
       company: s("Mobile Games Studio"),
       overview: b(
         "Mi primer rol profesional en la industria. Trabajé en el diseño de niveles y economía de un puzzle mobile con 500K+ descargas.",
@@ -220,7 +218,7 @@ const tools: ToolsContent = {
   title: b("Inventario de Herramientas", "Tool Inventory"),
   subtitle: b(
     "Mi stack tecnológico para desarrollo de videojuegos.",
-    "My tech stack for game development. Each tool is a weapon in my Game Designer arsenal.",
+    "My tech stack for game development. Each tool is a weapon in my " + siteConfig.discipline.en + " arsenal.",
   ),
   mastery: b("Dominio", "Mastery"),
   groups: [
@@ -312,8 +310,8 @@ const missions: MissionsContent = {
       difficulty: "normal",
       title: b("Misión: Contratación Freelance", "Mission: Freelance Hire"),
       description: b(
-        "¿Necesitas un Game Designer para tu proyecto? Contáctame para discutir cómo puedo ayudarte.",
-        "Do you need a Game Designer for your project? Contact me to discuss how I can help.",
+        "¿Necesitas un " + siteConfig.discipline.es + " para tu proyecto? Contáctame para discutir cómo puedo ayudarte.",
+        "Do you need a " + siteConfig.discipline.en + " for your project? Contact me to discuss how I can help.",
       ),
       requirements: b("Proyecto definido / Presupuesto acordado", "Defined project / Agreed budget"),
       reward: b("Diseño de juegos profesional", "Professional game design"),

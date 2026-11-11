@@ -1,3 +1,4 @@
+import { siteConfig } from "@/lib/site-config"
 import type { Metadata } from "next"
 import { Navbar } from "@/components/navbar"
 import { GamesGallery } from "@/components/games-gallery"
@@ -7,9 +8,9 @@ import { getGames } from "@/app/actions/games"
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: "My Games | Mathías Andino",
+  title: `My Games | ${siteConfig.name}`,
   description:
-    "Collection of video games designed and developed by Mathías Andino — Game Designer Junior. Play them in the browser, rate them and leave feedback.",
+    `Collection of video games designed and developed by ${siteConfig.name} — ${siteConfig.role.en}. Play them in the browser, rate them and leave feedback.`,
 }
 
 export default async function GamesPage() {

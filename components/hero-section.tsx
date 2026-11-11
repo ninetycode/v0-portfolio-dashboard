@@ -4,6 +4,7 @@ import { ArrowDown, Gamepad } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useSiteLang } from "@/lib/site-content/context"
+import { siteConfig } from "@/lib/site-config"
 import { AdminContentBar } from "@/components/admin-content-bar"
 import { SectionEditLink } from "@/components/section-edit-link"
 import { RichText } from "@/components/rich-text"
@@ -44,7 +45,7 @@ export function HeroSection() {
           <div className="relative h-full w-full rounded-full border-2 border-primary/50 overflow-hidden bg-muted">
             <Image
               src="/profile-avatar.jpg"
-              alt={plainText(tx(h.footerName))}
+              alt={siteConfig.name}
               fill
               sizes="(min-width: 768px) 240px, 192px"
               className="object-cover"

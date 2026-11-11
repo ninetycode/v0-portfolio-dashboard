@@ -146,9 +146,6 @@ export type HomeContent = {
   objectiveValue: Bilingual
   locationLabel: Bilingual
   locationValue: Bilingual
-  footerCredit: Bilingual
-  footerName: Bilingual
-  footerTagline: Bilingual
   featuredKicker: Bilingual
   featuredTitle: Bilingual
   featuredSubtitle: Bilingual
