@@ -87,6 +87,7 @@ export function HomeForm({ value, lang, onChange }: FormProps<HomeContent>) {
         <BiField label="Subtítulo" value={value.subtitle} lang={lang} onChange={(subtitle) => set({ subtitle })} />
         <BiField label="Clase" value={value.classLabel} lang={lang} onChange={(classLabel) => set({ classLabel })} />
         <BiField label="Especialización" value={value.spec} lang={lang} onChange={(spec) => set({ spec })} />
+        <BiField label="Rango" value={value.rank} lang={lang} onChange={(rank) => set({ rank })} />
         <BiField label="Región" value={value.region} lang={lang} onChange={(region) => set({ region })} />
         <BiField label="Botón de videojuegos" value={value.ctaGames} lang={lang} onChange={(ctaGames) => set({ ctaGames })} />
         <BiField label="Botón de proyectos" value={value.ctaProjects} lang={lang} onChange={(ctaProjects) => set({ ctaProjects })} />

@@ -128,6 +128,7 @@ function sanitizeHome(data: Record<string, unknown>, base: HomeContent): HomeCon
     subtitle: bi(data.subtitle, base.subtitle, SHORT),
     classLabel: bi(data.classLabel, base.classLabel, SHORT),
     spec: bi(data.spec, base.spec, SHORT),
+    rank: bi(data.rank, base.rank, SHORT),
     region: bi(data.region, base.region, SHORT),
     ctaGames: bi(data.ctaGames, base.ctaGames, SHORT),
     ctaProjects: bi(data.ctaProjects, base.ctaProjects, SHORT),

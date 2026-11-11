@@ -79,7 +79,7 @@ export function ContactQuest() {
   }
 
   return (
-    <section id="contact" className="scroll-mt-24 px-4 py-20">
+    <section id="contact" className="scroll-mt-24 px-4 pt-20 pb-4">
       <div className="mx-auto max-w-6xl">
         <div data-reveal="rise" className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-accent/10 border border-accent/30">
