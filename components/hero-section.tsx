@@ -13,9 +13,9 @@ import { plainText } from "@/lib/site-content/rich-text"
 const ctaBase =
   "group h-12 gap-2.5 rounded-xl px-6 font-sans text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 sm:min-w-44"
 const ctaPrimary =
-  "bg-primary text-highlight shadow-lg shadow-primary/20 hover:bg-highlight hover:text-highlight-foreground hover:shadow-xl hover:shadow-highlight/40"
+  "bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-highlight hover:text-highlight-foreground hover:shadow-xl hover:shadow-highlight/40"
 const ctaSurface =
-  "border-border bg-card/70 text-foreground shadow-sm hover:border-highlight hover:bg-highlight/10 hover:text-foreground hover:shadow-md hover:shadow-highlight/10 dark:border-border dark:bg-card/70 dark:hover:border-highlight dark:hover:bg-highlight/10"
+  "border-border bg-card/70 text-foreground shadow-sm hover:border-primary hover:bg-primary/10 hover:text-foreground hover:shadow-md hover:shadow-primary/10 dark:border-border dark:bg-card/70 dark:hover:border-primary dark:hover:bg-primary/10"
 
 export function HeroSection() {
   const { tx, content } = useSiteLang()
@@ -112,7 +112,7 @@ export function HeroSection() {
             className={`${ctaBase} ${ctaSurface}`}
           >
             <a href="/proyectos">
-              <FolderKanban className="size-5 text-primary transition-colors group-hover:text-highlight" aria-hidden="true" />
+              <FolderKanban className="size-5 text-primary" aria-hidden="true" />
               <RichText value={tx(h.ctaProjects)} />
             </a>
           </Button>
@@ -123,7 +123,7 @@ export function HeroSection() {
             className={`${ctaBase} ${ctaSurface}`}
           >
             <a href="#contact">
-              <Mail className="size-5 text-primary transition-colors group-hover:text-highlight" aria-hidden="true" />
+              <Mail className="size-5 text-primary" aria-hidden="true" />
               <RichText value={tx(h.ctaContact)} />
             </a>
           </Button>
