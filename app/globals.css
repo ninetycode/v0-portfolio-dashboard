@@ -47,8 +47,8 @@ html {
   --akane-accent: oklch(0.9119 0.0222 243.8174);
   --hp-red: oklch(0.6368 0.2078 25.3313);
   --mp-blue: oklch(0.4318 0.0709 257.7737);
-  --signal-blue: oklch(0.5 0.17 255);
-  --signal-green: oklch(0.55 0.15 150);
+  --highlight: #F6BA31;
+  --highlight-foreground: oklch(0.2864 0.0489 289.7403);
 }
 
 .dark {
@@ -89,8 +89,8 @@ html {
   --akane-accent: oklch(0.8823 0.0571 254.1284);
   --hp-red: oklch(0.6368 0.2078 25.3313);
   --mp-blue: oklch(0.8818 0.0755 140.3035);
-  --signal-blue: oklch(0.78 0.13 250);
-  --signal-green: oklch(0.84 0.17 150);
+  --highlight: #F6BA31;
+  --highlight-foreground: oklch(0.2864 0.0489 289.7403);
 }
 
 @theme inline {
@@ -105,8 +105,8 @@ html {
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-signal-blue: var(--signal-blue);
-  --color-signal-green: var(--signal-green);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -306,20 +306,4 @@ html {
   margin: 0.25rem 0;
   list-style: disc;
   padding-left: 1.25rem;
-}
-
-.glow-blue {
-  filter: drop-shadow(0 0 5px color-mix(in oklch, var(--signal-blue) 75%, transparent));
-}
-
-.glow-green {
-  filter: drop-shadow(0 0 5px color-mix(in oklch, var(--signal-green) 75%, transparent));
-}
-
-a:hover > .glow-blue {
-  filter: drop-shadow(0 0 9px var(--signal-blue));
-}
-
-a:hover > .glow-green {
-  filter: drop-shadow(0 0 9px var(--signal-green));
 }

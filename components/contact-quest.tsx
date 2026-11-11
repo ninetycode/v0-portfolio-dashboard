@@ -133,9 +133,9 @@ export function ContactQuest() {
                   </div>
 
                   <Button
+                    variant="outline"
                     onClick={() => setSelectedIdx(index)}
-                    className="w-full gap-2 mt-auto"
-                    style={{ backgroundColor: color, color: "#ffffff" }}
+                    className="mt-auto w-full gap-2 border-border bg-transparent font-semibold text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-highlight hover:bg-highlight hover:text-highlight-foreground hover:shadow-lg hover:shadow-highlight/25 dark:border-border dark:bg-transparent dark:hover:border-highlight dark:hover:bg-highlight"
                   >
                     <RichText value={tx(ct.accept)} />
                   </Button>
