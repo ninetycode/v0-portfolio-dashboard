@@ -12,8 +12,10 @@ import { plainText } from "@/lib/site-content/rich-text"
 
 const ctaBase =
   "group h-12 gap-2.5 rounded-xl px-6 font-sans text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 sm:min-w-44"
+const ctaPrimary =
+  "bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-highlight hover:text-highlight-foreground hover:shadow-xl hover:shadow-highlight/40"
 const ctaSurface =
-  "border-border bg-card/70 text-foreground shadow-sm hover:bg-card hover:text-foreground dark:border-border dark:bg-card/70 dark:hover:bg-card"
+  "border-border bg-card/70 text-foreground shadow-sm hover:border-primary hover:bg-primary/10 hover:text-foreground hover:shadow-md hover:shadow-primary/10 dark:border-border dark:bg-card/70 dark:hover:border-primary dark:hover:bg-primary/10"
 
 export function HeroSection() {
   const { tx, content } = useSiteLang()
@@ -96,7 +98,7 @@ export function HeroSection() {
           <Button
             asChild
             size="lg"
-            className={`${ctaBase} bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 hover:shadow-primary/30`}
+            className={`${ctaBase} ${ctaPrimary}`}
           >
             <a href="/games">
               <Gamepad2 className="size-5" aria-hidden="true" />
@@ -107,10 +109,10 @@ export function HeroSection() {
             asChild
             variant="outline"
             size="lg"
-            className={`${ctaBase} ${ctaSurface} hover:border-signal-blue/60`}
+            className={`${ctaBase} ${ctaSurface}`}
           >
             <a href="/proyectos">
-              <FolderKanban className="size-5 text-signal-blue glow-blue" aria-hidden="true" />
+              <FolderKanban className="size-5 text-primary" aria-hidden="true" />
               <RichText value={tx(h.ctaProjects)} />
             </a>
           </Button>
@@ -118,10 +120,10 @@ export function HeroSection() {
             asChild
             variant="outline"
             size="lg"
-            className={`${ctaBase} ${ctaSurface} hover:border-signal-green/60`}
+            className={`${ctaBase} ${ctaSurface}`}
           >
             <a href="#contact">
-              <Mail className="size-5 text-signal-green glow-green" aria-hidden="true" />
+              <Mail className="size-5 text-primary" aria-hidden="true" />
               <RichText value={tx(h.ctaContact)} />
             </a>
           </Button>

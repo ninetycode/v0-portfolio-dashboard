@@ -14,18 +14,7 @@ import { RichText } from "@/components/rich-text"
 import { plainText } from "@/lib/site-content/rich-text"
 import type { Difficulty, QuestKind, SocialIcon } from "@/lib/site-content/types"
 
-const difficultyColorMap: Record<"dark" | "light", Record<Difficulty, string>> = {
-  dark: {
-    easy: "#4ade80",
-    normal: "var(--primary)",
-    legendary: "var(--chart-4)",
-  },
-  light: {
-    easy: "#16a34a",
-    normal: "#3d5a9e",
-    legendary: "#b45309",
-  },
-}
+const questColor = "var(--primary)"
 
 const questIcons: Record<QuestKind, ReactNode> = {
   feedback: <Gamepad2 className="h-5 w-5" />,
@@ -54,8 +43,6 @@ export function ContactQuest() {
 
   useEffect(() => { setMounted(true) }, [])
 
-  const colorPalette = mounted && resolvedTheme === "light" ? difficultyColorMap.light : difficultyColorMap.dark
-  const getColor = (difficulty: Difficulty) => colorPalette[difficulty]
 
   const difficultyLabel = (difficulty: Difficulty) => {
     if (difficulty === "easy") return tx(ct.difficultyEasy)
@@ -79,7 +66,7 @@ export function ContactQuest() {
   }
 
   return (
-    <section id="contact" className="scroll-mt-24 px-4 pt-20 pb-4">
+    <section id="contact" className="scroll-mt-0 px-4 pt-20 pb-4">
       <div className="mx-auto max-w-6xl">
         <div data-reveal="rise" className="flex items-center gap-3 mb-4">
           <div className="flex h-10 w-10 items-center justify-center rounded-md bg-accent/10 border border-accent/30">
@@ -92,10 +79,8 @@ export function ContactQuest() {
 
         <div className="grid gap-6 sm:grid-cols-2 mb-12">
           {ct.quests.map((quest, index) => {
-            const color = getColor(quest.difficulty)
-            const bgTint = (mounted && resolvedTheme === "dark") || !mounted
-              ? `color-mix(in oklch, ${color} 18%, transparent)`
-              : `color-mix(in srgb, ${color} 12%, white)`
+            const color = questColor
+            const bgTint = `color-mix(in oklch, ${color} 15%, transparent)`
             return (
               <Card
                 key={quest.id}
@@ -133,9 +118,9 @@ export function ContactQuest() {
                   </div>
 
                   <Button
+                    variant="outline"
                     onClick={() => setSelectedIdx(index)}
-                    className="w-full gap-2 mt-auto"
-                    style={{ backgroundColor: color, color: "#ffffff" }}
+                    className="mt-auto w-full gap-2 border-border bg-transparent font-semibold text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-primary hover:bg-primary hover:text-primary-foreground hover:shadow-lg hover:shadow-primary/25 dark:border-border dark:bg-transparent dark:hover:border-primary dark:hover:bg-primary"
                   >
                     <RichText value={tx(ct.accept)} />
                   </Button>
@@ -174,8 +159,8 @@ export function ContactQuest() {
                   <div
                     className="h-10 w-10 rounded-lg flex items-center justify-center"
                     style={{
-                      backgroundColor: `color-mix(in oklch, ${getColor(selectedQuest.difficulty)} 15%, transparent)`,
-                      color: getColor(selectedQuest.difficulty),
+                      backgroundColor: `color-mix(in oklch, ${questColor} 15%, transparent)`,
+                      color: questColor,
                     }}
                   >
                     {questIcons[selectedQuest.kind]}
@@ -241,11 +226,7 @@ export function ContactQuest() {
                   </Button>
                   <Button
                     type="submit"
-                    className="flex-1 gap-2"
-                    style={{
-                      backgroundColor: getColor(selectedQuest.difficulty),
-                      color: "#ffffff",
-                    }}
+                    className="flex-1 gap-2 bg-primary text-primary-foreground hover:bg-primary/90"
                   >
                     <Send className="h-4 w-4" />
                     <RichText value={tx(ct.send)} />
