@@ -1,13 +1,19 @@
 "use client"
 
-import { ArrowDown, Gamepad } from "lucide-react"
+import { ArrowDown, FolderKanban, Gamepad2, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { useSiteLang } from "@/lib/site-content/context"
+import { siteConfig } from "@/lib/site-config"
 import { AdminContentBar } from "@/components/admin-content-bar"
 import { SectionEditLink } from "@/components/section-edit-link"
 import { RichText } from "@/components/rich-text"
 import { plainText } from "@/lib/site-content/rich-text"
+
+const ctaBase =
+  "group h-12 gap-2.5 rounded-xl px-6 font-sans text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 sm:min-w-44"
+const ctaSurface =
+  "border-border bg-card/70 text-foreground shadow-sm hover:bg-card hover:text-foreground dark:border-border dark:bg-card/70 dark:hover:bg-card"
 
 export function HeroSection() {
   const { tx, content } = useSiteLang()
@@ -44,7 +50,7 @@ export function HeroSection() {
           <div className="relative h-full w-full rounded-full border-2 border-primary/50 overflow-hidden bg-muted">
             <Image
               src="/profile-avatar.jpg"
-              alt={plainText(tx(h.footerName))}
+              alt={siteConfig.name}
               fill
               sizes="(min-width: 768px) 240px, 192px"
               className="object-cover"
@@ -77,29 +83,45 @@ export function HeroSection() {
           </span>
           <span className="hidden sm:inline text-border">|</span>
           <span className="flex items-center gap-1">
+            <span className="text-primary">{">>"}</span> <RichText value={tx(h.rank)} />
+          </span>
+          <span className="hidden sm:inline text-border">|</span>
+          <span className="flex items-center gap-1">
             <span className="text-primary">{">>"}</span> <RichText value={tx(h.region)} />
           </span>
         </div>
 
-        {/* CTA Buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
-          <Button asChild size="lg" className="gap-2 font-sans">
+        {/* CTA Buttons: same size, type and icon slot; hierarchy comes from fill only */}
+        <div className="mx-auto mb-12 flex w-full max-w-md flex-col items-stretch justify-center gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center">
+          <Button
+            asChild
+            size="lg"
+            className={`${ctaBase} bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 hover:shadow-primary/30`}
+          >
             <a href="/games">
-              <Gamepad className="h-4 w-4" />
+              <Gamepad2 className="size-5" aria-hidden="true" />
               <RichText value={tx(h.ctaGames)} />
             </a>
           </Button>
-          <Button asChild variant="outline" size="lg" className="gap-2 font-sans border-primary/30 hover:border-primary hover:bg-primary/5">
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className={`${ctaBase} ${ctaSurface} hover:border-signal-blue/60`}
+          >
             <a href="/proyectos">
+              <FolderKanban className="size-5 text-signal-blue glow-blue" aria-hidden="true" />
               <RichText value={tx(h.ctaProjects)} />
             </a>
           </Button>
-        </div>
-
-        {/* Contact Link */}
-        <div className="flex items-center justify-center mb-6 md:mb-12">
-          <Button asChild variant="ghost" size="sm" className="gap-2 font-mono text-muted-foreground hover:text-primary border border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-all duration-200">
+          <Button
+            asChild
+            variant="outline"
+            size="lg"
+            className={`${ctaBase} ${ctaSurface} hover:border-signal-green/60`}
+          >
             <a href="#contact">
+              <Mail className="size-5 text-signal-green glow-green" aria-hidden="true" />
               <RichText value={tx(h.ctaContact)} />
             </a>
           </Button>

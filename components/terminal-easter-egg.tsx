@@ -6,6 +6,7 @@ import { Terminal, Minus, X, Maximize2, Volume2, VolumeX } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useCursor } from "@/lib/cursor-context"
 import { useAudio } from "@/lib/audio-context"
+import { siteConfig } from "@/lib/site-config"
 import { useAdmin } from "@/lib/admin-context"
 import { adminLogin } from "@/app/actions/admin"
 
@@ -31,7 +32,7 @@ const staticCommands: Record<string, string | string[]> = {
   about: [
     "╔══════════════════════════════════════╗",
     "║  MATHÍAS ANDINO                      ║",
-    "║  Game Designer Junior                ║",
+    `║  ${siteConfig.role.es.padEnd(36)}║`,
     "║  Nivel: 27  |  Clase: Designer       ║",
     "║  Ubicación: González Catán, AR       ║",
     "╚══════════════════════════════════════╝",

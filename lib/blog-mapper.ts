@@ -1,13 +1,14 @@
+import { siteConfig } from "@/lib/site-config"
 import type { BlogPostRow } from "@/lib/db/schema"
 import type { BlogPost } from "@/lib/blog-data"
 
 const DEFAULT_AUTHOR = {
   name: "Mathías Andino",
   avatar: "/profile-avatar.jpg",
-  role: "Game Designer Junior",
+  role: siteConfig.role.es,
 }
 
-/** Formats a YYYY-MM-DD date into Spanish long form, e.g. "15 de noviembre de 2024" */
+/** Formats a YYYY-MM-DD date into Spanish long form, e.g. "15 de noviembre de 2025" */
 export function formatDateEs(dateStr: string): string {
   const [y, m, d] = dateStr.split("-").map(Number)
   const date = new Date(y, (m || 1) - 1, d || 1)

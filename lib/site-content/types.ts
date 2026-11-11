@@ -137,6 +137,7 @@ export type HomeContent = {
   subtitle: Bilingual
   classLabel: Bilingual
   spec: Bilingual
+  rank: Bilingual
   region: Bilingual
   ctaGames: Bilingual
   ctaProjects: Bilingual
@@ -146,9 +147,6 @@ export type HomeContent = {
   objectiveValue: Bilingual
   locationLabel: Bilingual
   locationValue: Bilingual
-  footerCredit: Bilingual
-  footerName: Bilingual
-  footerTagline: Bilingual
   featuredKicker: Bilingual
   featuredTitle: Bilingual
   featuredSubtitle: Bilingual

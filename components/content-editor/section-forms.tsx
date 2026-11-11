@@ -87,16 +87,12 @@ export function HomeForm({ value, lang, onChange }: FormProps<HomeContent>) {
         <BiField label="Subtítulo" value={value.subtitle} lang={lang} onChange={(subtitle) => set({ subtitle })} />
         <BiField label="Clase" value={value.classLabel} lang={lang} onChange={(classLabel) => set({ classLabel })} />
         <BiField label="Especialización" value={value.spec} lang={lang} onChange={(spec) => set({ spec })} />
+        <BiField label="Rango" value={value.rank} lang={lang} onChange={(rank) => set({ rank })} />
         <BiField label="Región" value={value.region} lang={lang} onChange={(region) => set({ region })} />
         <BiField label="Botón de videojuegos" value={value.ctaGames} lang={lang} onChange={(ctaGames) => set({ ctaGames })} />
         <BiField label="Botón de proyectos" value={value.ctaProjects} lang={lang} onChange={(ctaProjects) => set({ ctaProjects })} />
         <BiField label="Botón de contacto" value={value.ctaContact} lang={lang} onChange={(ctaContact) => set({ ctaContact })} />
         <BiField label="Texto de bajar" value={value.scrollDown} lang={lang} onChange={(scrollDown) => set({ scrollDown })} />
-      </Group>
-      <Group title="Pie de la página de inicio">
-        <BiField label="Crédito" value={value.footerCredit} lang={lang} onChange={(footerCredit) => set({ footerCredit })} />
-        <BiField label="Nombre" value={value.footerName} lang={lang} onChange={(footerName) => set({ footerName })} />
-        <BiField label="Línea inferior" value={value.footerTagline} lang={lang} onChange={(footerTagline) => set({ footerTagline })} />
       </Group>
       <Group title="Videojuegos destacados" hint="Solo el título de esa sección. Los juegos se editan en Mis Videojuegos.">
         <BiField label="Etiqueta" value={value.featuredKicker} lang={lang} onChange={(featuredKicker) => set({ featuredKicker })} />

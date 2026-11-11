@@ -2,6 +2,7 @@
 
 import { createContext, useContext, type ReactNode } from "react"
 import { useLang, type Lang } from "@/lib/i18n"
+import { resolveSiteTokens } from "@/lib/site-config"
 import { defaultSiteContent } from "./defaults"
 import type { Bilingual, SiteContent } from "./types"
 
@@ -18,7 +19,7 @@ export function useSiteContent() {
 export function tx(value: Bilingual | undefined, lang: Lang): string {
   if (!value) return ""
   const text = value[lang]
-  return typeof text === "string" ? text : value.es
+  return resolveSiteTokens(typeof text === "string" ? text : value.es, lang)
 }
 
 export function useSiteLang() {

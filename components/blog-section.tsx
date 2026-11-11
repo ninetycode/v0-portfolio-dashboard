@@ -23,7 +23,7 @@ const BLOG_POSTS: BlogPost[] = [
     excerpt:
       "Las lecciones aprendidas tras 18 meses desarrollando nuestro primer roguelike con netcode. Desde el diseño inicial hasta el Early Access.",
     category: "Post-Mortems",
-    date: "15 de noviembre de 2024",
+    date: "15 de noviembre de 2025",
     readTime: "12 min",
   },
   {
@@ -32,7 +32,7 @@ const BLOG_POSTS: BlogPost[] = [
     excerpt:
       "Un análisis profundo de lo que hace que un juego se sienta bien, con ejemplos prácticos de implementación en Godot y Unity.",
     category: "Opinión de Industria",
-    date: "28 de octubre de 2024",
+    date: "28 de octubre de 2025",
     readTime: "8 min",
   },
   {
@@ -41,7 +41,7 @@ const BLOG_POSTS: BlogPost[] = [
     excerpt:
       "Cómo diseñé e implementé un sistema de inventario flexible que se adapta a diferentes géneros de juegos.",
     category: "Actualizaciones",
-    date: "12 de octubre de 2024",
+    date: "12 de octubre de 2025",
     readTime: "6 min",
   },
   {
@@ -50,7 +50,7 @@ const BLOG_POSTS: BlogPost[] = [
     excerpt:
       "Por qué tu Game Design Document debería evolucionar con el proyecto y cómo estructurarlo para facilitar la iteración.",
     category: "Opinión de Industria",
-    date: "20 de septiembre de 2024",
+    date: "20 de septiembre de 2025",
     readTime: "10 min",
   },
   {
@@ -59,7 +59,7 @@ const BLOG_POSTS: BlogPost[] = [
     excerpt:
       "Cómo logramos un Top 10 en nuestra primera participación como equipo, incluyendo nuestro proceso de ideación y desarrollo.",
     category: "Post-Mortems",
-    date: "5 de agosto de 2024",
+    date: "5 de agosto de 2025",
     readTime: "15 min",
   },
   {
@@ -68,7 +68,7 @@ const BLOG_POSTS: BlogPost[] = [
     excerpt:
       "Técnicas y herramientas para crear sistemas económicos equilibrados en juegos F2P y premium.",
     category: "Opinión de Industria",
-    date: "18 de julio de 2024",
+    date: "18 de julio de 2025",
     readTime: "11 min",
   },
 ]
