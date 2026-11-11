@@ -284,7 +284,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                           </span>
                           {project.embedUrl && (
                             <span className="rounded-md bg-background">
-                              <Badge className="gap-1 border border-accent/30 bg-accent/20 font-mono text-xs text-accent">
+                              <Badge className="gap-1 border border-primary bg-primary font-mono text-xs text-primary-foreground hover:bg-primary">
                                 <Play className="h-3 w-3" />
                                 {lang === "en" ? "Playable" : "Jugable"}
                               </Badge>
