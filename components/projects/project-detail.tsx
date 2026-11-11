@@ -176,6 +176,7 @@ export function ProjectDetail({ project, admin }: { project: Project; admin: boo
               width={project.embedWidth}
               height={project.embedHeight}
               coverImage={project.coverImage}
+              coverFocus={project.coverFocus}
             />
           </div>
         </section>

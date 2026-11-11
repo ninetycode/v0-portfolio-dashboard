@@ -6,6 +6,7 @@ import { ExternalLink, Gamepad2, PlayCircle } from "lucide-react"
 import { RatingBadge } from "@/components/games/star-rating"
 import { RichText } from "@/components/rich-text"
 import { CoverImage } from "@/components/cover-image"
+import { coverFocusStyle } from "@/lib/cover-focus"
 import { useSiteLang } from "@/lib/site-content/context"
 import type { GameSummary } from "@/lib/games-types"
 
@@ -44,7 +45,7 @@ export function FeaturedGames({ games }: { games: GameSummary[] }) {
                       alt={`Portada de ${game.title}`}
                       sizes="(min-width: 1152px) 564px, (min-width: 768px) 50vw, 100vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      style={{ imageRendering: "pixelated" }}
+                      style={{ imageRendering: "pixelated", ...coverFocusStyle(game.coverFocus) }}
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">

@@ -1,4 +1,5 @@
 import { parseEmbed } from "@/lib/games-options"
+import type { CoverFocus } from "@/lib/cover-focus"
 
 export const PROJECT_STATUSES = ["idea", "in-progress", "finished", "abandoned", "future"] as const
 export type ProjectStatus = (typeof PROJECT_STATUSES)[number]
@@ -22,6 +23,7 @@ export interface Project {
   tags: string[]
   projectDate: string
   coverImage: string | null
+  coverFocus: CoverFocus | null
   screenshots: string[]
   embedUrl: string | null
   embedWidth: number
@@ -42,6 +44,7 @@ export type ProjectInput = {
   tags: string[]
   projectDate: string
   coverImage: string
+  coverFocus: CoverFocus | null
   screenshots: string[]
   embedUrl: string
   embedWidth: number

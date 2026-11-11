@@ -4,6 +4,7 @@ import { useRef, useState } from "react"
 import { Maximize2, Play } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CoverImage } from "@/components/cover-image"
+import { coverFocusStyle, type CoverFocus } from "@/lib/cover-focus"
 
 interface GamePlayerProps {
   title: string
@@ -11,9 +12,10 @@ interface GamePlayerProps {
   width: number
   height: number
   coverImage: string | null
+  coverFocus?: CoverFocus | null
 }
 
-export function GamePlayer({ title, embedUrl, width, height, coverImage }: GamePlayerProps) {
+export function GamePlayer({ title, embedUrl, width, height, coverImage, coverFocus }: GamePlayerProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [started, setStarted] = useState(false)
 
@@ -50,7 +52,7 @@ export function GamePlayer({ title, embedUrl, width, height, coverImage }: GameP
                 priority
                 sizes="(min-width: 1024px) 960px, 100vw"
                 className="object-cover opacity-60 transition-opacity group-hover:opacity-40"
-                style={{ imageRendering: "pixelated" }}
+                style={{ imageRendering: "pixelated", ...coverFocusStyle(coverFocus) }}
               />
             )}
             <span className="relative flex flex-col items-center gap-3">

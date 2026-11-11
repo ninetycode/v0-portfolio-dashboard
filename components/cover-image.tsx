@@ -1,6 +1,7 @@
 import Image from "next/image"
 import type { CSSProperties } from "react"
 import { cn } from "@/lib/utils"
+import { coverFocusStyle, type CoverFocus } from "@/lib/cover-focus"
 
 // Debe coincidir con images.remotePatterns en next.config.mjs.
 const OPTIMIZABLE_HOSTS = [/^img\.itch\.zone$/, /\.public\.blob\.vercel-storage\.com$/]
@@ -22,6 +23,8 @@ type CoverImageProps = {
   sizes: string
   className?: string
   style?: CSSProperties
+  /** Encuadre elegido por el admin (posición y zoom dentro de la miniatura). */
+  focus?: CoverFocus | null
   priority?: boolean
   draggable?: boolean
 }
@@ -31,7 +34,8 @@ type CoverImageProps = {
  * Sirve una versión redimensionada en AVIF/WebP cuando el origen está permitido
  * y cae a un <img> normal para cualquier otra URL que cargue el admin.
  */
-export function CoverImage({ src, alt, sizes, className, style, priority = false, draggable }: CoverImageProps) {
+export function CoverImage({ src, alt, sizes, className, style: styleProp, focus, priority = false, draggable }: CoverImageProps) {
+  const style = { ...styleProp, ...coverFocusStyle(focus) }
   if (!canOptimize(src)) {
     return (
       <img

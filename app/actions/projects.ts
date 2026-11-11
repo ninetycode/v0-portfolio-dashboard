@@ -6,6 +6,7 @@ import { db } from "@/lib/db"
 import { projects, type ProjectRow } from "@/lib/db/schema"
 import { isAdmin } from "@/lib/admin-auth"
 import { slugify, uniqueTags } from "@/lib/games-options"
+import { sanitizeCoverFocus } from "@/lib/cover-focus"
 import {
   DEFAULT_PROJECT_CATEGORIES,
   DEFAULT_PROJECT_PLATFORMS,
@@ -39,6 +40,7 @@ function toProject(row: ProjectRow): Project {
     tags: row.tags,
     projectDate: row.projectDate,
     coverImage: row.coverImage,
+    coverFocus: sanitizeCoverFocus(row.coverFocus),
     screenshots: row.screenshots,
     embedUrl: row.embedUrl,
     embedWidth: row.embedWidth,
@@ -100,6 +102,7 @@ function cleanInput(input: ProjectInput) {
     tags: tags(input.tags),
     projectDate: input.projectDate.trim().slice(0, 40),
     coverImage: image(input.coverImage),
+    coverFocus: sanitizeCoverFocus(input.coverFocus),
     screenshots: uniqueTags(input.screenshots.map((v) => v.trim()).filter(isImageSrc)).slice(0, 12),
     embedUrl: embed ? url(embed.url) : null,
     embedWidth: Math.max(320, Math.min(2400, Number(embed?.width ?? input.embedWidth) || 1280)),

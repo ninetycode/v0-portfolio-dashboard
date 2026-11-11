@@ -39,6 +39,7 @@ import { deleteProject, reorderProjects } from "@/app/actions/projects"
 import { PROJECT_STATUSES, statusConfig, type Project, type ProjectStatus } from "@/lib/projects-types"
 import { PlatformIcon } from "@/components/projects/platform-icon"
 import { CoverImage } from "@/components/cover-image"
+import { coverFocusStyle } from "@/lib/cover-focus"
 
 export const statusIcons: Record<ProjectStatus, typeof Lightbulb> = {
   idea: Lightbulb,
@@ -265,6 +266,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                           priority={position < 3}
                           sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          style={coverFocusStyle(project.coverFocus)}
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center">
