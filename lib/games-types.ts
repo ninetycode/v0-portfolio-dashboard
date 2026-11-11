@@ -1,4 +1,5 @@
 import type { GameDocLink } from "@/lib/db/schema"
+import type { CoverFocus } from "@/lib/cover-focus"
 
 export type GameSummary = {
   id: string
@@ -8,6 +9,7 @@ export type GameSummary = {
   genres: string[]
   platforms: string[]
   coverImage: string | null
+  coverFocus: CoverFocus | null
   status: string
   playable: boolean
   avgRating: number | null
@@ -40,6 +42,7 @@ export type GameInput = {
   externalUrl: string
   itchGameId: string
   coverImage: string
+  coverFocus: CoverFocus | null
   screenshots: string[]
   docLinks: GameDocLink[]
 }
@@ -61,6 +64,7 @@ export type GameDetail = {
   externalUrl: string | null
   itchGameId: string | null
   coverImage: string | null
+  coverFocus: CoverFocus | null
   screenshots: string[]
   docLinks: GameDocLink[]
   sortOrder: number

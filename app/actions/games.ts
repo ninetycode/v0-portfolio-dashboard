@@ -5,6 +5,7 @@ import { asc, desc, eq, sql } from "drizzle-orm"
 import { db } from "@/lib/db"
 import { gameReviews, games } from "@/lib/db/schema"
 import { isAdmin } from "@/lib/admin-auth"
+import { sanitizeCoverFocus } from "@/lib/cover-focus"
 import type { GameReview, GameSummary, GameDetail, GameInput } from "@/lib/games-types"
 import {
   BROWSER_PLATFORM,
@@ -54,6 +55,7 @@ export async function getGames(): Promise<GameSummary[]> {
       genres: games.genres,
       platforms: games.platforms,
       coverImage: games.coverImage,
+      coverFocus: games.coverFocus,
       status: games.status,
       embedUrl: games.embedUrl,
       ...ratingStats,
@@ -61,7 +63,12 @@ export async function getGames(): Promise<GameSummary[]> {
     .from(games)
     .orderBy(asc(games.sortOrder), asc(games.createdAt))
 
-  return rows.map((r) => ({ ...r, avgRating: toAverage(r.avgRating), playable: Boolean(r.embedUrl) }))
+  return rows.map((r) => ({
+    ...r,
+    coverFocus: sanitizeCoverFocus(r.coverFocus),
+    avgRating: toAverage(r.avgRating),
+    playable: Boolean(r.embedUrl),
+  }))
 }
 
 export async function getGameById(id: string): Promise<GameDetail | null> {
@@ -87,6 +94,7 @@ export async function getGameBySlug(slug: string): Promise<GameDetail | null> {
 
   return {
     ...row.game,
+    coverFocus: sanitizeCoverFocus(row.game.coverFocus),
     createdAt: row.game.createdAt.toISOString(),
     avgRating: toAverage(row.avgRating),
     reviewCount: row.reviewCount,
@@ -224,6 +232,7 @@ function cleanGameInput(input: GameInput) {
     externalUrl: url(input.externalUrl),
     itchGameId: /^\d{1,12}$/.test(input.itchGameId?.trim() ?? "") ? input.itchGameId.trim() : null,
     coverImage: url(input.coverImage),
+    coverFocus: sanitizeCoverFocus(input.coverFocus),
     screenshots: uniqueTags(input.screenshots.map((v) => v.trim()).filter(isHttpUrl)).slice(0, 12),
     docLinks: input.docLinks
       .map((link) => ({ label: link.label.trim().slice(0, 100), url: link.url.trim().slice(0, 1000) }))

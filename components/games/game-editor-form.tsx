@@ -25,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { TagPicker } from "@/components/games/tag-picker"
+import { CoverFocusEditor } from "@/components/cover-focus-editor"
 import { importItchGame, createGame, updateGame } from "@/app/actions/games"
 import {
   BROWSER_PLATFORM,
@@ -60,6 +61,7 @@ const defaults: GameInput = {
   externalUrl: "",
   itchGameId: "",
   coverImage: "",
+  coverFocus: null,
   screenshots: [],
   docLinks: [],
 }
@@ -84,6 +86,7 @@ function toInput(game: GameDetail): GameInput {
     externalUrl: game.externalUrl ?? "",
     itchGameId: game.itchGameId ?? "",
     coverImage: game.coverImage ?? "",
+    coverFocus: game.coverFocus,
     screenshots: game.screenshots,
     docLinks: game.docLinks,
   }
@@ -510,6 +513,10 @@ export function GameEditorForm({ game, taxonomy }: Props) {
             {(id) => <Input id={id} value={form.coverImage} onChange={(e) => update("coverImage", e.target.value)} placeholder="https://..." autoComplete="off" />}
           </FieldShell>
         </div>
+
+        {form.coverImage && (
+          <CoverFocusEditor image={form.coverImage} value={form.coverFocus} onChange={(v) => update("coverFocus", v)} />
+        )}
 
         <div className="flex flex-col gap-3">
           <div className="flex items-baseline justify-between">

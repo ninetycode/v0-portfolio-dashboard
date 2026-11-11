@@ -39,6 +39,7 @@ import { deleteProject, reorderProjects } from "@/app/actions/projects"
 import { PROJECT_STATUSES, statusConfig, type Project, type ProjectStatus } from "@/lib/projects-types"
 import { PlatformIcon } from "@/components/projects/platform-icon"
 import { CoverImage } from "@/components/cover-image"
+import { coverFocusStyle } from "@/lib/cover-focus"
 
 export const statusIcons: Record<ProjectStatus, typeof Lightbulb> = {
   idea: Lightbulb,
@@ -265,6 +266,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                           priority={position < 3}
                           sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          style={coverFocusStyle(project.coverFocus)}
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center">
@@ -272,29 +274,35 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                         </div>
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
-                      <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-                        <Badge className={`gap-1 border font-mono text-xs ${statusConfig[project.status].color}`}>
-                          <StatusIcon className="h-3 w-3" />
-                          {getStatusLabel(project.status)}
-                        </Badge>
-                        {project.embedUrl && (
-                          <Badge className="gap-1 border border-accent/30 bg-accent/20 font-mono text-xs text-accent">
-                            <Play className="h-3 w-3" />
-                            {lang === "en" ? "Playable" : "Jugable"}
-                          </Badge>
-                        )}
-                      </div>
-                      <div className="absolute top-3 right-3 flex gap-1">
-                        {project.platforms.map((platform) => (
-                          <div
-                            key={platform}
-                            className="flex h-6 w-6 items-center justify-center rounded border border-border/50 bg-background/80 backdrop-blur-sm"
-                            title={platform}
-                          >
-                            <PlatformIcon platform={platform} />
-                            <span className="sr-only">{platform}</span>
-                          </div>
-                        ))}
+                      <div className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-2">
+                        <div className="flex flex-wrap gap-1.5">
+                          <span className="rounded-md bg-background">
+                            <Badge className={`gap-1 border font-mono text-xs ${statusConfig[project.status].color}`}>
+                              <StatusIcon className="h-3 w-3" />
+                              {getStatusLabel(project.status)}
+                            </Badge>
+                          </span>
+                          {project.embedUrl && (
+                            <span className="rounded-md bg-background">
+                              <Badge className="gap-1 border border-accent/30 bg-accent/20 font-mono text-xs text-accent">
+                                <Play className="h-3 w-3" />
+                                {lang === "en" ? "Playable" : "Jugable"}
+                              </Badge>
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex shrink-0 gap-1">
+                          {project.platforms.map((platform) => (
+                            <div
+                              key={platform}
+                              className="flex h-7 w-7 items-center justify-center rounded-md border border-border bg-background text-foreground"
+                              title={platform}
+                            >
+                              <PlatformIcon platform={platform} />
+                              <span className="sr-only">{platform}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                       <div className="absolute inset-0 flex items-center justify-center bg-background/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                         <span className="font-mono text-sm text-primary">{pr.seeDetails}</span>

@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { TagPicker } from "@/components/games/tag-picker"
 import { FieldShell, FormSection, ImageDrop } from "@/components/games/game-editor-form"
 import { GamePlayer } from "@/components/games/game-player"
+import { CoverFocusEditor } from "@/components/cover-focus-editor"
 import { createProject, updateProject } from "@/app/actions/projects"
 import { slugify } from "@/lib/games-options"
 import {
@@ -37,6 +38,7 @@ const defaults: ProjectInput = {
   tags: [],
   projectDate: "",
   coverImage: "",
+  coverFocus: null,
   screenshots: [],
   embedUrl: "",
   embedWidth: 1280,
@@ -57,6 +59,7 @@ function toInput(p: Project): ProjectInput {
     tags: p.tags,
     projectDate: p.projectDate,
     coverImage: p.coverImage ?? "",
+    coverFocus: p.coverFocus,
     screenshots: p.screenshots,
     embedUrl: p.embedUrl ?? "",
     embedWidth: p.embedWidth,
@@ -243,7 +246,7 @@ export function ProjectEditorForm({ project, taxonomy }: Props) {
             </Button>
             {showPreview && (
               <div className="w-full" style={{ maxWidth: `${form.embedWidth}px` }}>
-                <GamePlayer title={form.title || "Vista previa"} embedUrl={form.embedUrl} width={form.embedWidth} height={form.embedHeight} coverImage={form.coverImage || null} />
+                <GamePlayer title={form.title || "Vista previa"} embedUrl={form.embedUrl} width={form.embedWidth} height={form.embedHeight} coverImage={form.coverImage || null} coverFocus={form.coverFocus} />
               </div>
             )}
           </div>
@@ -263,6 +266,9 @@ export function ProjectEditorForm({ project, taxonomy }: Props) {
             onClear={() => update("coverImage", "")}
           />
         </div>
+        {form.coverImage && (
+          <CoverFocusEditor image={form.coverImage} value={form.coverFocus} onChange={(v) => update("coverFocus", v)} />
+        )}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {form.screenshots.map((src, i) => (
             <div key={src + i} className="group relative aspect-video overflow-hidden rounded-md border border-border bg-muted">

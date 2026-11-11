@@ -111,6 +111,7 @@ export default async function GamePage({ params }: Props) {
               width={game.embedWidth}
               height={game.embedHeight}
               coverImage={game.coverImage}
+              coverFocus={game.coverFocus}
             />
           </section>
         )}

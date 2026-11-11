@@ -5,6 +5,7 @@ import Link from "next/link"
 import { ArrowLeft, Calendar, ChevronLeft, ChevronRight, ExternalLink, FileText, Pencil, Play, Presentation, Video } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { CoverImage } from "@/components/cover-image"
 import { GamePlayer } from "@/components/games/game-player"
 import { PlatformIcon } from "@/components/projects/platform-icon"
 import { statusIcons } from "@/components/projects-gallery"
@@ -24,6 +25,7 @@ export function ProjectDetail({ project, admin }: { project: Project; admin: boo
   const pr = t.projects
   const screenshots = project.screenshots.length ? project.screenshots : project.coverImage ? [project.coverImage] : []
   const [current, setCurrent] = useState(0)
+  const focusFor = (src: string) => (src === project.coverImage ? project.coverFocus : null)
   const StatusIcon = statusIcons[project.status]
   const statusLabel = lang === "en" ? statusConfig[project.status].labelEn : statusConfig[project.status].label
 
@@ -73,7 +75,14 @@ export function ProjectDetail({ project, admin }: { project: Project; admin: boo
         <div className="flex flex-col gap-4">
           {screenshots.length > 0 && (
             <div className="relative aspect-video overflow-hidden rounded-xl border border-border/50 bg-muted">
-              <img src={screenshots[current] || "/placeholder.svg"} alt={`${project.title}, imagen ${current + 1}`} className="h-full w-full object-cover" />
+              <CoverImage
+                src={screenshots[current]}
+                alt={`${project.title}, imagen ${current + 1}`}
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                priority={current === 0}
+                className="object-cover"
+                focus={focusFor(screenshots[current])}
+              />
               {screenshots.length > 1 && (
                 <>
                   <button onClick={prev} className="absolute top-1/2 left-4 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border/50 bg-background/80 backdrop-blur-sm transition-colors hover:bg-background" aria-label="Anterior">
@@ -98,7 +107,7 @@ export function ProjectDetail({ project, admin }: { project: Project; admin: boo
                     i === current ? "border-primary ring-2 ring-primary/20" : "border-transparent hover:border-primary/50",
                   )}
                 >
-                  <img src={src || "/placeholder.svg"} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />
+                  <CoverImage src={src} alt="" sizes="96px" className="object-cover" focus={focusFor(src)} />
                 </button>
               ))}
             </div>
@@ -176,6 +185,7 @@ export function ProjectDetail({ project, admin }: { project: Project; admin: boo
               width={project.embedWidth}
               height={project.embedHeight}
               coverImage={project.coverImage}
+              coverFocus={project.coverFocus}
             />
           </div>
         </section>

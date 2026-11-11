@@ -17,6 +17,8 @@ export const blogPosts = pgTable("blog_posts", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
 })
 
+type CoverFocusRow = { x: number; y: number; zoom: number }
+
 export type BlogPostRow = typeof blogPosts.$inferSelect
 export type NewBlogPostRow = typeof blogPosts.$inferInsert
 
@@ -39,6 +41,7 @@ export const games = pgTable("games", {
   externalUrl: text("external_url"),
   itchGameId: text("itch_game_id"),
   coverImage: text("cover_image"),
+  coverFocus: jsonb("cover_focus").$type<CoverFocusRow>(),
   screenshots: text("screenshots").array().notNull().default([]),
   docLinks: jsonb("doc_links").$type<GameDocLink[]>().notNull().default([]),
   sortOrder: integer("sort_order").notNull().default(0),
@@ -70,6 +73,7 @@ export const projects = pgTable("projects", {
   tags: text("tags").array().notNull().default([]),
   projectDate: text("project_date").notNull().default(""),
   coverImage: text("cover_image"),
+  coverFocus: jsonb("cover_focus").$type<CoverFocusRow>(),
   screenshots: text("screenshots").array().notNull().default([]),
   embedUrl: text("embed_url"),
   embedWidth: integer("embed_width").notNull().default(1280),
