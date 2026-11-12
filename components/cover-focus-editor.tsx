@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { Move, RotateCcw, ZoomIn } from "lucide-react"
+import { ImageOff, Move, RotateCcw, ZoomIn } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
@@ -32,6 +32,7 @@ export function CoverFocusEditor({ image, value, onChange }: Props) {
   const drag = useRef<{ startX: number; startY: number; focus: CoverFocus } | null>(null)
   const [natural, setNatural] = useState<{ w: number; h: number } | null>(null)
   const [dragging, setDragging] = useState(false)
+  const [failedSrc, setFailedSrc] = useState<string | undefined>()
 
   const commit = (next: CoverFocus) => onChange(sanitizeCoverFocus(next))
 
@@ -119,18 +120,28 @@ export function CoverFocusEditor({ image, value, onChange }: Props) {
           dragging ? "cursor-grabbing" : "cursor-grab",
         )}
       >
-        <img
-          src={image || "/placeholder.svg"}
-          alt=""
-          draggable={false}
-          onLoad={(e) => setNatural({ w: e.currentTarget.naturalWidth, h: e.currentTarget.naturalHeight })}
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{ imageRendering: "pixelated", ...coverFocusStyle(focus) }}
-        />
-        <span className="pointer-events-none absolute top-2 left-2 flex items-center gap-1.5 rounded bg-background/90 px-2 py-1 font-mono text-[11px] text-foreground">
-          <Move className="h-3 w-3" />
-          Arrastrar
-        </span>
+        {failedSrc === image ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 p-4 text-center text-xs text-muted-foreground">
+            <ImageOff className="h-5 w-5" aria-hidden="true" />
+            <span>No se pudo cargar la imagen. Súbela de nuevo (JPG, PNG o WebP).</span>
+          </div>
+        ) : (
+          <>
+            <img
+              src={image || "/placeholder.svg"}
+              alt=""
+              draggable={false}
+              onLoad={(e) => setNatural({ w: e.currentTarget.naturalWidth, h: e.currentTarget.naturalHeight })}
+              onError={() => setFailedSrc(image)}
+              className="absolute inset-0 h-full w-full object-cover"
+              style={{ imageRendering: "pixelated", ...coverFocusStyle(focus) }}
+            />
+            <span className="pointer-events-none absolute top-2 left-2 flex items-center gap-1.5 rounded bg-background/90 px-2 py-1 font-mono text-[11px] text-foreground">
+              <Move className="h-3 w-3" />
+              Arrastrar
+            </span>
+          </>
+        )}
       </div>
 
       <div className="flex max-w-xl items-center gap-3">
