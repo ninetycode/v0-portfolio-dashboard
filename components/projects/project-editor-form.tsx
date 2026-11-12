@@ -25,8 +25,10 @@ import { CoverFocusEditor } from "@/components/cover-focus-editor"
 import { createProject, updateProject } from "@/app/actions/projects"
 import { slugify } from "@/lib/games-options"
 import {
+  PROJECT_BADGES,
   PROJECT_STATUSES,
   RESOURCE_TYPES,
+  badgeOptions,
   statusConfig,
   toProjectEmbed,
   type Project,
@@ -53,6 +55,7 @@ const defaults: ProjectInput = {
   embedUrl: "",
   embedWidth: 1280,
   embedHeight: 740,
+  badge: "auto",
   externalUrl: "",
   resources: [],
 }
@@ -74,6 +77,7 @@ function toInput(p: Project): ProjectInput {
     embedUrl: p.embedUrl ?? "",
     embedWidth: p.embedWidth,
     embedHeight: p.embedHeight,
+    badge: p.badge,
     externalUrl: p.externalUrl ?? "",
     resources: p.resources,
   }
@@ -116,7 +120,7 @@ export function ProjectEditorForm({ project, taxonomy }: Props) {
   const setTitle = (title: string) => setForm((prev) => ({ ...prev, title, slug: slugTouched ? prev.slug : slugify(title) }))
 
   const setEmbed = (raw: string) => {
-    if (!/<iframe|docs\.google\.com\/presentation/i.test(raw)) return update("embedUrl", raw)
+    if (!/<iframe|docs\.google\.com\/presentation|drive\.google\.com\/file/i.test(raw)) return update("embedUrl", raw)
     const parsed = toProjectEmbed(raw)
     setForm((prev) => ({
       ...prev,
@@ -274,11 +278,27 @@ export function ProjectEditorForm({ project, taxonomy }: Props) {
       </FormSection>
 
       <FormSection
-        title="Jugable / embed"
-        description="Pega un iframe (itch.io, etc.) o un link de Google Slides: se convierte solo en presentación embebida. Déjalo vacío si no es jugable."
+        title="Embed (juego o documento)"
+        description="Pega un iframe (itch.io, etc.) o un link de Google Slides / Drive: se convierte solo en presentación embebida. Déjalo vacío si no hay nada para mostrar embebido."
       >
         <FieldShell label="Iframe o URL del embed">
           {(id) => <Textarea id={id} rows={3} value={form.embedUrl} onChange={(e) => setEmbed(e.target.value)} placeholder='<iframe src="..."></iframe>' className="font-mono text-xs" />}
+        </FieldShell>
+        <FieldShell label="Etiqueta en la tarjeta" hint={badgeOptions[form.badge].hint}>
+          {(id) => (
+            <Select value={form.badge} onValueChange={(v) => update("badge", v as ProjectInput["badge"])}>
+              <SelectTrigger id={id} className="w-full max-w-xs">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {PROJECT_BADGES.map((badge) => (
+                  <SelectItem key={badge} value={badge}>
+                    {badgeOptions[badge].label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
         </FieldShell>
         <div className="grid max-w-sm grid-cols-2 gap-4">
           <FieldShell label="Ancho">

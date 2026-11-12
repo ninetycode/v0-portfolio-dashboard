@@ -21,6 +21,7 @@ import {
   Archive,
   CheckCircle2,
   Clock,
+  FileText,
   Filter,
   FolderOpen,
   GripVertical,
@@ -36,7 +37,7 @@ import {
 import { useLang } from "@/lib/i18n"
 import { useAdmin } from "@/lib/admin-context"
 import { deleteProject, reorderProjects } from "@/app/actions/projects"
-import { PROJECT_STATUSES, statusConfig, type Project, type ProjectStatus } from "@/lib/projects-types"
+import { PROJECT_STATUSES, resolveProjectBadge, statusConfig, type Project, type ProjectStatus } from "@/lib/projects-types"
 import { PlatformIcon } from "@/components/projects/platform-icon"
 import { CoverImage } from "@/components/cover-image"
 import { coverFocusStyle } from "@/lib/cover-focus"
@@ -332,11 +333,19 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                               {getStatusLabel(project.status)}
                             </Badge>
                           </span>
-                          {project.embedUrl && (
+                          {resolveProjectBadge(project) === "playable" && (
                             <span className="rounded-md bg-background">
                               <Badge className="gap-1 border border-primary bg-primary font-mono text-xs text-primary-foreground hover:bg-primary">
                                 <Play className="h-3 w-3" />
                                 {lang === "en" ? "Playable" : "Jugable"}
+                              </Badge>
+                            </span>
+                          )}
+                          {resolveProjectBadge(project) === "document" && (
+                            <span className="rounded-md bg-background">
+                              <Badge className="gap-1 border border-primary bg-primary font-mono text-xs text-primary-foreground hover:bg-primary">
+                                <FileText className="h-3 w-3" />
+                                {lang === "en" ? "Document" : "Documento"}
                               </Badge>
                             </span>
                           )}

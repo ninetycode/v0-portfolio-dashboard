@@ -12,7 +12,7 @@ import { statusIcons } from "@/components/projects-gallery"
 import { useLang } from "@/lib/i18n"
 import { DocumentViewer } from "@/components/projects/document-viewer"
 import { isViewableDocument } from "@/lib/document-files"
-import { statusConfig, type Project } from "@/lib/projects-types"
+import { resolveProjectBadge, statusConfig, type Project } from "@/lib/projects-types"
 import { cn } from "@/lib/utils"
 
 function ResourceIcon({ type }: { type: string }) {
@@ -24,6 +24,7 @@ function ResourceIcon({ type }: { type: string }) {
 
 export function ProjectDetail({ project, admin }: { project: Project; admin: boolean }) {
   const { t, lang } = useLang()
+  const isDocumentEmbed = resolveProjectBadge(project) === "document"
   const pr = t.projects
   const screenshots = project.screenshots.length ? project.screenshots : project.coverImage ? [project.coverImage] : []
   const [current, setCurrent] = useState(0)
@@ -146,8 +147,8 @@ export function ProjectDetail({ project, admin }: { project: Project; admin: boo
           {project.embedUrl && (
             <Button asChild size="lg" className="mb-8 w-fit gap-2 font-mono">
               <a href="#jugar">
-                <Play className="h-4 w-4" />
-                {lang === "en" ? "play_now" : "jugar_ahora"}
+                {isDocumentEmbed ? <FileText className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                {isDocumentEmbed ? (lang === "en" ? "view_document" : "ver_documento") : lang === "en" ? "play_now" : "jugar_ahora"}
               </a>
             </Button>
           )}
@@ -222,7 +223,7 @@ export function ProjectDetail({ project, admin }: { project: Project; admin: boo
 
       {project.embedUrl && (
         <section id="jugar" className="mt-16 scroll-mt-24 border-t border-border/50 pt-10">
-          <p className="font-mono text-xs uppercase tracking-widest text-primary">{lang === "en" ? "play" : "jugar"}</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-primary">{isDocumentEmbed ? (lang === "en" ? "document" : "documento") : lang === "en" ? "play" : "jugar"}</p>
           <h2 className="mt-2 mb-6 font-serif text-2xl font-bold">{project.title}</h2>
           <div className="mx-auto w-full" style={{ maxWidth: `${project.embedWidth}px` }}>
             <GamePlayer

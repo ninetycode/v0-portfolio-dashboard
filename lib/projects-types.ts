@@ -11,6 +11,29 @@ export const DEFAULT_PROJECT_PLATFORMS = ["Navegador", "PC", "Mobile", "Consola"
 
 export type ProjectResource = { type: string; label: string; url: string }
 
+export const PROJECT_BADGES = ["auto", "playable", "document", "none"] as const
+export type ProjectBadge = (typeof PROJECT_BADGES)[number]
+export type ResolvedBadge = "playable" | "document"
+
+export const badgeOptions: Record<ProjectBadge, { label: string; hint: string }> = {
+  auto: { label: "Automática", hint: "Documento si el embed es de Google Drive/Slides/Docs; Jugable en cualquier otro caso." },
+  playable: { label: "Jugable", hint: "Muestra la etiqueta verde Jugable." },
+  document: { label: "Documento", hint: "Muestra la etiqueta Documento con ícono de archivo." },
+  none: { label: "Ninguna", hint: "No muestra etiqueta." },
+}
+
+export const isProjectBadge = (value: string): value is ProjectBadge => (PROJECT_BADGES as readonly string[]).includes(value)
+
+const DOCUMENT_EMBED_HOST = /^https?:\/\/(docs\.google\.com|drive\.google\.com|view\.officeapps\.live\.com|onedrive\.live\.com|1drv\.ms)\//i
+
+/** The badge that actually shows on the card and detail page, or null when there is none. */
+export function resolveProjectBadge(project: { badge: ProjectBadge; embedUrl: string | null }): ResolvedBadge | null {
+  if (project.badge === "none") return null
+  if (project.badge === "playable" || project.badge === "document") return project.embedUrl ? project.badge : null
+  if (!project.embedUrl) return null
+  return DOCUMENT_EMBED_HOST.test(project.embedUrl) ? "document" : "playable"
+}
+
 export interface Project {
   id: string
   slug: string
@@ -28,6 +51,7 @@ export interface Project {
   embedUrl: string | null
   embedWidth: number
   embedHeight: number
+  badge: ProjectBadge
   externalUrl: string | null
   resources: ProjectResource[]
   sortOrder: number
@@ -49,6 +73,7 @@ export type ProjectInput = {
   embedUrl: string
   embedWidth: number
   embedHeight: number
+  badge: ProjectBadge
   externalUrl: string
   resources: ProjectResource[]
 }
@@ -76,6 +101,10 @@ export function toProjectEmbed(raw: string): { url: string; width?: number; heig
       width: parsed.width ?? 960,
       height: parsed.height ?? 569,
     }
+  }
+  const driveId = parsed.url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/)?.[1]
+  if (driveId && !/\/preview/.test(parsed.url)) {
+    return { url: `https://drive.google.com/file/d/${driveId}/preview`, width: parsed.width ?? 960, height: parsed.height ?? 569 }
   }
   return parsed
 }
