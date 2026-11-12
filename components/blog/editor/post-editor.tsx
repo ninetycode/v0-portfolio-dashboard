@@ -30,6 +30,7 @@ import { BlockEditor, blocksToMarkdown, markdownToBlocks, newBlock, type Block }
 import { createPost, updatePost, type BlogPostInput } from "@/app/actions/blog"
 import { categories } from "@/lib/blog-data"
 import type { BlogPostRow } from "@/lib/db/schema"
+import { uploadImageFile } from "@/lib/upload-image"
 
 interface PostEditorProps {
   post?: BlogPostRow | null
@@ -91,17 +92,9 @@ export function PostEditor({ post }: PostEditorProps) {
     setUploadingCover(true)
     setError(null)
     try {
-      const formData = new FormData()
-      formData.append("file", file)
-      const res = await fetch("/api/admin/upload", { method: "POST", body: formData })
-      const data = await res.json()
-      if (res.ok && data.url) {
-        setCoverImage(data.url)
-      } else {
-        setError(data.error || "Error al subir la imagen de portada")
-      }
-    } catch {
-      setError("Error de red al subir la imagen")
+      setCoverImage(await uploadImageFile(file))
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Error al subir la imagen de portada")
     } finally {
       setUploadingCover(false)
     }

@@ -24,6 +24,7 @@ import {
   Loader2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { uploadImageFile } from "@/lib/upload-image"
 
 export type BlockType =
   | "text"
@@ -374,17 +375,11 @@ export function BlockEditor({ blocks, onChange }: BlockEditorProps) {
     if (!blockId) return
     setUploadingFor(blockId)
     try {
-      const formData = new FormData()
-      formData.append("file", file)
-      const res = await fetch("/api/admin/upload", { method: "POST", body: formData })
-      const data = await res.json()
-      if (res.ok && data.url) {
-        updateBlock(blockId, { content: data.url, meta: file.name.replace(/\.[^.]+$/, "") })
-      } else {
-        updateBlock(blockId, { type: "text", content: `Error al subir imagen: ${data.error || "desconocido"}` })
-      }
-    } catch {
-      updateBlock(blockId, { type: "text", content: "Error de red al subir la imagen" })
+      const url = await uploadImageFile(file)
+      updateBlock(blockId, { content: url, meta: file.name.replace(/\.[^.]+$/, "") })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "desconocido"
+      updateBlock(blockId, { type: "text", content: `Error al subir imagen: ${message}` })
     } finally {
       setUploadingFor(null)
       pendingImageBlockId.current = null

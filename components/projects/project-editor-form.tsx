@@ -24,6 +24,7 @@ import { GamePlayer } from "@/components/games/game-player"
 import { CoverFocusEditor } from "@/components/cover-focus-editor"
 import { createProject, updateProject } from "@/app/actions/projects"
 import { slugify } from "@/lib/games-options"
+import { uploadImageFile } from "@/lib/upload-image"
 import {
   PROJECT_BADGES,
   PROJECT_STATUSES,
@@ -83,15 +84,7 @@ function toInput(p: Project): ProjectInput {
   }
 }
 
-async function uploadImage(file: File) {
-  const body = new FormData()
-  body.append("file", file)
-  body.append("folder", "projects")
-  const res = await fetch("/api/admin/upload", { method: "POST", body })
-  const data = await res.json().catch(() => ({}))
-  if (!res.ok || !data.url) throw new Error(data.error ?? "No se pudo subir la imagen.")
-  return data.url as string
-}
+const uploadImage = (file: File) => uploadImageFile(file, "projects")
 
 export function ProjectEditorForm({ project, taxonomy }: Props) {
   const router = useRouter()

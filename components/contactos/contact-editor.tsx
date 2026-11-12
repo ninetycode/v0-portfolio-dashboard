@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
+import { uploadImageFile } from "@/lib/upload-image"
 import {
   CONTACT_ICONS,
   slugifyLinkTitle,
@@ -143,19 +144,10 @@ export function ContactLinksForm({
     }
     setUploading(true)
     try {
-      const body = new FormData()
-      body.set("file", file)
-      body.set("folder", "contacto")
-      const response = await fetch("/api/admin/upload", { method: "POST", body })
-      const payload = (await response.json()) as { url?: string; error?: string }
-      if (!response.ok || !payload.url) {
-        toast.error(payload.error || "No se pudo subir la imagen")
-        return
-      }
-      patchHeader({ avatarUrl: payload.url })
+      patchHeader({ avatarUrl: await uploadImageFile(file, "contacto") })
       toast.success("Imagen subida")
-    } catch {
-      toast.error("No se pudo subir la imagen")
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "No se pudo subir la imagen")
     } finally {
       setUploading(false)
     }

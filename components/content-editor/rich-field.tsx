@@ -17,6 +17,7 @@ import {
   type InlineFormat,
 } from "@/lib/site-content/format-dom"
 import { editorValue, splitIntoItems, stripInlineFormatting, type FontName } from "@/lib/site-content/rich-text"
+import { uploadImageFile } from "@/lib/upload-image"
 
 const SWATCHES = ["#1e293b", "#3d5a9e", "#478cbf", "#16a34a", "#b45309"]
 const FORMAT_KEYS: InlineFormat[] = ["bold", "italic", "underline", "strike"]
@@ -217,18 +218,9 @@ export function RichField({
     setError("")
     setUploading(true)
     try {
-      const body = new FormData()
-      body.set("file", file)
-      body.set("folder", "content")
-      const response = await fetch("/api/admin/upload", { method: "POST", body })
-      const data = (await response.json()) as { url?: string; error?: string }
-      if (!response.ok || !data.url) {
-        setError(data.error || "No se pudo subir la imagen")
-        return
-      }
-      insertImage(data.url)
-    } catch {
-      setError("No se pudo subir la imagen")
+      insertImage(await uploadImageFile(file, "content"))
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "No se pudo subir la imagen")
     } finally {
       setUploading(false)
       if (fileRef.current) fileRef.current.value = ""

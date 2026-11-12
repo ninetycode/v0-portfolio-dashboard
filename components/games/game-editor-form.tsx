@@ -9,6 +9,7 @@ import {
   Download,
   Eye,
   EyeOff,
+  ImageOff,
   ImagePlus,
   Loader2,
   Monitor,
@@ -38,6 +39,7 @@ import {
   type GameTaxonomy,
 } from "@/lib/games-options"
 import type { GameDetail, GameInput } from "@/lib/games-types"
+import { uploadImageFile } from "@/lib/upload-image"
 import { cn } from "@/lib/utils"
 
 type Props = { game?: GameDetail; taxonomy?: GameTaxonomy }
@@ -92,15 +94,7 @@ function toInput(game: GameDetail): GameInput {
   }
 }
 
-async function uploadImage(file: File) {
-  const body = new FormData()
-  body.append("file", file)
-  body.append("folder", "games")
-  const res = await fetch("/api/admin/upload", { method: "POST", body })
-  const data = await res.json().catch(() => ({}))
-  if (!res.ok || !data.url) throw new Error(data.error ?? "No se pudo subir la imagen.")
-  return data.url as string
-}
+const uploadImage = (file: File) => uploadImageFile(file, "games")
 
 const ITCH_PAGE = /^https?:\/\/(www\.)?[^/]+\.itch\.io\/\S+/i
 
@@ -729,6 +723,7 @@ export function ImageDrop({
 }) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [over, setOver] = useState(false)
+  const [failedSrc, setFailedSrc] = useState<string | undefined>()
 
   return (
     <div
@@ -750,7 +745,20 @@ export function ImageDrop({
     >
       {image ? (
         <>
-          <img src={image || "/placeholder.svg"} alt="Portada" className="h-full w-full object-cover" style={{ imageRendering: "pixelated" }} />
+          {failedSrc === image ? (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-1 p-4 text-center text-xs text-muted-foreground">
+              <ImageOff className="h-5 w-5" aria-hidden="true" />
+              <span>No se pudo cargar la imagen. Súbela de nuevo (JPG, PNG o WebP).</span>
+            </div>
+          ) : (
+            <img
+              src={image || "/placeholder.svg"}
+              alt="Portada"
+              onError={() => setFailedSrc(image)}
+              className="h-full w-full object-cover"
+              style={{ imageRendering: "pixelated" }}
+            />
+          )}
           <div className="absolute right-1.5 bottom-1.5 flex gap-1">
             <Button type="button" size="icon" variant="secondary" className="h-7 w-7" onClick={() => inputRef.current?.click()} aria-label="Cambiar portada">
               {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}

@@ -29,7 +29,7 @@ const DOCUMENT_EMBED_HOST = /^https?:\/\/(docs\.google\.com|drive\.google\.com|v
 /** The badge that actually shows on the card and detail page, or null when there is none. */
 export function resolveProjectBadge(project: { badge: ProjectBadge; embedUrl: string | null }): ResolvedBadge | null {
   if (project.badge === "none") return null
-  if (project.badge === "playable" || project.badge === "document") return project.embedUrl ? project.badge : null
+  if (project.badge === "playable" || project.badge === "document") return project.badge
   if (!project.embedUrl) return null
   return DOCUMENT_EMBED_HOST.test(project.embedUrl) ? "document" : "playable"
 }
