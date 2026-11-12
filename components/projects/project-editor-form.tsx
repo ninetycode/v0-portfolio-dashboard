@@ -3,7 +3,17 @@
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { AlertCircle, Eye, EyeOff, Loader2, Plus, Save, Star, Trash2 } from "lucide-react"
+import { upload } from "@vercel/blob/client"
+import { AlertCircle, Eye, EyeOff, FileUp, Loader2, Plus, Save, Star, Trash2 } from "lucide-react"
+import {
+  DOCUMENT_ACCEPT,
+  DOCUMENT_FOLDER,
+  KIND_LABELS,
+  MAX_DOCUMENT_BYTES,
+  documentMimeType,
+  getDocumentSource,
+  resourceTypeForFile,
+} from "@/lib/document-files"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -88,6 +98,8 @@ export function ProjectEditorForm({ project, taxonomy }: Props) {
   const [uploading, setUploading] = useState<"cover" | "screenshots" | null>(null)
   const [imageUrl, setImageUrl] = useState("")
   const [showPreview, setShowPreview] = useState(false)
+  const [docUploads, setDocUploads] = useState<{ id: string; name: string; percent: number }[]>([])
+  const [dragging, setDragging] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const dirty = JSON.stringify(form) !== JSON.stringify(initial)
@@ -138,6 +150,44 @@ export function ProjectEditorForm({ project, taxonomy }: Props) {
 
   const updateResource = (index: number, key: "type" | "label" | "url", value: string) =>
     setForm((prev) => ({ ...prev, resources: prev.resources.map((r, i) => (i === index ? { ...r, [key]: value } : r)) }))
+
+  const uploadDocuments = async (files: FileList | File[] | null) => {
+    if (!files || !files.length) return
+    setError(null)
+    for (const file of Array.from(files)) {
+      const mime = documentMimeType(file.name)
+      if (!mime) {
+        setError(`"${file.name}" no es un formato compatible. Usa PDF, PowerPoint, Word, Excel, TXT o imagen.`)
+        continue
+      }
+      if (file.size > MAX_DOCUMENT_BYTES) {
+        setError(`"${file.name}" supera los ${MAX_DOCUMENT_BYTES / 1024 / 1024} MB.`)
+        continue
+      }
+      const id = `${file.name}-${Date.now()}`
+      setDocUploads((prev) => [...prev, { id, name: file.name, percent: 0 }])
+      try {
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_")
+        const blob = await upload(`${DOCUMENT_FOLDER}${safeName}`, file, {
+          access: "public",
+          handleUploadUrl: "/api/admin/upload-document",
+          contentType: mime,
+          multipart: file.size > 8 * 1024 * 1024,
+          onUploadProgress: ({ percentage }) =>
+            setDocUploads((prev) => prev.map((u) => (u.id === id ? { ...u, percent: Math.round(percentage) } : u))),
+        })
+        const label = file.name.replace(/\.[^.]+$/, "").slice(0, 100)
+        setForm((prev) => ({
+          ...prev,
+          resources: [...prev.resources, { type: resourceTypeForFile(file.name), label, url: blob.url }].slice(0, 30),
+        }))
+      } catch (e) {
+        setError(e instanceof Error ? `No se pudo subir "${file.name}": ${e.message}` : `No se pudo subir "${file.name}".`)
+      } finally {
+        setDocUploads((prev) => prev.filter((u) => u.id !== id))
+      }
+    }
+  }
 
   const save = async () => {
     setSaving(true)
@@ -314,35 +364,91 @@ export function ProjectEditorForm({ project, taxonomy }: Props) {
         </div>
       </FormSection>
 
-      <FormSection title="Recursos y links" description="Documentos, presentaciones, videos o páginas relacionadas.">
-        {form.resources.map((resource, i) => (
-          <div key={i} className="grid gap-2 md:grid-cols-[160px_1fr_1.5fr_auto]">
-            <Select value={resource.type} onValueChange={(v) => updateResource(i, "type", v)}>
-              <SelectTrigger aria-label="Tipo de recurso">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {RESOURCE_TYPES.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {type}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Input value={resource.label} onChange={(e) => updateResource(i, "label", e.target.value)} placeholder="Nombre del botón" aria-label="Nombre del recurso" />
-            <Input value={resource.url} onChange={(e) => updateResource(i, "url", e.target.value)} placeholder="https://..." aria-label="URL del recurso" />
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="hover:text-destructive"
-              onClick={() => update("resources", form.resources.filter((_, j) => j !== i))}
-              aria-label="Quitar recurso"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
+      <FormSection
+        title="Recursos y documentos"
+        description="Sube PDF, PowerPoint, Word, Excel, TXT o imágenes para verlos dentro de la página, o agrega links (Drive, Google Slides, etc.)."
+      >
+        <label
+          onDragOver={(e) => {
+            e.preventDefault()
+            setDragging(true)
+          }}
+          onDragLeave={() => setDragging(false)}
+          onDrop={(e) => {
+            e.preventDefault()
+            setDragging(false)
+            uploadDocuments(e.dataTransfer.files)
+          }}
+          className={cn(
+            "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border border-dashed px-4 py-8 text-center transition-colors focus-within:ring-2 focus-within:ring-ring",
+            dragging ? "border-primary bg-primary/10" : "border-border hover:border-primary/50 hover:bg-primary/5",
+          )}
+        >
+          <FileUp className="h-6 w-6 text-primary" />
+          <span className="text-sm font-medium">Arrastra archivos aquí o haz clic para elegirlos</span>
+          <span className="font-mono text-xs text-muted-foreground">PDF, PPTX, DOCX, XLSX, TXT, imágenes · hasta {MAX_DOCUMENT_BYTES / 1024 / 1024} MB</span>
+          <input
+            type="file"
+            multiple
+            accept={DOCUMENT_ACCEPT}
+            className="sr-only"
+            onChange={(e) => {
+              uploadDocuments(e.target.files)
+              e.target.value = ""
+            }}
+          />
+        </label>
+
+        {docUploads.map((u) => (
+          <div key={u.id} className="flex flex-col gap-1" role="status">
+            <div className="flex items-center justify-between gap-2 font-mono text-xs text-muted-foreground">
+              <span className="truncate">{u.name}</span>
+              <span>{u.percent}%</span>
+            </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+              <div className="h-full bg-primary transition-all" style={{ width: `${u.percent}%` }} />
+            </div>
           </div>
         ))}
+
+        {form.resources.map((resource, i) => {
+          const kind = resource.url ? getDocumentSource(resource.url).kind : null
+          return (
+            <div key={i} className="flex flex-col gap-1">
+              <div className="grid gap-2 md:grid-cols-[160px_1fr_1.5fr_auto]">
+                <Select value={resource.type} onValueChange={(v) => updateResource(i, "type", v)}>
+                  <SelectTrigger aria-label="Tipo de recurso">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {RESOURCE_TYPES.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Input value={resource.label} onChange={(e) => updateResource(i, "label", e.target.value)} placeholder="Nombre del botón" aria-label="Nombre del recurso" />
+                <Input value={resource.url} onChange={(e) => updateResource(i, "url", e.target.value)} placeholder="https://..." aria-label="URL del recurso" />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="hover:text-destructive"
+                  onClick={() => update("resources", form.resources.filter((_, j) => j !== i))}
+                  aria-label="Quitar recurso"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+              {kind && (
+                <p className="font-mono text-xs text-muted-foreground">
+                  {kind === "link" ? "Se mostrará como botón de enlace." : `Se verá dentro de la página · ${KIND_LABELS[kind].es}`}
+                </p>
+              )}
+            </div>
+          )
+        })}
         <Button
           type="button"
           variant="outline"
