@@ -29,7 +29,7 @@ export function ScrollReveal() {
         return ra.top - rb.top || ra.left - rb.left
       })
       items.forEach((node, index) => {
-        node.style.setProperty("--reveal-delay", `${Math.min(index, 6) * 120}ms`)
+        node.style.setProperty("--reveal-delay", `${Math.min(index, 6) * 70}ms`)
         node.classList.add("is-revealed")
       })
     }
@@ -41,10 +41,8 @@ export function ScrollReveal() {
 
     const readyToReveal = (rect: DOMRect) => {
       const viewport = window.innerHeight
-      if (rect.height <= 0 || rect.bottom <= 8 || rect.top >= viewport) return false
-      const visible = Math.min(rect.bottom, viewport) - Math.max(rect.top, 0)
-      const needed = Math.min(rect.height, Math.max(16, rect.height * 0.55))
-      return visible + 0.5 >= needed && rect.top < viewport * 0.94
+      if (rect.height <= 0 || rect.bottom <= 8) return false
+      return rect.top < viewport * 1.04
     }
 
     const observer = new IntersectionObserver(
@@ -56,7 +54,7 @@ export function ScrollReveal() {
           queue(node)
         }
       },
-      { threshold: [0, 0.2, 0.45, 0.7] },
+      { rootMargin: "0px 0px 6% 0px", threshold: [0, 0.05, 0.2] },
     )
 
     const onAnimationEnd = (event: AnimationEvent) => {

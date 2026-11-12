@@ -268,12 +268,12 @@ html {
 }
 
 [data-reveal].is-revealed {
-  animation: reveal-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms) both;
+  animation: reveal-rise 0.62s cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms) both;
 }
 
 [data-reveal="pop"].is-revealed {
   animation-name: reveal-pop;
-  animation-duration: 1.05s;
+  animation-duration: 0.72s;
 }
 
 @media (prefers-reduced-motion: reduce) {
