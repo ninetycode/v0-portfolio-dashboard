@@ -78,6 +78,7 @@ export const projects = pgTable("projects", {
   embedUrl: text("embed_url"),
   embedWidth: integer("embed_width").notNull().default(1280),
   embedHeight: integer("embed_height").notNull().default(740),
+  badge: text("badge").notNull().default("auto"),
   externalUrl: text("external_url"),
   resources: jsonb("resources").$type<ProjectResourceRow[]>().notNull().default([]),
   sortOrder: integer("sort_order").notNull().default(0),

@@ -10,6 +10,7 @@ import { sanitizeCoverFocus } from "@/lib/cover-focus"
 import {
   DEFAULT_PROJECT_CATEGORIES,
   DEFAULT_PROJECT_PLATFORMS,
+  isProjectBadge,
   isProjectStatus,
   toProjectEmbed,
   type Project,
@@ -45,6 +46,7 @@ function toProject(row: ProjectRow): Project {
     embedUrl: row.embedUrl,
     embedWidth: row.embedWidth,
     embedHeight: row.embedHeight,
+    badge: isProjectBadge(row.badge) ? row.badge : "auto",
     externalUrl: row.externalUrl,
     resources: row.resources,
     sortOrder: row.sortOrder,
@@ -107,6 +109,7 @@ function cleanInput(input: ProjectInput) {
     embedUrl: embed ? url(embed.url) : null,
     embedWidth: Math.max(320, Math.min(2400, Number(embed?.width ?? input.embedWidth) || 1280)),
     embedHeight: Math.max(240, Math.min(1600, Number(embed?.height ?? input.embedHeight) || 740)),
+    badge: isProjectBadge(input.badge) ? input.badge : "auto",
     externalUrl: url(input.externalUrl),
     resources: input.resources
       .map((r) => ({ type: r.type.trim().slice(0, 40) || "Documento", label: r.label.trim().slice(0, 100), url: r.url.trim().slice(0, 1000) }))
