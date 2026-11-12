@@ -111,7 +111,7 @@ function cleanInput(input: ProjectInput) {
     resources: input.resources
       .map((r) => ({ type: r.type.trim().slice(0, 40) || "Documento", label: r.label.trim().slice(0, 100), url: r.url.trim().slice(0, 1000) }))
       .filter((r) => r.label && isHttpUrl(r.url))
-      .slice(0, 12),
+      .slice(0, 30),
   }
 }
 

@@ -10,6 +10,8 @@ import { GamePlayer } from "@/components/games/game-player"
 import { PlatformIcon } from "@/components/projects/platform-icon"
 import { statusIcons } from "@/components/projects-gallery"
 import { useLang } from "@/lib/i18n"
+import { DocumentViewer } from "@/components/projects/document-viewer"
+import { isViewableDocument } from "@/lib/document-files"
 import { statusConfig, type Project } from "@/lib/projects-types"
 import { cn } from "@/lib/utils"
 
@@ -25,6 +27,8 @@ export function ProjectDetail({ project, admin }: { project: Project; admin: boo
   const pr = t.projects
   const screenshots = project.screenshots.length ? project.screenshots : project.coverImage ? [project.coverImage] : []
   const [current, setCurrent] = useState(0)
+  const documents = project.resources.filter((r) => isViewableDocument(r.url))
+  const [activeDoc, setActiveDoc] = useState(0)
   const focusFor = (src: string) => (src === project.coverImage ? project.coverFocus : null)
   const StatusIcon = statusIcons[project.status]
   const statusLabel = lang === "en" ? statusConfig[project.status].labelEn : statusConfig[project.status].label
@@ -152,14 +156,24 @@ export function ProjectDetail({ project, admin }: { project: Project; admin: boo
             <div className="mt-auto border-t border-border/50 pt-6">
               <h2 className="mb-4 font-mono text-sm font-medium uppercase tracking-wider text-muted-foreground">{pr.downloadResources}</h2>
               <div className="flex flex-wrap gap-3">
-                {project.resources.map((resource) => (
-                  <Button key={resource.url + resource.label} variant="outline" size="lg" className="gap-2 border-border/50 hover:border-primary/50 hover:bg-primary/5" asChild>
-                    <a href={resource.url} target="_blank" rel="noopener noreferrer">
-                      <ResourceIcon type={resource.type} />
-                      {resource.label}
-                    </a>
-                  </Button>
-                ))}
+                {project.resources.map((resource) => {
+                  const docIndex = documents.indexOf(resource)
+                  return (
+                    <Button key={resource.url + resource.label} variant="outline" size="lg" className="gap-2 border-border/50 hover:border-primary/50 hover:bg-primary/5" asChild>
+                      {docIndex === -1 ? (
+                        <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                          <ResourceIcon type={resource.type} />
+                          {resource.label}
+                        </a>
+                      ) : (
+                        <a href="#documentos" onClick={() => setActiveDoc(docIndex)}>
+                          <ResourceIcon type={resource.type} />
+                          {resource.label}
+                        </a>
+                      )}
+                    </Button>
+                  )
+                })}
                 {project.externalUrl && !project.resources.some((r) => r.url === project.externalUrl) && (
                   <Button variant="outline" size="lg" className="gap-2 border-border/50 hover:border-primary/50 hover:bg-primary/5" asChild>
                     <a href={project.externalUrl} target="_blank" rel="noopener noreferrer">
@@ -173,6 +187,38 @@ export function ProjectDetail({ project, admin }: { project: Project; admin: boo
           )}
         </div>
       </div>
+
+      {documents.length > 0 && (
+        <section id="documentos" className="mt-16 scroll-mt-24 border-t border-border/50 pt-10">
+          <p className="font-mono text-xs uppercase tracking-widest text-primary">{lang === "en" ? "documents" : "documentos"}</p>
+          <h2 className="mt-2 mb-6 font-serif text-2xl font-bold">{lang === "en" ? "Project files" : "Archivos del proyecto"}</h2>
+          {documents.length > 1 && (
+            <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label={lang === "en" ? "Documents" : "Documentos"}>
+              {documents.map((doc, i) => (
+                <button
+                  key={doc.url}
+                  type="button"
+                  role="tab"
+                  aria-selected={i === activeDoc}
+                  onClick={() => setActiveDoc(i)}
+                  className={cn(
+                    "flex items-center gap-2 rounded-md border px-3 py-1.5 font-mono text-xs transition-colors",
+                    i === activeDoc ? "border-primary/50 bg-primary/10 text-primary" : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground",
+                  )}
+                >
+                  <ResourceIcon type={doc.type} />
+                  {doc.label}
+                </button>
+              ))}
+            </div>
+          )}
+          <DocumentViewer
+            url={documents[Math.min(activeDoc, documents.length - 1)].url}
+            title={documents[Math.min(activeDoc, documents.length - 1)].label}
+            lang={lang === "en" ? "en" : "es"}
+          />
+        </section>
+      )}
 
       {project.embedUrl && (
         <section id="jugar" className="mt-16 scroll-mt-24 border-t border-border/50 pt-10">
