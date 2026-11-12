@@ -327,14 +327,14 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                       <div className="absolute inset-0 bg-gradient-to-t from-card via-card/10 to-transparent" />
                       <div className="absolute inset-x-3 bottom-3 flex items-end justify-between gap-2">
                         <div className="flex flex-wrap gap-1.5">
-                          <span className="rounded-md bg-background">
+                          <span className="flex rounded-md bg-background">
                             <Badge className={`gap-1 border font-mono text-xs ${statusConfig[project.status].color}`}>
                               <StatusIcon className="h-3 w-3" />
                               {getStatusLabel(project.status)}
                             </Badge>
                           </span>
                           {resolveProjectBadge(project) === "playable" && (
-                            <span className="rounded-md bg-background">
+                            <span className="flex rounded-md bg-background">
                               <Badge className="gap-1 border border-primary bg-primary font-mono text-xs text-primary-foreground hover:bg-primary">
                                 <Play className="h-3 w-3" />
                                 {lang === "en" ? "Playable" : "Jugable"}
@@ -342,7 +342,7 @@ export function ProjectsGallery({ projects }: { projects: Project[] }) {
                             </span>
                           )}
                           {resolveProjectBadge(project) === "document" && (
-                            <span className="rounded-md bg-background">
+                            <span className="flex rounded-md bg-background">
                               <Badge className="gap-1 border border-primary bg-primary font-mono text-xs text-primary-foreground hover:bg-primary">
                                 <FileText className="h-3 w-3" />
                                 {lang === "en" ? "Document" : "Documento"}
