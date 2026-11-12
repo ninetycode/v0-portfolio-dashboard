@@ -5,17 +5,45 @@ import { useEffect } from "react"
 const SELECTOR = "[data-reveal]"
 const REVEAL_ANIMATIONS = new Set(["reveal-rise", "reveal-pop"])
 
+const STORAGE_KEY = "animations"
+
+type AnimationsApi = {
+  on: () => string
+  off: () => string
+  toggle: () => string
+  status: () => string
+}
+
+declare global {
+  interface Window {
+    animations?: AnimationsApi
+    animaciones?: AnimationsApi
+  }
+}
+
+function readStoredPreference() {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY) !== "off"
+  } catch {
+    return true
+  }
+}
+
+function storePreference(enabled: boolean) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, enabled ? "on" : "off")
+  } catch {
+    // Storage can be blocked; the toggle still works for the current page.
+  }
+}
+
 function resetPending(node: HTMLElement) {
   node.classList.remove("reveal-arm", "is-revealed")
   delete node.dataset.revealBound
   node.style.removeProperty("--reveal-delay")
 }
 
-export function ScrollReveal() {
-  useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    if (reduce) return
-
+function startScrollReveal() {
     let batch: HTMLElement[] = []
     let frame = 0
 
@@ -124,6 +152,57 @@ export function ScrollReveal() {
       document.querySelectorAll<HTMLElement>(SELECTOR).forEach((node) => {
         if (!node.classList.contains("reveal-done")) resetPending(node)
       })
+    }
+}
+
+export function ScrollReveal() {
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    let stop: (() => void) | null = null
+    let enabled = readStoredPreference() && !reducedMotion
+
+    const apply = (next: boolean) => {
+      if (next === Boolean(stop)) return
+      if (next) {
+        // Re-arm what the visitor has not reached yet so it animates on scroll again.
+        document.querySelectorAll<HTMLElement>(`${SELECTOR}.reveal-done`).forEach((node) => {
+          if (node.getBoundingClientRect().top > window.innerHeight) node.classList.remove("reveal-done")
+        })
+        stop = startScrollReveal()
+      } else {
+        stop?.()
+        stop = null
+      }
+    }
+
+    const describe = () => {
+      if (reducedMotion) return "Animaciones desactivadas por el sistema (prefers-reduced-motion)."
+      return enabled ? "Animaciones de scroll: activadas" : "Animaciones de scroll: desactivadas"
+    }
+
+    const set = (next: boolean) => {
+      if (reducedMotion) return describe()
+      enabled = next
+      storePreference(next)
+      apply(next)
+      return describe()
+    }
+
+    const api: AnimationsApi = {
+      on: () => set(true),
+      off: () => set(false),
+      toggle: () => set(!enabled),
+      status: describe,
+    }
+    window.animations = api
+    window.animaciones = api
+
+    apply(enabled)
+
+    return () => {
+      apply(false)
+      delete window.animations
+      delete window.animaciones
     }
   }, [])
 
