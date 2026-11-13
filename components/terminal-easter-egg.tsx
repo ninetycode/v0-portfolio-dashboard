@@ -509,6 +509,21 @@ function AkaneTerminal() {
 
 export function TerminalEasterEgg() {
   const pathname = usePathname()
-  if (pathname.startsWith("/contacto")) return null
-  return <AkaneTerminal />
+  const [isNotFound, setIsNotFound] = useState(false)
+
+  useEffect(() => {
+    const sync = () => {
+      setIsNotFound(document.documentElement.dataset.notFound === "true")
+    }
+    sync()
+    window.addEventListener("not-found-change", sync)
+    return () => window.removeEventListener("not-found-change", sync)
+  }, [pathname])
+
+  if (pathname.startsWith("/contacto") || isNotFound) return null
+  return (
+    <div data-terminal-easter-egg="">
+      <AkaneTerminal />
+    </div>
+  )
 }

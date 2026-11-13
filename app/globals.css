@@ -307,3 +307,9 @@ html {
   list-style: disc;
   padding-left: 1.25rem;
 }
+
+body:has([data-not-found-page]) [data-terminal-easter-egg],
+body:has([data-not-found-page]) [data-scroll-to-top],
+body:has([data-not-found-page]) [data-admin-edit-shortcut] {
+  display: none !important;
+}

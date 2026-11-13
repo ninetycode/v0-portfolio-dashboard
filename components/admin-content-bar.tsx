@@ -41,6 +41,7 @@ export function AdminEditShortcut() {
 
   return (
     <Link
+      data-admin-edit-shortcut=""
       href="/contenido"
       className="fixed top-20 left-4 z-40 inline-flex items-center gap-2 rounded-lg border border-primary/30 bg-background/90 px-3 py-2 font-mono text-xs text-primary shadow-sm backdrop-blur-sm hover:bg-primary/10"
     >

@@ -29,6 +29,7 @@ function ScrollToTopButton() {
 
   return (
     <button
+      data-scroll-to-top=""
       onClick={scrollToTop}
       className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:scale-110 transition-transform sm:bottom-20"
       aria-label="Volver al inicio"
