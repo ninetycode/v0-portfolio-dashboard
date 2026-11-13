@@ -414,6 +414,7 @@ export const translations = {
         "Opinión": "Opinión",
         "Devlogs": "Devlogs",
         "Noticias": "Noticias",
+        "Bitácora": "Bitácora",
       },
     },
     // Footer
@@ -828,6 +829,7 @@ export const translations = {
         "Opinión": "Opinion",
         "Devlogs": "Devlogs",
         "Noticias": "News",
+        "Bitácora": "Logbook",
       },
     },
     footer: {

@@ -27,6 +27,7 @@ export const categories = [
   "Opinión",
   "Devlogs",
   "Noticias",
+  "Bitácora",
 ] as const
 
 export const popularTags = [
