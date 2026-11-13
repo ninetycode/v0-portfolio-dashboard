@@ -30,9 +30,8 @@ function slugify(text: string): string {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
-    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
     .slice(0, 80)
 }
 
@@ -54,9 +53,12 @@ export async function getPostById(id: string): Promise<BlogPostRow | null> {
 export async function createPost(input: BlogPostInput): Promise<{ success: boolean; slug?: string; error?: string }> {
   try {
     await requireAdmin()
-    const slug = input.slug.trim() || slugify(input.title)
-    if (!slug || !input.title.trim()) {
+    const slug = slugify(input.slug) || slugify(input.title)
+    if (!input.title.trim()) {
       return { success: false, error: "El título es obligatorio" }
+    }
+    if (!slug) {
+      return { success: false, error: "El slug (URL) es obligatorio" }
     }
     const existing = await getPostBySlug(slug)
     if (existing) {
@@ -88,9 +90,12 @@ export async function updatePost(
 ): Promise<{ success: boolean; slug?: string; error?: string }> {
   try {
     await requireAdmin()
-    const slug = input.slug.trim() || slugify(input.title)
-    if (!slug || !input.title.trim()) {
+    const slug = slugify(input.slug) || slugify(input.title)
+    if (!input.title.trim()) {
       return { success: false, error: "El título es obligatorio" }
+    }
+    if (!slug) {
+      return { success: false, error: "El slug (URL) es obligatorio" }
     }
     // Check slug collision with another post
     const existing = await getPostBySlug(slug)

@@ -41,9 +41,19 @@ function slugify(text: string): string {
     .toLowerCase()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 80)
+}
+
+function sanitizeSlugDraft(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9\s-]/g, "")
-    .trim()
     .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
     .slice(0, 80)
 }
 
@@ -108,6 +118,12 @@ export function PostEditor({ post }: PostEditorProps) {
       return
     }
 
+    const normalizedSlug = slugify(effectiveSlug)
+    if (slugTouched && !normalizedSlug) {
+      setError("El slug (URL) es obligatorio")
+      return
+    }
+
     const content = blocksToMarkdown(blocks)
     if (!content.trim()) {
       setError("El contenido no puede estar vacío")
@@ -117,7 +133,7 @@ export function PostEditor({ post }: PostEditorProps) {
     setSaving(true)
 
     const input: BlogPostInput = {
-      slug: effectiveSlug,
+      slug: normalizedSlug || slugify(title),
       title,
       excerpt,
       content,
@@ -219,7 +235,7 @@ export function PostEditor({ post }: PostEditorProps) {
           onChange={(e) => setTitle(e.target.value.replace(/\n/g, ""))}
           placeholder="Título de la entrada"
           rows={1}
-          className="w-full resize-none bg-transparent font-serif text-3xl md:text-4xl font-bold outline-none placeholder:text-muted-foreground/40 mb-2"
+          className="w-full resize-none bg-transparent font-serif text-3xl md:text-4xl font-bold outline-none placeholder:text-muted-foreground/40 mb-6"
           onInput={(e) => {
             const el = e.currentTarget
             el.style.height = "auto"
@@ -227,23 +243,46 @@ export function PostEditor({ post }: PostEditorProps) {
           }}
         />
 
-        {/* Slug */}
-        <div className="flex items-center gap-2 mb-6 text-sm font-mono text-muted-foreground">
-          <span className="shrink-0">/blog/</span>
-          <input
-            type="text"
-            value={effectiveSlug}
-            onChange={(e) => {
-              setSlugTouched(true)
-              setSlug(slugify(e.target.value))
-            }}
-            placeholder="slug-de-la-entrada"
-            className="flex-1 bg-transparent outline-none border-b border-transparent focus:border-border transition-colors"
-          />
-        </div>
-
         {/* Metadata grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 rounded-lg border border-border bg-card p-4">
+          <div className="space-y-2 md:col-span-2">
+            <div className="flex items-center justify-between gap-2">
+              <Label htmlFor="slug-input" className="font-mono text-xs text-muted-foreground">
+                Slug (URL) <span className="text-destructive">*</span>
+              </Label>
+              {slugTouched && title.trim() && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSlugTouched(false)
+                    setSlug(slugify(title))
+                  }}
+                  className="font-mono text-xs text-primary hover:underline"
+                >
+                  Generar desde título
+                </button>
+              )}
+            </div>
+            <Input
+              id="slug-input"
+              value={effectiveSlug}
+              onChange={(e) => {
+                setSlugTouched(true)
+                setSlug(sanitizeSlugDraft(e.target.value))
+              }}
+              onBlur={() => {
+                if (slugTouched) {
+                  setSlug(slugify(slug))
+                }
+              }}
+              placeholder="slug-de-la-entrada"
+              className="bg-background font-mono text-sm"
+            />
+            <p className="font-mono text-xs text-muted-foreground">
+              {`/blog/${slugify(effectiveSlug) || "slug-de-la-entrada"}`}
+            </p>
+          </div>
+
           <div className="space-y-2">
             <Label className="font-mono text-xs text-muted-foreground">Categoría</Label>
             <Select value={category} onValueChange={setCategory}>

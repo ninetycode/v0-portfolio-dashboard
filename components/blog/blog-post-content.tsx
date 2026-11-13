@@ -12,12 +12,14 @@ import {
   Linkedin, 
   Link2, 
   Bookmark,
-  Check
+  Check,
+  Pencil
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import type { BlogPost } from "@/lib/blog-data"
 import { useLang } from "@/lib/i18n"
+import { useAdmin } from "@/lib/admin-context"
 
 interface BlogPostContentProps {
   post: BlogPost
@@ -102,6 +104,7 @@ function parseMarkdown(content: string): string {
 export function BlogPostContent({ post, relatedPosts, baseUrl }: BlogPostContentProps) {
   const [copied, setCopied] = useState(false)
   const { t } = useLang()
+  const { isAdmin } = useAdmin()
   const tb = t.blog
 
   const shareUrl = `${baseUrl}/blog/${post.slug}`
@@ -119,7 +122,7 @@ export function BlogPostContent({ post, relatedPosts, baseUrl }: BlogPostContent
       <section className={`relative pt-24 pb-12 bg-gradient-to-br ${post.color}`}>
         <div className="mx-auto max-w-4xl px-4">
           {/* Back link and Category */}
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex flex-wrap items-center gap-4 mb-8">
             <Link
               href="/blog"
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
@@ -132,6 +135,15 @@ export function BlogPostContent({ post, relatedPosts, baseUrl }: BlogPostContent
             <Badge className="font-mono bg-primary/10 text-primary border-primary/20">
               {post.category}
             </Badge>
+
+            {isAdmin && (
+              <Button asChild variant="outline" size="sm" className="ml-auto gap-2 font-mono text-xs">
+                <Link href={`/blog/editor/${post.id}`}>
+                  <Pencil className="h-3.5 w-3.5" />
+                  editar_entrada
+                </Link>
+              </Button>
+            )}
           </div>
 
           {/* Title */}
