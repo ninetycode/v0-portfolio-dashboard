@@ -1,4 +1,4 @@
-import { siteConfig } from "@/lib/site-config"
+import { resolveSiteTokens, siteConfig, type SiteLang } from "@/lib/site-config"
 import { siteBaseUrl } from "@/lib/site-url"
 
 export const CONTACT_LINKS_KEY = "contact_links"
@@ -252,11 +252,22 @@ export function findActiveContactLink(data: ContactLinksContent, slug: string): 
   return data.links.find((link) => link.active && link.slug === slug)
 }
 
+/** Texto público de la cabecera: deja el token guardado intacto y resuelve el título al mostrar. */
+export function resolveContactHeader(header: ContactHeader, lang: SiteLang = "es"): ContactHeader {
+  return {
+    avatarUrl: header.avatarUrl,
+    displayName: resolveSiteTokens(header.displayName, lang),
+    roleBadge: resolveSiteTokens(header.roleBadge, lang),
+    bio: resolveSiteTokens(header.bio, lang),
+  }
+}
+
 export function contactProfileSchema(data: ContactLinksContent, baseUrl = siteBaseUrl()) {
   const visible = visibleContactLinks(data)
-  const avatar = data.header.avatarUrl.startsWith("/")
-    ? `${baseUrl}${data.header.avatarUrl}`
-    : data.header.avatarUrl
+  const header = resolveContactHeader(data.header)
+  const avatar = header.avatarUrl.startsWith("/")
+    ? `${baseUrl}${header.avatarUrl}`
+    : header.avatarUrl
   const sameAs = visible.flatMap((link) => (/^https?:\/\//i.test(link.url) ? [link.url] : []))
   const mail = visible.find((link) => link.url.toLowerCase().startsWith("mailto:"))
   const email = mail ? mail.url.replace(/^mailto:/i, "").split("?")[0] : undefined
@@ -267,9 +278,9 @@ export function contactProfileSchema(data: ContactLinksContent, baseUrl = siteBa
     url: `${baseUrl}/contacto`,
     mainEntity: {
       "@type": "Person",
-      name: data.header.displayName,
-      jobTitle: data.header.roleBadge,
-      description: data.header.bio,
+      name: header.displayName,
+      jobTitle: header.roleBadge,
+      description: header.bio,
       url: baseUrl,
       ...(avatar ? { image: avatar } : {}),
       ...(email ? { email } : {}),

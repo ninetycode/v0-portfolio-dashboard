@@ -3,7 +3,7 @@ import { Suspense } from "react"
 import { ContactPage } from "@/components/contactos/contact-page"
 import ContactosLoading from "./loading"
 import { isAdmin } from "@/lib/admin-auth"
-import { contactProfileSchema, visibleContactLinks } from "@/lib/site-content/contact-links"
+import { contactProfileSchema, resolveContactHeader, visibleContactLinks } from "@/lib/site-content/contact-links"
 import { readContactLinks } from "@/lib/site-content/contact-links-store"
 import { siteBaseUrl } from "@/lib/site-url"
 
@@ -11,10 +11,11 @@ export const dynamic = "force-dynamic"
 
 export async function generateMetadata(): Promise<Metadata> {
   const data = await readContactLinks()
+  const header = resolveContactHeader(data.header)
   const base = siteBaseUrl()
   const description =
-    data.header.bio || `Links de ${data.header.displayName}: portfolio, juegos, proyectos, blog y redes.`
-  const title = `Contacto | ${data.header.displayName}`
+    header.bio || `Links de ${header.displayName}: portfolio, juegos, proyectos, blog y redes.`
+  const title = `Contacto | ${header.displayName}`
 
   return {
     title,

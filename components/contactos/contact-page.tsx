@@ -8,8 +8,14 @@ import { useTheme } from "next-themes"
 import { toast } from "sonner"
 import { Toaster } from "@/components/ui/sonner"
 import { LinkIcon } from "@/components/contactos/link-icon"
+import { useLang } from "@/lib/i18n"
 import { CONTACT_SHARE_URL } from "@/lib/site-url"
-import { visibleContactLinks, type ContactLink, type ContactLinksContent } from "@/lib/site-content/contact-links"
+import {
+  resolveContactHeader,
+  visibleContactLinks,
+  type ContactLink,
+  type ContactLinksContent,
+} from "@/lib/site-content/contact-links"
 import { cn } from "@/lib/utils"
 
 const ContactEditorDialog = dynamic(() =>
@@ -108,15 +114,17 @@ function SiteIconLink({ link }: { link: ContactLink }) {
 }
 
 function ProfileHeader({ header }: { header: ContactLinksContent["header"] }) {
+  const { lang } = useLang()
+  const shown = resolveContactHeader(header, lang)
   const [broken, setBroken] = useState(false)
-  const showImage = Boolean(header.avatarUrl) && !broken
+  const showImage = Boolean(shown.avatarUrl) && !broken
 
   return (
     <header className="flex flex-col items-center text-center">
       {showImage ? (
         <img
-          src={header.avatarUrl}
-          alt={header.displayName}
+          src={shown.avatarUrl}
+          alt={shown.displayName}
           width={96}
           height={96}
           className="h-24 w-24 rounded-full border border-primary/40 object-cover box-glow-subtle"
@@ -124,14 +132,14 @@ function ProfileHeader({ header }: { header: ContactLinksContent["header"] }) {
         />
       ) : (
         <div className="flex h-24 w-24 items-center justify-center rounded-full border border-primary/40 font-serif text-2xl box-glow-subtle">
-          {header.displayName.slice(0, 1) || "M"}
+          {shown.displayName.slice(0, 1) || "M"}
         </div>
       )}
-      <h1 className="mt-4 font-serif text-2xl font-bold">{header.displayName}</h1>
-      {header.roleBadge ? (
-        <p className="mt-2 font-mono text-xs uppercase tracking-widest text-primary text-balance">{header.roleBadge}</p>
+      <h1 className="mt-4 font-serif text-2xl font-bold">{shown.displayName}</h1>
+      {shown.roleBadge ? (
+        <p className="mt-2 font-mono text-xs uppercase tracking-widest text-primary text-balance">{shown.roleBadge}</p>
       ) : null}
-      {header.bio ? <p className="mt-3 text-sm text-muted-foreground text-balance">{header.bio}</p> : null}
+      {shown.bio ? <p className="mt-3 text-sm text-muted-foreground text-balance">{shown.bio}</p> : null}
     </header>
   )
 }

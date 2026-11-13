@@ -1,4 +1,5 @@
 import { siteConfig } from "@/lib/site-config"
+import { resolveContactHeader } from "@/lib/site-content/contact-links"
 import { readFile } from "node:fs/promises"
 import { join, sep } from "node:path"
 import { createElement } from "react"
@@ -50,10 +51,11 @@ async function avatarDataUrl(url: string): Promise<string | null> {
 
 export async function renderContactOg() {
   const data = await readContactLinks()
-  const avatar = await avatarDataUrl(data.header.avatarUrl)
-  const name = data.header.displayName.slice(0, 42) || "Mathías Andino"
-  const role = (data.header.roleBadge || siteConfig.role.es).slice(0, 70)
-  const bioSource = data.header.bio || "Portfolio, juegos, proyectos y redes."
+  const header = resolveContactHeader(data.header)
+  const avatar = await avatarDataUrl(header.avatarUrl)
+  const name = header.displayName.slice(0, 42) || "Mathías Andino"
+  const role = (header.roleBadge || siteConfig.role.es).slice(0, 70)
+  const bioSource = header.bio || "Portfolio, juegos, proyectos y redes."
   const bio = bioSource.length > 160 ? `${bioSource.slice(0, 157)}…` : bioSource
 
   const portrait = avatar

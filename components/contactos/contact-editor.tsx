@@ -227,6 +227,9 @@ export function ContactLinksForm({
               value={draft.header.roleBadge}
               onChange={(event) => patchHeader({ roleBadge: event.target.value })}
             />
+            <p className="text-xs text-muted-foreground">
+              {"{role}"} sigue el título del sitio: Game Designer Junior en español y Junior Game Designer en inglés.
+            </p>
           </Field>
           <Field label="Bio" id="contact-bio">
             <Textarea

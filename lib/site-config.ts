@@ -38,14 +38,19 @@ export function getFooterTagline(lang: SiteLang): string {
   return `${siteConfig.year} | ${getRole(lang)} | ${siteConfig.location}`
 }
 
+const SITE_TOKEN = /\{(role|discipline|rank)\}/gi
+
 /**
  * Reemplaza {role}, {discipline} y {rank} dentro de textos editables (por ejemplo los guardados
- * desde el editor de contenido), para que sigan el título definido en siteConfig.
+ * desde el editor de contenido o la insignia de contacto), para que sigan el título definido en
+ * siteConfig. Acepta mayúsculas ({ROLE}) porque la insignia se muestra en versalitas.
  */
 export function resolveSiteTokens(text: string, lang: SiteLang): string {
   if (!text.includes("{")) return text
-  return text
-    .replaceAll("{role}", getRole(lang))
-    .replaceAll("{discipline}", getDiscipline(lang))
-    .replaceAll("{rank}", getRank(lang))
+  return text.replace(SITE_TOKEN, (_match, token: string) => {
+    const key = token.toLowerCase()
+    if (key === "role") return getRole(lang)
+    if (key === "discipline") return getDiscipline(lang)
+    return getRank(lang)
+  })
 }
