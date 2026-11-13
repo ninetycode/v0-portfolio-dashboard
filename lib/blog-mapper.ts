@@ -30,5 +30,6 @@ export function rowToPost(row: BlogPostRow): BlogPost {
     author: DEFAULT_AUTHOR,
     featured: row.featured,
     color: row.color,
+    views: row.views ?? 0,
   }
 }

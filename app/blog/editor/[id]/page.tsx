@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation"
 import { isAdmin } from "@/lib/admin-auth"
-import { getPostById } from "@/app/actions/blog"
+import { getBlogTagOptions, getPostById } from "@/app/actions/blog"
 import { PostEditor } from "@/components/blog/editor/post-editor"
 
 export const dynamic = "force-dynamic"
@@ -20,11 +20,11 @@ export default async function EditPostPage({ params }: Props) {
   }
 
   const { id } = await params
-  const post = await getPostById(id)
+  const [post, tagOptions] = await Promise.all([getPostById(id), getBlogTagOptions()])
 
   if (!post) {
     notFound()
   }
 
-  return <PostEditor post={post} />
+  return <PostEditor post={post} tagOptions={tagOptions} />
 }

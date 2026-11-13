@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { 
@@ -103,9 +103,21 @@ function parseMarkdown(content: string): string {
 
 export function BlogPostContent({ post, relatedPosts, baseUrl }: BlogPostContentProps) {
   const [copied, setCopied] = useState(false)
+  const viewedSlugRef = useRef<string | null>(null)
   const { t } = useLang()
   const { isAdmin } = useAdmin()
   const tb = t.blog
+
+  useEffect(() => {
+    if (viewedSlugRef.current === post.slug) return
+    viewedSlugRef.current = post.slug
+    fetch("/api/blog/view", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug: post.slug }),
+      keepalive: true,
+    }).catch(() => {})
+  }, [post.slug])
 
   const shareUrl = `${baseUrl}/blog/${post.slug}`
   const shareText = `${post.title} por ${post.author.name}`

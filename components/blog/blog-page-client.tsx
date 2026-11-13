@@ -11,7 +11,7 @@ import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { useAdmin } from "@/lib/admin-context"
 import { deletePost } from "@/app/actions/blog"
-import type { BlogPost } from "@/lib/blog-data"
+import { getPopularTagsFromPosts, type BlogPost } from "@/lib/blog-data"
 import { Plus, Shield, Trash2, Loader2 } from "lucide-react"
 import {
   AlertDialog,
@@ -69,6 +69,8 @@ export function BlogPageClient({ posts }: BlogPageClientProps) {
     }
     return counts
   }, [posts])
+
+  const popularTags = useMemo(() => getPopularTagsFromPosts(posts), [posts])
 
   const handleTagToggle = (tag: string) => {
     setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]))
@@ -136,6 +138,7 @@ export function BlogPageClient({ posts }: BlogPageClientProps) {
               selectedTags={selectedTags}
               onTagToggle={handleTagToggle}
               categoryCounts={categoryCounts}
+              popularTags={popularTags}
             />
           </div>
         </div>

@@ -19,6 +19,7 @@ export interface BlogPost {
   author: Author
   featured: boolean
   color: string
+  views?: number
 }
 
 export const categories = [
@@ -30,17 +31,62 @@ export const categories = [
   "Bitácora",
 ] as const
 
-export const popularTags = [
+export const DEFAULT_BLOG_TAGS = [
   "Unity",
   "Godot",
+  "Unreal",
   "Game Design",
   "Programación",
   "Level Design",
   "Narrativa",
   "Pixel Art",
+  "Arte 2D",
+  "Arte 3D",
+  "Audio",
+  "Shaders",
+  "UI/UX",
+  "IA",
   "Roguelike",
   "Indie",
+  "Game Jam",
+  "Producción",
+  "Documentación",
+  "Devlog",
 ]
+
+export const MAX_POPULAR_TAGS = 10
+
+export function getPopularTagsFromPosts(posts: BlogPost[], limit = MAX_POPULAR_TAGS): string[] {
+  const tagStats = new Map<string, { label: string; views: number; postCount: number }>()
+
+  for (const post of posts) {
+    const postViews = post.views ?? 0
+    const seenInPost = new Set<string>()
+    for (const rawTag of post.tags) {
+      const label = rawTag.trim()
+      const key = label.toLowerCase()
+      if (!key || seenInPost.has(key)) continue
+      seenInPost.add(key)
+
+      const current = tagStats.get(key)
+      if (current) {
+        current.views += postViews
+        current.postCount += 1
+      } else {
+        tagStats.set(key, { label, views: postViews, postCount: 1 })
+      }
+    }
+  }
+
+  return [...tagStats.values()]
+    .sort((a, b) => {
+      if (b.views !== a.views) return b.views - a.views
+      if (b.postCount !== a.postCount) return b.postCount - a.postCount
+      return a.label.localeCompare(b.label, "es")
+    })
+    .slice(0, limit)
+    .map((entry) => entry.label)
+}
 
 export const blogPosts: BlogPost[] = [
   {

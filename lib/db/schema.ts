@@ -12,9 +12,15 @@ export const blogPosts = pgTable("blog_posts", {
   coverImage: text("cover_image"),
   featured: boolean("featured").notNull().default(false),
   color: text("color").notNull().default("from-primary/20 to-accent/20"),
+  views: integer("views").notNull().default(0),
   publishedAt: date("published_at").notNull().defaultNow(),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+})
+
+export const blogTags = pgTable("blog_tags", {
+  name: text("name").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 })
 
 type CoverFocusRow = { x: number; y: number; zoom: number }

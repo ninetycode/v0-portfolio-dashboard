@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation"
 import { isAdmin } from "@/lib/admin-auth"
+import { getBlogTagOptions } from "@/app/actions/blog"
 import { PostEditor } from "@/components/blog/editor/post-editor"
 
 export const dynamic = "force-dynamic"
@@ -14,5 +15,7 @@ export default async function NewPostPage() {
     redirect("/blog")
   }
 
-  return <PostEditor />
+  const tagOptions = await getBlogTagOptions()
+
+  return <PostEditor tagOptions={tagOptions} />
 }

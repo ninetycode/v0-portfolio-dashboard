@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Search, Rss, Mail, Tag, Folder } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { categories, popularTags, getCategoryCounts } from "@/lib/blog-data"
+import { categories, getCategoryCounts } from "@/lib/blog-data"
 import { useLang } from "@/lib/i18n"
 
 interface BlogSidebarProps {
@@ -15,6 +15,7 @@ interface BlogSidebarProps {
   selectedTags: string[]
   onTagToggle: (tag: string) => void
   categoryCounts?: Record<string, number>
+  popularTags?: string[]
 }
 
 export function BlogSidebar({
@@ -25,6 +26,7 @@ export function BlogSidebar({
   selectedTags,
   onTagToggle,
   categoryCounts: categoryCountsProp,
+  popularTags = [],
 }: BlogSidebarProps) {
   const [email, setEmail] = useState("")
   const [subscribed, setSubscribed] = useState(false)
@@ -104,21 +106,25 @@ export function BlogSidebar({
           <Tag className="h-4 w-4" />
           {tb.popularTags}
         </h3>
-        <div className="flex flex-wrap gap-2">
-          {popularTags.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => onTagToggle(tag)}
-              className={`px-3 py-1.5 text-xs font-mono rounded-md transition-colors ${
-                selectedTags.includes(tag)
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary"
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
+        {popularTags.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {popularTags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => onTagToggle(tag)}
+                className={`px-3 py-1.5 text-xs font-mono rounded-md transition-colors ${
+                  selectedTags.includes(tag)
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary"
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <p className="text-xs font-mono text-muted-foreground">{tb.noTags}</p>
+        )}
       </div>
 
       {/* Newsletter */}

@@ -27,13 +27,16 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { BlockEditor, blocksToMarkdown, markdownToBlocks, newBlock, type Block } from "./block-editor"
-import { createPost, updatePost, type BlogPostInput } from "@/app/actions/blog"
-import { categories } from "@/lib/blog-data"
+import { createPost, registerBlogTag, updatePost, type BlogPostInput } from "@/app/actions/blog"
+import { categories, DEFAULT_BLOG_TAGS } from "@/lib/blog-data"
+import { uniqueTags } from "@/lib/games-options"
+import { TagPicker } from "@/components/games/tag-picker"
 import type { BlogPostRow } from "@/lib/db/schema"
 import { uploadImageFile } from "@/lib/upload-image"
 
 interface PostEditorProps {
   post?: BlogPostRow | null
+  tagOptions?: string[]
 }
 
 function slugify(text: string): string {
@@ -64,7 +67,7 @@ function estimateReadTime(blocks: Block[]): string {
   return `${minutes} min`
 }
 
-export function PostEditor({ post }: PostEditorProps) {
+export function PostEditor({ post, tagOptions }: PostEditorProps) {
   const router = useRouter()
   const isEditing = Boolean(post)
 
@@ -74,7 +77,9 @@ export function PostEditor({ post }: PostEditorProps) {
   const [excerpt, setExcerpt] = useState(post?.excerpt ?? "")
   const [category, setCategory] = useState(post?.category ?? "Devlogs")
   const [tags, setTags] = useState<string[]>(post?.tags ?? [])
-  const [tagInput, setTagInput] = useState("")
+  const [availableTagOptions, setAvailableTagOptions] = useState<string[]>(() =>
+    uniqueTags([...(tagOptions ?? DEFAULT_BLOG_TAGS), ...(post?.tags ?? [])]),
+  )
   const [publishedAt, setPublishedAt] = useState(post?.publishedAt ?? new Date().toISOString().slice(0, 10))
   const [featured, setFeatured] = useState(post?.featured ?? false)
   const [coverImage, setCoverImage] = useState<string | null>(post?.coverImage ?? null)
@@ -90,12 +95,16 @@ export function PostEditor({ post }: PostEditorProps) {
     [slug, slugTouched, title],
   )
 
-  const addTag = () => {
-    const t = tagInput.trim()
-    if (t && !tags.includes(t)) {
-      setTags([...tags, t])
+  const handleTagsChange = (nextTags: string[]) => {
+    setTags(nextTags)
+    const knownKeys = new Set(availableTagOptions.map((t) => t.toLowerCase()))
+    const addedCustomTags = nextTags.filter((t) => !knownKeys.has(t.toLowerCase()))
+    if (addedCustomTags.length > 0) {
+      setAvailableTagOptions((prev) => uniqueTags([...prev, ...addedCustomTags]))
+      for (const tag of addedCustomTags) {
+        void registerBlogTag(tag)
+      }
     }
-    setTagInput("")
   }
 
   const handleCoverUpload = async (file: File) => {
@@ -326,39 +335,16 @@ export function PostEditor({ post }: PostEditorProps) {
             />
           </div>
 
-          <div className="space-y-2 md:col-span-2">
-            <Label htmlFor="tag-input" className="font-mono text-xs text-muted-foreground">
-              Etiquetas
-            </Label>
-            <div className="flex flex-wrap items-center gap-2">
-              {tags.map((tag) => (
-                <Badge key={tag} variant="secondary" className="font-mono text-xs gap-1 pr-1">
-                  {tag}
-                  <button
-                    type="button"
-                    onClick={() => setTags(tags.filter((t) => t !== tag))}
-                    className="rounded-full p-0.5 hover:bg-muted"
-                    aria-label={`Quitar etiqueta ${tag}`}
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                </Badge>
-              ))}
-              <Input
-                id="tag-input"
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if ((e.key === "Enter" || e.key === ",") && !e.nativeEvent.isComposing && e.keyCode !== 229) {
-                    e.preventDefault()
-                    addTag()
-                  }
-                }}
-                onBlur={addTag}
-                placeholder="Escribe y presiona Enter..."
-                className="bg-background w-56 h-8 text-sm"
-              />
-            </div>
+          <div className="md:col-span-2">
+            <TagPicker
+              label="Etiquetas"
+              description="Selecciona etiquetas predeterminadas o escribe para crear nuevas (se guardarán para futuros artículos)."
+              value={tags}
+              options={availableTagOptions}
+              onChange={handleTagsChange}
+              placeholder="Buscar o crear etiqueta..."
+              max={10}
+            />
           </div>
 
           <div className="flex items-center gap-3 md:col-span-2">
