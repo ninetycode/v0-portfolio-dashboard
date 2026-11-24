@@ -103,6 +103,9 @@ const about: AboutContent = {
       description: b("Participación en jams internacionales", "Participation in international jams"),
     },
   ],
+  cvLabel: b("Descargar CV", "Download CV"),
+  cvUrl: "",
+  cvFileName: "",
 }
 
 const experience: ExperienceContent = {

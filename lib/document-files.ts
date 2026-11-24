@@ -13,6 +13,8 @@ export type DocKind =
 
 export const MAX_DOCUMENT_BYTES = 100 * 1024 * 1024
 export const DOCUMENT_FOLDER = "projects/docs/"
+export const CV_FOLDER = "cv/"
+export const CV_ACCEPT = ".pdf,.doc,.docx"
 
 type ExtensionInfo = { kind: DocKind; mime: string }
 

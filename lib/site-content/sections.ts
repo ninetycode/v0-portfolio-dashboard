@@ -19,7 +19,7 @@ export const SECTIONS: {
     slug: "sobre",
     label: "Sobre mí",
     viewHref: "/#about",
-    description: "Título, párrafos y tarjetas de la sección Sobre mí.",
+    description: "Título, párrafos, tarjetas y CV de la sección Sobre mí.",
   },
   {
     key: "experience",

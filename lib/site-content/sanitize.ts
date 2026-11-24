@@ -146,7 +146,23 @@ function sanitizeHome(data: Record<string, unknown>, base: HomeContent): HomeCon
   }
 }
 
-function sanitizeAbout(data: Record<string, unknown>, base: AboutContent): AboutContent {
+function cvUrlOf(value: unknown, fallback: string, mode: Mode, errors: string[]): string {
+  if (typeof value !== "string") return fallback
+  const raw = value.trim().slice(0, 1000)
+  if (!raw) return ""
+  if (/^https?:\/\/\S+$/i.test(raw) || /^\/\S+$/.test(raw)) return raw
+  if (mode === "write") {
+    errors.push("El enlace del CV tiene que empezar por https:// o /.")
+  }
+  return fallback
+}
+
+function plainName(value: unknown, fallback: string, max: number): string {
+  if (typeof value !== "string") return fallback
+  return value.replace(/[\u0000-\u001f<>]/g, "").trim().slice(0, max)
+}
+
+function sanitizeAbout(data: Record<string, unknown>, base: AboutContent, mode: Mode, errors: string[]): AboutContent {
   const stats = Array.isArray(data.stats) ? data.stats.slice(0, 8) : base.stats
   return {
     label: bi(data.label, base.label, SHORT),
@@ -168,6 +184,9 @@ function sanitizeAbout(data: Record<string, unknown>, base: AboutContent): About
       }),
       "stat",
     ),
+    cvLabel: bi(data.cvLabel, base.cvLabel, SHORT),
+    cvUrl: cvUrlOf(data.cvUrl, base.cvUrl, mode, errors),
+    cvFileName: plainName(data.cvFileName, base.cvFileName, 200),
   }
 }
 
@@ -302,7 +321,7 @@ export function sanitizeSection<K extends SectionKey>(key: K, data: unknown, mod
   const base = defaultSiteContent[key]
   let value: SiteContent[K]
   if (key === "home") value = sanitizeHome(data, base as HomeContent) as SiteContent[K]
-  else if (key === "about") value = sanitizeAbout(data, base as AboutContent) as SiteContent[K]
+  else if (key === "about") value = sanitizeAbout(data, base as AboutContent, mode, errors) as SiteContent[K]
   else if (key === "experience") value = sanitizeExperience(data, base as ExperienceContent) as SiteContent[K]
   else if (key === "tools") value = sanitizeTools(data, base as ToolsContent, mode, errors) as SiteContent[K]
   else value = sanitizeMissions(data, base as MissionsContent, mode, errors) as SiteContent[K]

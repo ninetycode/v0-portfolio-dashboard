@@ -24,6 +24,7 @@ import {
   SelectField,
   TextField,
 } from "./editor-fields"
+import { CvField } from "./cv-field"
 
 type FormProps<T> = {
   value: T
@@ -199,6 +200,10 @@ export function AboutForm({ value, lang, onChange }: FormProps<AboutContent>) {
             }
           />
         ) : null}
+      </Group>
+      <Group title="Curriculum Vitae (CV)" hint="Adjunta tu CV actualizado para que se pueda descargar desde la sección Sobre mí.">
+        <BiField label="Texto del botón" value={value.cvLabel} lang={lang} onChange={(cvLabel) => set({ cvLabel })} />
+        <CvField url={value.cvUrl} fileName={value.cvFileName} onChange={(patch) => set(patch)} />
       </Group>
     </div>
   )

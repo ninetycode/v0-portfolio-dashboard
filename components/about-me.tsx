@@ -1,9 +1,11 @@
 "use client"
 
-import { Gamepad2, Code, Target, Trophy } from "lucide-react"
+import { Download, Gamepad2, Code, Target, Trophy } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { useSiteLang } from "@/lib/site-content/context"
 import { SectionEditLink } from "@/components/section-edit-link"
 import { RichText } from "@/components/rich-text"
+import { getDocumentSource } from "@/lib/document-files"
 import { plainText } from "@/lib/site-content/rich-text"
 import type { AboutIcon } from "@/lib/site-content/types"
 
@@ -15,7 +17,7 @@ const statIcons: Record<AboutIcon, typeof Gamepad2> = {
 }
 
 export function AboutMe({ gameCount }: { gameCount: number }) {
-  const { tx, content } = useSiteLang()
+  const { lang, tx, content } = useSiteLang()
   const about = content.about
 
   const stats = about.stats.map((stat) => ({
@@ -29,6 +31,10 @@ export function AboutMe({ gameCount }: { gameCount: number }) {
     ),
     description: tx(stat.description),
   }))
+
+  const cvLabel = tx(about.cvLabel) || (lang === "en" ? "Download CV" : "Descargar CV")
+  const cvUrl = about.cvUrl.trim()
+  const cvDownloadUrl = cvUrl ? getDocumentSource(cvUrl).downloadUrl : ""
 
   return (
     <section id="about" className="scroll-mt-24 bg-background py-20">
@@ -61,19 +67,52 @@ export function AboutMe({ gameCount }: { gameCount: number }) {
             })}
           </div>
 
-          {/* Stats Grid — spans right col, aligned with body text */}
-          <div className="grid min-w-0 grid-cols-2 gap-3 sm:gap-4 lg:-mt-4">
-            {stats.map((stat, index) => (
-              <div
-                key={index}
-                data-reveal="pop"
-                className="min-w-0 rounded-xl border border-border/50 bg-card p-4 transition-colors group hover:border-primary/30 sm:p-6"
-              >
-                <stat.icon className="mb-3 h-7 w-7 text-primary transition-transform duration-200 group-hover:scale-125 sm:mb-4 sm:h-8 sm:w-8" />
-                <h3 className="mb-1 break-words text-base font-bold sm:text-lg">{stat.title}</h3>
-                <p className="text-sm text-muted-foreground"><RichText value={stat.description} /></p>
-              </div>
-            ))}
+          {/* Stats Grid + CV Button — spans right col, aligned with body text */}
+          <div className="flex flex-col gap-4 sm:gap-5 lg:-mt-4">
+            <div className="grid min-w-0 grid-cols-2 gap-3 sm:gap-4">
+              {stats.map((stat, index) => (
+                <div
+                  key={index}
+                  data-reveal="pop"
+                  className="min-w-0 rounded-xl border border-border/50 bg-card p-4 transition-colors group hover:border-primary/30 sm:p-6"
+                >
+                  <stat.icon className="mb-3 h-7 w-7 text-primary transition-transform duration-200 group-hover:scale-125 sm:mb-4 sm:h-8 sm:w-8" />
+                  <h3 className="mb-1 break-words text-base font-bold sm:text-lg">{stat.title}</h3>
+                  <p className="text-sm text-muted-foreground"><RichText value={stat.description} /></p>
+                </div>
+              ))}
+            </div>
+
+            <div data-reveal="rise">
+              {cvDownloadUrl ? (
+                <Button
+                  asChild
+                  size="lg"
+                  className="group h-12 w-full gap-2.5 rounded-xl bg-primary px-6 font-sans text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all duration-200 hover:-translate-y-0.5 hover:bg-highlight hover:text-highlight-foreground hover:shadow-xl hover:shadow-highlight/40"
+                >
+                  <a
+                    href={cvDownloadUrl}
+                    download={about.cvFileName || ""}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Download className="size-5 transition-transform duration-200 group-hover:translate-y-0.5" aria-hidden="true" />
+                    <RichText value={cvLabel} />
+                  </a>
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  size="lg"
+                  disabled
+                  title={lang === "en" ? "CV not available yet" : "CV aún no disponible"}
+                  className="h-12 w-full gap-2.5 rounded-xl bg-primary px-6 font-sans text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20"
+                >
+                  <Download className="size-5" aria-hidden="true" />
+                  <RichText value={cvLabel} />
+                </Button>
+              )}
+            </div>
           </div>
 
         </div>

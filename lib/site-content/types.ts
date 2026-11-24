@@ -23,6 +23,9 @@ export type AboutContent = {
   titleYear: string
   paragraphs: Bilingual[]
   stats: AboutStat[]
+  cvLabel: Bilingual
+  cvUrl: string
+  cvFileName: string
 }
 
 export const EXPERIENCE_TYPES = ["work", "project", "milestone"] as const

@@ -1,7 +1,7 @@
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client"
 import { type NextRequest, NextResponse } from "next/server"
 import { isAdmin } from "@/lib/admin-auth"
-import { ALLOWED_DOCUMENT_MIME_TYPES, DOCUMENT_FOLDER, MAX_DOCUMENT_BYTES, documentMimeType } from "@/lib/document-files"
+import { ALLOWED_DOCUMENT_MIME_TYPES, CV_FOLDER, DOCUMENT_FOLDER, MAX_DOCUMENT_BYTES, documentMimeType } from "@/lib/document-files"
 
 // Documents go straight from the browser to Blob, so they are not limited by the serverless body size.
 export async function POST(request: NextRequest) {
@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       body,
       request,
       onBeforeGenerateToken: async (pathname) => {
-        if (!pathname.startsWith(DOCUMENT_FOLDER) || !documentMimeType(pathname)) {
+        if ((!pathname.startsWith(DOCUMENT_FOLDER) && !pathname.startsWith(CV_FOLDER)) || !documentMimeType(pathname)) {
           throw new Error("Formato de archivo no permitido")
         }
         return {
