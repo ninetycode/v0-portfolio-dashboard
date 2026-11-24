@@ -33,6 +33,8 @@ import {
   DEFAULT_DOWNLOAD_PLATFORMS,
   DEFAULT_GENRES,
   STATUS_OPTIONS,
+  hasBrowserPlatform,
+  isBrowserPlatform,
   parseEmbed,
   slugify,
   uniqueTags,
@@ -68,7 +70,6 @@ const defaults: GameInput = {
   docLinks: [],
 }
 
-const isBrowserPlatform = (p: string) => p.toLowerCase() === BROWSER_PLATFORM.toLowerCase()
 const isHttpUrl = (value: string) => /^https?:\/\/\S+$/i.test(value.trim())
 
 function toInput(game: GameDetail): GameInput {
@@ -133,6 +134,16 @@ export function GameEditorForm({ game, taxonomy }: Props) {
   const setPlatforms = (browser: boolean, os: string[]) =>
     update("platforms", uniqueTags([...(browser ? [BROWSER_PLATFORM] : []), ...os]))
 
+  const toggleBrowser = () => {
+    const nextBrowser = !isBrowser
+    setForm((prev) => ({
+      ...prev,
+      platforms: uniqueTags([...(nextBrowser ? [BROWSER_PLATFORM] : []), ...prev.platforms.filter((p) => !isBrowserPlatform(p))]),
+      ...(nextBrowser ? {} : { embedUrl: "" }),
+    }))
+    if (!nextBrowser) setShowPreview(false)
+  }
+
   const toggleDownloadable = () => {
     if (downloadable) {
       setDownloadable(false)
@@ -161,8 +172,12 @@ export function GameEditorForm({ game, taxonomy }: Props) {
     setImporting(false)
     if (!result.success) return setMessage({ kind: "error", text: result.error })
     const data = result.data
-    setForm((prev) => ({ ...prev, ...data }))
-    if (data.platforms?.some((p) => !isBrowserPlatform(p))) setDownloadable(true)
+    setForm((prev) => ({
+      ...prev,
+      ...data,
+      embedUrl: data.embedUrl ?? (data.platforms && !hasBrowserPlatform(data.platforms) ? "" : prev.embedUrl),
+    }))
+    if (data.platforms) setDownloadable(data.platforms.some((p) => !isBrowserPlatform(p)))
     setSlugTouched(false)
     setErrors([])
     setMessage({
@@ -251,7 +266,7 @@ export function GameEditorForm({ game, taxonomy }: Props) {
     }
     setSaving(true)
     setMessage(null)
-    const payload = { ...form, slug: slugify(form.slug) }
+    const payload = { ...form, slug: slugify(form.slug), embedUrl: isBrowser ? form.embedUrl : "" }
     const result = game ? await updateGame(game.id, payload) : await createGame(payload)
     if (result.success && result.slug) {
       router.push(`/games/${result.slug}`)
@@ -420,7 +435,7 @@ export function GameEditorForm({ game, taxonomy }: Props) {
             text="Se juega embebido en la página."
             active={isBrowser}
             error={hasError("platforms")}
-            onClick={() => setPlatforms(!isBrowser, osPlatforms)}
+            onClick={toggleBrowser}
           />
           <ModeCard
             icon={<Download className="h-5 w-5" />}

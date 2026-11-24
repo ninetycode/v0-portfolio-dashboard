@@ -12,6 +12,8 @@ import {
   DEFAULT_DOWNLOAD_PLATFORMS,
   DEFAULT_GENRES,
   STATUS_OPTIONS,
+  hasBrowserPlatform,
+  isBrowserPlatform,
   parseEmbed,
   slugify,
   translateItchGenre,
@@ -67,7 +69,7 @@ export async function getGames(): Promise<GameSummary[]> {
     ...r,
     coverFocus: sanitizeCoverFocus(r.coverFocus),
     avgRating: toAverage(r.avgRating),
-    playable: Boolean(r.embedUrl),
+    playable: Boolean(r.embedUrl) && hasBrowserPlatform(r.platforms),
   }))
 }
 
@@ -204,7 +206,7 @@ export async function getGameTaxonomy(): Promise<GameTaxonomy> {
   return {
     genres: uniqueTags([...byUsage(rows.flatMap((r) => r.genres)), ...DEFAULT_GENRES]),
     platforms: uniqueTags([...DEFAULT_DOWNLOAD_PLATFORMS, ...byUsage(rows.flatMap((r) => r.platforms))]).filter(
-      (p) => p.toLowerCase() !== BROWSER_PLATFORM.toLowerCase(),
+      (p) => !isBrowserPlatform(p),
     ),
   }
 }
@@ -216,6 +218,8 @@ function cleanGameInput(input: GameInput) {
     const trimmed = value.trim().slice(0, 1000)
     return isHttpUrl(trimmed) ? trimmed : null
   }
+  const platforms = uniqueTags(input.platforms.map((v) => v.trim().slice(0, 40))).slice(0, 10)
+  const isBrowser = hasBrowserPlatform(platforms)
   return {
     title: input.title.trim().slice(0, 160),
     slug: slugify(input.slug),
@@ -223,10 +227,10 @@ function cleanGameInput(input: GameInput) {
     description: input.description.trim().slice(0, 10000),
     controls: input.controls.trim().slice(0, 3000),
     genres: uniqueTags(input.genres.map((v) => v.trim().slice(0, 40))).slice(0, 10),
-    platforms: uniqueTags(input.platforms.map((v) => v.trim().slice(0, 40))).slice(0, 10),
+    platforms,
     engine: input.engine.trim().slice(0, 80) || null,
     status: input.status.trim().slice(0, 80) || STATUS_OPTIONS[0],
-    embedUrl: url(input.embedUrl),
+    embedUrl: isBrowser ? url(input.embedUrl) : null,
     embedWidth: Math.max(320, Math.min(2400, Number(input.embedWidth) || 1280)),
     embedHeight: Math.max(240, Math.min(1600, Number(input.embedHeight) || 740)),
     externalUrl: url(input.externalUrl),
@@ -245,7 +249,7 @@ function validateGame(data: ReturnType<typeof cleanGameInput>): string | null {
   if (!data.title) return "Falta el título."
   if (!data.slug) return "Falta el slug (URL del juego)."
   if (data.platforms.length === 0) return "Indica si el juego se juega en el navegador, es descargable o ambos."
-  const isBrowser = data.platforms.some((p) => p.toLowerCase() === BROWSER_PLATFORM.toLowerCase())
+  const isBrowser = hasBrowserPlatform(data.platforms)
   if (isBrowser && !data.embedUrl) return "Los juegos de navegador necesitan el iframe o la URL del embed."
   if (!isBrowser && !data.externalUrl) return "Los juegos descargables necesitan un enlace de descarga."
   return null

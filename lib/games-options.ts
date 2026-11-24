@@ -1,5 +1,10 @@
 export const BROWSER_PLATFORM = "Navegador"
 
+export const isBrowserPlatform = (platform: string) =>
+  platform.trim().toLowerCase() === BROWSER_PLATFORM.toLowerCase()
+
+export const hasBrowserPlatform = (platforms: string[]) => platforms.some(isBrowserPlatform)
+
 export const DEFAULT_GENRES = [
   "Plataformas",
   "Metroidvania",

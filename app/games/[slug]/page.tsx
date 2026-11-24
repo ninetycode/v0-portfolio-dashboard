@@ -14,6 +14,7 @@ import { GameDocLinks } from "@/components/games/game-doc-links"
 import { GameReviews } from "@/components/games/game-reviews"
 import { RatingBadge } from "@/components/games/star-rating"
 import { getGameBySlug } from "@/app/actions/games"
+import { hasBrowserPlatform, isBrowserPlatform } from "@/lib/games-options"
 
 export const dynamic = "force-dynamic"
 
@@ -52,6 +53,7 @@ export default async function GamePage({ params }: Props) {
 
   const controls = parseControls(game.controls)
   const admin = await isAdmin()
+  const isPlayableInBrowser = Boolean(game.embedUrl) && hasBrowserPlatform(game.platforms)
   const details = [
     { label: "Género", value: game.genres.join(", ") },
     { label: "Plataforma", value: game.platforms.join(", ") },
@@ -103,7 +105,7 @@ export default async function GamePage({ params }: Props) {
           </div>
         </header>
 
-        {game.embedUrl && (
+        {isPlayableInBrowser && game.embedUrl && (
           <section aria-label="Jugar">
             <GamePlayer
               title={game.title}
@@ -116,11 +118,11 @@ export default async function GamePage({ params }: Props) {
           </section>
         )}
 
-        {!game.embedUrl && game.itchGameId && (
+        {!isPlayableInBrowser && game.itchGameId && (
           <ItchDownloadWidget
             itchGameId={game.itchGameId}
             title={game.title}
-            platforms={game.platforms.filter((p) => p.toLowerCase() !== "navegador")}
+            platforms={game.platforms.filter((p) => !isBrowserPlatform(p))}
             coverImage={game.coverImage}
           />
         )}
